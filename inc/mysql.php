@@ -19,7 +19,7 @@ class MySQL {
 		try {
 			$this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password);
 		}
-		catch(PDOException $e) { 
+		catch(PDOException $e) {
 			return null;
 		}
 
@@ -34,6 +34,9 @@ class MySQL {
 		} else {
 			$qh->execute();
 		}
+
+		if ($qh->errorInfo()) { echo $qh->errorInfo()[2]; }
+
 		return $qh;
 	}
 
