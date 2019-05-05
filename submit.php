@@ -124,8 +124,8 @@ if ($display_form == true) {
 
 			$values = $mysql->fetch($q3);
 			?>
-			<div class="form-group row">
-			        <div class="col-3">
+			<div class="form-group row" style="margin-bottom: 5px;">
+			        <div class="col-3 text-right">
 			                <span><?php echo $asset['description']; ?></span><br>
 					<span class="small"><?php echo $asset_class['description']; ?></span>
 			        </div>
@@ -143,7 +143,9 @@ if ($display_form == true) {
 	}
 
 	?>
-	<button class="btn btn-primary" type="submit">Submit</button>
+	<div class="col-7 text-center">
+		<button class="btn btn-primary" type="submit">Submit</button>
+	</div>
 
 	<?php
 	echo "</form>";
