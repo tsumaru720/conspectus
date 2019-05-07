@@ -99,7 +99,7 @@ if ($display_form == true) {
 
 	<form method="post">
 	<div class="form-group row">
-	        <div class="col-3 text-center font-weight-bold">
+	        <div class="col-4 text-center font-weight-bold">
 	                Asset
 	        </div>
 	        <div class="col-2 text-center font-weight-bold">
@@ -125,15 +125,15 @@ if ($display_form == true) {
 			$values = $mysql->fetch($q3);
 			?>
 			<div class="form-group row" style="margin-bottom: 5px;">
-			        <div class="col-3 text-right">
-			                <span><?php echo $asset['description']; ?></span><br>
+			        <div class="col-4 text-right">
+			                <span><?php echo $asset['description']; ?></span> - 
 					<span class="small"><?php echo $asset_class['description']; ?></span>
 			        </div>
 			        <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">
-			                <input class="form-control" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
+			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
 			        </div>
 			        <div class="col-2 <?php echo !is_valid($asset['id']."_latest") ? 'has-danger' : ''; ?>">
-			                <input class="form-control" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
+			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
 			        </div>
 			</div>
 			<?php
@@ -143,7 +143,7 @@ if ($display_form == true) {
 	}
 
 	?>
-	<div class="col-7 text-center">
+	<div class="col-8 text-center">
 		<button class="btn btn-primary" type="submit">Submit</button>
 	</div>
 
