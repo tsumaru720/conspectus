@@ -3,7 +3,7 @@
 require_once('config.php');
 require_once('inc/mysql.php');
 
-$mysql = new MySQL($CONFIG['SQL_HOSTNAME'], $CONFIG['SQL_PORT'], $CONFIG['SQL_USERNAME'], $CONFIG['SQL_PASSWORD'], $CONFIG['SQL_DATABASE']);
+$mysql = new MySQL($config['SQL_HOSTNAME'], $config['SQL_PORT'], $config['SQL_USERNAME'], $config['SQL_PASSWORD'], $config['SQL_DATABASE']);
 
 
 function is_valid($field) {

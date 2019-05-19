@@ -1,0 +1,7 @@
+<?php
+
+$config['SQL_USERNAME'] = 'assets';
+$config['SQL_PASSWORD'] = 'asdfsdf';
+$config['SQL_DATABASE'] = 'asset_tracker';
+$config['SQL_HOSTNAME'] = 'localhost';
+$config['SQL_PORT'] = 3306;
