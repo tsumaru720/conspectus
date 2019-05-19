@@ -1,29 +1,17 @@
 <?php
 
-/*
-$data = array('username' => 'test');
-$query = $mysql->query("SELECT * from users where username = :username", $data);
-var_dump($mysql->fetch($query));
-var_dump($mysql->fetch($query));
-*/
-
 class MySQL {
 
-	public function __construct($host, $port, $username, $password, $database) {
-		$this->host = $host;
-		$this->port = $port;
-		$this->username = $username;
-		$this->password = $password;
-		$this->database = $database;
+	private $handle = null;
 
+	public function __construct($host, $port, $username, $password, $database) {
 		try {
 			$this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password);
 		}
 		catch(PDOException $e) {
-			return null;
+			return null; //do nothing
 		}
 
-		return $this->handle;
 	}
 
 	public function query($query, $data = null) {
@@ -38,6 +26,10 @@ class MySQL {
 		if ($qh->errorInfo()) { echo $qh->errorInfo()[2]; }
 
 		return $qh;
+	}
+
+	public function getHandle() {
+		return $this->handle;
 	}
 
 	public function fetch($qh) {
