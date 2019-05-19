@@ -18,13 +18,15 @@ class Main {
 	}
 
 	private function classLoader($class) {
-		require_once(BASE_DIR. '/app/'.$class.'.php');
+		$class = explode('\\', $class);
+		require_once(BASE_DIR. '/app/'.array_pop($class).'.php');
 	}
 	
 	private function loadConfig() {
 		if (file_exists(BASE_DIR . '/config.php')) {
 			require_once(BASE_DIR. '/config.php');
 			$this->config = array_merge($this->defaults(), $config);
+			//TODO check for required config entries
 		} else {
 			//TODO handle this nicer
 			$this->fatalErr('no config');
