@@ -7,5 +7,3 @@ $main = new Main();
 
 
 ?>
-
-
