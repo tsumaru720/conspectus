@@ -2,7 +2,7 @@
 
 class PageLoader {
 
-	private $theme = 'dev';
+	private $theme = 'default';
 	private $main = null;
 	private $twig = null;
 	private $vars = array();
