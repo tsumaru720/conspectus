@@ -4,10 +4,12 @@ class Main {
 
 	private $config = null;
 	private $db = null;
+	private $page = null;
 
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
 
+		$this->page = new PageLoader($this);
 		$this->loadConfig();
 		$this->initDB();
 	}
@@ -17,9 +19,9 @@ class Main {
 	}
 	
 	private function loadConfig() {
-		// Load defaults here.
-		// If for any reason we cant load our config file, we'll need to know these to display an error.
-		$config['THEME'] = 'default';
+
+		// Placeholder for default config settings
+		$config = array();
 
 		$this->config = $config;
 		if (file_exists(__DIR__ . '/../config.php')) {
@@ -28,7 +30,11 @@ class Main {
 			//TODO check for required config entries
 		} else {
 			//TODO handle this nicer
-			$this->fatalErr('no config');
+			$this->fatalErr('NO_CFG');
+		}
+
+		if (array_key_exists('THEME', $this->config)) {
+			$this->page->setTheme($this->config['THEME']);
 		}
 	}
 
@@ -41,16 +47,17 @@ class Main {
 						);
 		$db = $this->db;
 		if (!is_object($db->getHandle())) {
-			$this->fatalErr('invalid db creds');
+			$this->fatalErr('DB_403');
 		}
 
 	}
 
-	private function fatalErr($string) {
-		//TODO make this theme stuff
-		//TODO some kind of error codes so theme can do wording
-		var_dump($this->config);
-		echo $string;
+	private function fatalErr($error) {
+		$this->page->displayHeader = false;
+		$this->page->displayMenu = false;
+		$this->page->displayFooter = false;
+		$this->page->setVar('error_code', $error);
+		$this->page->load('loading_error');
 		die();
 	}
 	
