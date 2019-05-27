@@ -24,7 +24,7 @@ class Main {
 		$config = array();
 
 		$this->config = $config;
-		if (file_exists(__DIR__ . '/../config.phps')) {
+		if (file_exists(__DIR__ . '/../config.php')) {
 			require_once(__DIR__. '/../config.php');
 			$this->config = array_merge($this->config, $config);
 			//TODO check for required config entries
