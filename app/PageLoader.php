@@ -29,7 +29,7 @@ class PageLoader {
 		} else {
 			include __DIR__ . '/../themes/default/app/'.$pageName.'.php';
 		}
-		
+		//TODO load twig here with fallback to "default" if no template file is found
 		$this->doc = new Document($this->main, $this->vars);
 	}
 
