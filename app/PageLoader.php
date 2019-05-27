@@ -37,6 +37,15 @@ class PageLoader {
 		}
 	}
 
+	private function checkInterface($var) {
+		if (!$var instanceof ThemeClass) {
+			//TODO theme this - but by this point we already have "Document" declared...
+			echo 'Template page does not use ThemeClass interface';
+			die();
+		}
+
+	}
+
 	public function load($pageName) {
 		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
 
@@ -52,13 +61,32 @@ class PageLoader {
 		$this->twig = new \Twig\Environment($loader);
 
 		$doc = new Document($this->main, $this->twig, $this->vars);
-		if (!$doc instanceof ThemeClass) {
-			//TODO theme this - but by this point we already have "Document" declared...
-			echo 'Template page does not use ThemeClass interface';
-			die();
+		$this->checkInterface($doc);
+
+		$this->setVar('page_title', $doc->getTitle());
+
+		if ($this->displayHeader) {
+			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__header.php');
+			$header = new Header($this->main, $this->twig, $this->vars);
+			$this->checkInterface($header);
+			$header->render();
+		}
+
+		if ($this->displayMenu) {
+			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__menu.php');
+			$menu = new Menu($this->main, $this->twig, $this->vars);
+			$this->checkInterface($menu);
+			$menu->render();
 		}
 
 		$doc->render();
+
+		if ($this->displayFooter) {
+			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__footer.php');
+			$footer = new Footer($this->main, $this->twig, $this->vars);
+			$this->checkInterface($footer);
+			$footer->render();
+		}
 	}
 
 }
