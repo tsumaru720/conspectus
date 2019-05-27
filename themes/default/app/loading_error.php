@@ -1,23 +1,26 @@
 <?php
 
-class Document {
-	public function __construct(&$main, $vars) {
-		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../html');
-		$twig = new \Twig\Environment($loader);
+class Document extends Theme {
 
-		$vars['page_title'] = 'Error';
+	protected $pageTitle = 'Error';
+
+	public function __construct(&$main, &$twig, $vars) {
+
+		$vars['page_title'] = $this->pageTitle;
 		
 		switch ($vars['error_code']) {
 			case 'NO_CFG':
-				$vars['string'] = 'Unable to load config file.';
+				$vars['string'] = 'Unable to load config file';
 				break;
 			case 'DB_403':
 				$vars['string'] = 'Unable to connect to database server; Please check the credentials provided';
 				break;
 		}
-		
-		echo $twig->render('loading_error.html', $vars);
+
+		$this->vars = $vars;
+		$this->document = $twig->load('loading_error.html');
 	}
+
 }
 
 ?>

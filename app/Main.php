@@ -52,10 +52,8 @@ class Main {
 
 	}
 
-	private function fatalErr($error) {
-		$this->page->displayHeader = false;
-		$this->page->displayMenu = false;
-		$this->page->displayFooter = false;
+	public function fatalErr($error) {
+		$this->page->setFrame(false, false, false);
 		$this->page->setVar('error_code', $error);
 		$this->page->load('loading_error');
 		die();
