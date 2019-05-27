@@ -2,7 +2,7 @@
 
 class PageLoader {
 
-	private $theme = 'default';
+	private $theme = 'dev';
 	private $main = null;
 	private $twig = null;
 	private $vars = array();
@@ -29,23 +29,26 @@ class PageLoader {
 		$this->displayMenu = $menu;
 	}
 
+	private function resolveTheme($pageName) {
+	var_dump(__DIR__ . '/../themes/'.$this->theme.'/'.$pageName);
+		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/'.$pageName)) {
+			return $this->theme;
+		} else {
+			return 'default';
+		}
+	}
+
 	public function load($pageName) {
 		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
 
 		// Loadin the main theme class/interface
-		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/theme.php')) {
-			include __DIR__ . '/../themes/'.$this->theme.'/theme.php';
-		} else {
-			include __DIR__ . '/../themes/default/theme.php';
-		}
+		include __DIR__ . '/../themes/'.$this->resolveTheme('theme.php').'/theme.php';
 
 		// Load in the page we're trying to load
-		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/app/'.$pageName.'.php')) {
-			include __DIR__ . '/../themes/'.$this->theme.'/app/'.$pageName.'.php';
+		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/html')) {
 			$loader->prependPath(__DIR__ . '/../themes/'.$this->theme.'/html');
-		} else {
-			include __DIR__ . '/../themes/default/app/'.$pageName.'.php';
 		}
+		include __DIR__ . '/../themes/'.$this->resolveTheme('app/'.$pageName.'.php').'/app/'.$pageName.'.php';
 
 		$this->twig = new \Twig\Environment($loader);
 
