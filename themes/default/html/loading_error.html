@@ -18,11 +18,7 @@
 		<div class="col">
 			<div class="container">
 				<div class="alert alert-danger text-center" role="alert">
-					{% if error_code == "NO_CFG" %}
-						Unable to load config file
-					{% elseif error_code == "DB_403" %}
-						Unable to connect to database server; Please check the credentials provided
-					{% endif %}
+					{{ error_string }}
 				</div>
 			</div>
 		</div>

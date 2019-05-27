@@ -30,7 +30,7 @@ class Main {
 			//TODO check for required config entries
 		} else {
 			//TODO handle this nicer
-			$this->fatalErr('NO_CFG');
+			$this->fatalErr('NO_CFG', 'Unable to load config file');
 		}
 
 		if (array_key_exists('THEME', $this->config)) {
@@ -47,14 +47,15 @@ class Main {
 						);
 		$db = $this->db;
 		if (!is_object($db->getHandle())) {
-			$this->fatalErr('DB_403');
+			$this->fatalErr('DB_403', 'Unable to connect to database server; Please check the credentials provided');
 		}
 
 	}
 
-	public function fatalErr($error) {
+	public function fatalErr($errorCode, $errorStr) {
 		$this->page->setFrame(false, false, false);
-		$this->page->setVar('error_code', $error);
+		$this->page->setVar('error_code', $errorCode);
+		$this->page->setVar('error_string', $errorStr);
 		$this->page->load('loading_error');
 		die();
 	}
