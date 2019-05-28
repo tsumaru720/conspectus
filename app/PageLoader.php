@@ -43,7 +43,6 @@ class PageLoader {
 			echo 'Template page does not use ThemeClass interface';
 			die();
 		}
-
 	}
 
 	public function load($pageName) {
@@ -90,5 +89,3 @@ class PageLoader {
 	}
 
 }
-
-?>

@@ -9,5 +9,3 @@ class Menu extends Theme {
 	}
 
 }
-
-?>

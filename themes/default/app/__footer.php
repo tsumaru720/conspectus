@@ -9,5 +9,3 @@ class Footer extends Theme {
 	}
 
 }
-
-?>

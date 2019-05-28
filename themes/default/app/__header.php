@@ -9,5 +9,3 @@ class Header extends Theme {
 	}
 
 }
-
-?>
