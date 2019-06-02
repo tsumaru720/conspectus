@@ -53,7 +53,7 @@ class Main {
 	}
 
 	public function fatalErr($errorCode, $errorStr) {
-		$this->page->setFrame(false, false, false);
+		$this->page->setFrame(false, false);
 		$this->page->setVar('error_code', $errorCode);
 		$this->page->setVar('error_string', $errorStr);
 		$this->page->load('loading_error');

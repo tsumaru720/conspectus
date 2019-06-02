@@ -8,7 +8,6 @@ class PageLoader {
 	private $vars = array();
 	
 	private $displayHeader = true;
-	private $displayMenu = true;
 	private $displayFooter = true;
 
 	public function __construct(&$main) {
@@ -23,10 +22,9 @@ class PageLoader {
 		$this->vars[$name] = $value;
 	}
 
-	public function setFrame($header, $footer, $menu) {
+	public function setFrame($header, $footer) {
 		$this->displayHeader = $header;
 		$this->displayFooter = $footer;
-		$this->displayMenu = $menu;
 	}
 
 	private function resolveTheme($location) {
@@ -64,13 +62,6 @@ class PageLoader {
 			$header = new Header($this->main, $this->twig, $this->vars);
 			$this->checkInterface($header);
 			$header->render();
-		}
-
-		if ($this->displayMenu) {
-			include $this->resolveTheme('app/__menu.php');
-			$menu = new Menu($this->main, $this->twig, $this->vars);
-			$this->checkInterface($menu);
-			$menu->render();
 		}
 
 		$doc->render();
