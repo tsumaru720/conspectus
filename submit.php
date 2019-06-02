@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-require_once('inc/mysql.php');
+require_once('app/MySQL.php');
 
 $mysql = new MySQL($config['SQL_HOSTNAME'], $config['SQL_PORT'], $config['SQL_USERNAME'], $config['SQL_PASSWORD'], $config['SQL_DATABASE']);
 
@@ -45,7 +45,7 @@ function is_valid($field) {
 
         <body>
                 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-                        <a class="navbar-brand" href="submit.php">Submit</a>
+                        <a class="navbar-brand" href="submit.php">Submit - <?php echo $config['SQL_DATABASE']; ?></a>
                         </div>
                 </nav>
 
