@@ -36,9 +36,9 @@ class PageLoader {
 	}
 
 	private function checkInterface($var) {
-		if (!$var instanceof ThemeClass) {
+		if (!$var instanceof ThemeInterface) {
 			//TODO theme this - but by this point we already have "Document" declared...
-			echo 'Template page does not use ThemeClass interface';
+			echo 'Template page does not use ThemeInterface interface';
 			die();
 		}
 	}

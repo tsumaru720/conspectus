@@ -1,6 +1,6 @@
 <?php
 
-interface ThemeClass {
+interface ThemeInterface {
 
 	public function __construct(&$main, &$twig, $vars);
 

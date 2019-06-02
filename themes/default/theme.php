@@ -1,6 +1,6 @@
 <?php
 
-abstract class Theme implements ThemeClass {
+abstract class Theme implements ThemeInterface {
 
 	protected $document = null;
 	protected $vars = array();
