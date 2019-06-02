@@ -5,6 +5,7 @@ class Main {
 	private $config = null;
 	private $db = null;
 	private $page = null;
+	private $router = null;
 
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
@@ -12,6 +13,11 @@ class Main {
 		$this->page = new PageLoader($this);
 		$this->loadConfig();
 		$this->initDB();
+
+		// If we get this far, initial loading _seems_ ok
+		$this->router = new Router($this->page);
+		$this->router->run();
+
 	}
 
 	private function classLoader($class) {
@@ -56,7 +62,7 @@ class Main {
 		$this->page->setFrame(false, false);
 		$this->page->setVar('error_code', $errorCode);
 		$this->page->setVar('error_string', $errorStr);
-		$this->page->load('loading_error');
+		$this->page->display('loading_error');
 		die();
 	}
 	

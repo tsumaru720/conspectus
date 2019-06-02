@@ -43,7 +43,7 @@ class PageLoader {
 		}
 	}
 
-	public function load($pageName) {
+	public function display($pageName) {
 		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
 		$loader->prependPath($this->resolveTheme('html'));
 		$this->twig = new \Twig\Environment($loader);
