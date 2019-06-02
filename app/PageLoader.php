@@ -29,11 +29,11 @@ class PageLoader {
 		$this->displayMenu = $menu;
 	}
 
-	private function resolveTheme($pageName) {
-		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/'.$pageName)) {
-			return $this->theme.'/'.$pageName;
+	private function resolveTheme($location) {
+		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/'.$location)) {
+			return __DIR__ . '/../themes/'.$this->theme.'/'.$location;
 		} else {
-			return 'default/'.$pageName;
+			return __DIR__ . '/../themes/default/'.$location;
 		}
 	}
 
@@ -47,17 +47,12 @@ class PageLoader {
 
 	public function load($pageName) {
 		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
+		$loader->prependPath($this->resolveTheme('html'));
+		$this->twig = new \Twig\Environment($loader);
 
 		// Loadin the main theme class/interface
-		include __DIR__ . '/../themes/'.$this->resolveTheme('theme.php');
-
-		// Load in the page we're trying to load
-		if (file_exists(__DIR__ . '/../themes/'.$this->theme.'/html')) {
-			$loader->prependPath(__DIR__ . '/../themes/'.$this->theme.'/html');
-		}
-		include __DIR__ . '/../themes/'.$this->resolveTheme('app/'.$pageName.'.php');
-
-		$this->twig = new \Twig\Environment($loader);
+		include $this->resolveTheme('theme.php');
+		include $this->resolveTheme('app/'.$pageName.'.php');
 
 		$doc = new Document($this->main, $this->twig, $this->vars);
 		$this->checkInterface($doc);
@@ -65,14 +60,14 @@ class PageLoader {
 		$this->setVar('page_title', $doc->getTitle());
 
 		if ($this->displayHeader) {
-			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__header.php');
+			include $this->resolveTheme('app/__header.php');
 			$header = new Header($this->main, $this->twig, $this->vars);
 			$this->checkInterface($header);
 			$header->render();
 		}
 
 		if ($this->displayMenu) {
-			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__menu.php');
+			include $this->resolveTheme('app/__menu.php');
 			$menu = new Menu($this->main, $this->twig, $this->vars);
 			$this->checkInterface($menu);
 			$menu->render();
@@ -81,7 +76,7 @@ class PageLoader {
 		$doc->render();
 
 		if ($this->displayFooter) {
-			include __DIR__ . '/../themes/'.$this->resolveTheme('app/__footer.php');
+			include $this->resolveTheme('app/__footer.php');
 			$footer = new Footer($this->main, $this->twig, $this->vars);
 			$this->checkInterface($footer);
 			$footer->render();
