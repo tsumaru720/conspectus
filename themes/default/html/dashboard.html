@@ -1,1 +1,135 @@
-<h1>Dashboard goes here</h1>
+<h2>Dashboard</h2></div>
+	<div class="container-fluid pr-5">
+		<div class="row text-center">
+			<div class="pt-2 col-sm ml-5" style="background-color: rgba(54, 162, 235, 0.5); ">
+				<h4>Total Deposit<br>{{ mostRecent.deposit_str }}</h4>
+			</div>
+			<div class="pt-2 col-sm ml-5" style="background-color: rgba(255, 159, 64, 0.5)">
+				<h4>Current Value<br>{{ mostRecent.asset_str }}</h4>
+			</div>
+			<div class="pt-2 col-sm ml-5" style="background-color: {% if mostRecent.gain < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+				<h4>Overall Gain<br>{{ mostRecent.gain_str }}</h4>
+			</div>
+		</div>
+	</div>
+
+
+<canvas class="my-4 w-100" id="totals_chart" width="900" height="150"></canvas>
+<canvas class="my-4 w-100" id="gains_chart" width="900" height="150"></canvas>
+
+<!-- Graphs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+
+// TOTALS CHART
+
+var ctx = document.getElementById('totals_chart');
+
+var labels = [
+{% for data in periodData %}
+	'{{ data.period }}'{% if loop.last == false %} , {% endif %}
+
+{% endfor %}
+];
+
+var total_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Deposit Value',
+            data: [
+			{% for data in periodData %}
+			'{{ data.deposit_total }}'{% if loop.last == false %} , {% endif %}
+
+			{% endfor %}
+			],
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Asset Value',
+            data: [
+			{% for data in periodData %}
+				'{{ data.asset_total }}'{% if loop.last == false %} , {% endif %}
+
+			{% endfor %}
+			],
+            type: 'line',
+            borderColor: 'rgb(255, 159, 64)',
+            backgroundColor: 'rgb(255, 159, 64)',
+            fill: false,
+            lineTension: 0.1,
+            borderWidth: 2
+        }]
+    },
+    options: {
+		animation: false,
+        legend: {
+			display: false,
+			position: 'right'
+		},
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+					callback: function(label, index, labels) {
+                        return "£" + label.toFixed(2);
+                    }
+                }
+            }]
+        }
+    }
+});
+
+// GAINS CHART
+
+var ctx = document.getElementById('gains_chart');
+
+var data = [
+{% for data in periodData %}
+	'{{ data.gain }}'{% if loop.last == false %} , {% endif %}
+
+{% endfor %}
+];
+
+var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+var gains_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Gains',
+            data: data,
+			borderColor: border_colours,
+            backgroundColor: bg_colours,
+            borderWidth: 1
+        }]
+    },
+    options: {
+		title: {
+			display: true,
+			text: "Total Gain"
+		},
+		animation: false,
+        legend: {
+			display: false,
+			position: 'right'
+		},
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+					callback: function(label, index, labels) {
+                        return "£" + label.toFixed(2);
+                    }
+                }
+            }]
+        }
+    }
+});
+
+</script>
+

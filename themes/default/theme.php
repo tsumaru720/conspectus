@@ -15,4 +15,10 @@ abstract class Theme implements ThemeInterface {
 	public function getTitle() {
 		return $this->pageTitle;
 	}
+
+	public function debug($str) {
+		echo "<!-- \n\n";
+		var_dump($str);
+		echo "\n\n-->";
+	}
 }
