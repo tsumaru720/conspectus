@@ -21,14 +21,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
 
+// https://www.chartjs.org/samples/latest/charts/bar/stacked.html
+
 // TOTALS CHART
 
 var ctx = document.getElementById('totals_chart');
 
 var labels = [
 {% for data in periodData %}
-	'{{ data.period }}'{% if loop.last == false %} , {% endif %}
-
+	'{{ data.period }}',
 {% endfor %}
 ];
 
@@ -40,8 +41,7 @@ var total_chart = new Chart(ctx, {
             label: 'Deposit Value',
             data: [
 			{% for data in periodData %}
-			'{{ data.deposit_total }}'{% if loop.last == false %} , {% endif %}
-
+				'{{ data.deposit_total }}',
 			{% endfor %}
 			],
 			backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -51,8 +51,7 @@ var total_chart = new Chart(ctx, {
             label: 'Asset Value',
             data: [
 			{% for data in periodData %}
-				'{{ data.asset_total }}'{% if loop.last == false %} , {% endif %}
-
+				'{{ data.asset_total }}',
 			{% endfor %}
 			],
             type: 'line',
@@ -82,14 +81,16 @@ var total_chart = new Chart(ctx, {
     }
 });
 
+
+
+
 // GAINS CHART
 
 var ctx = document.getElementById('gains_chart');
 
 var data = [
 {% for data in periodData %}
-	'{{ data.gain }}'{% if loop.last == false %} , {% endif %}
-
+	'{{ data.gain }}',
 {% endfor %}
 ];
 
@@ -130,6 +131,8 @@ var gains_chart = new Chart(ctx, {
         }
     }
 });
+
+
 
 </script>
 
