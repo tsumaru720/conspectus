@@ -126,7 +126,7 @@ if ($display_form == true) {
 			?>
 			<div class="form-group row" style="margin-bottom: 5px;">
 			        <div class="col-4 text-right">
-			                <span><?php echo $asset['description']; ?></span> - 
+					<span><?php echo '('.$asset['id'].') '.$asset['description']; ?></span> -
 					<span class="small"><?php echo $asset_class['description']; ?></span>
 			        </div>
 			        <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">

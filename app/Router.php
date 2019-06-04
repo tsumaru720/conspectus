@@ -16,7 +16,17 @@ class Router {
 	}
 
 	private function addRoutes() {
-		$this->router->get('/', function() { $this->page->display('dashboard'); });
+		$this->router->get('/', function() {
+			$this->page->setVar('modifier', '>');
+			$this->page->setVar('asset_id', '0');
+			$this->page->display('asset_view');
+		});
+
+		$this->router->get('/asset/{assetID}', function($assetID) {
+			$this->page->setVar('modifier', '=');
+			$this->page->setVar('asset_id', $assetID);
+			$this->page->display('asset_view');
+		});
 
 		$this->router->set404(function() {
 			$this->page->setFrame(false, false);
