@@ -34,6 +34,20 @@ class Document extends Theme {
 								GROUP BY period, yearMonth
 								ORDER BY yearMonth ASC", $data);
 
+// 		$q = $this->db->query("SELECT SUM(deposit_value) AS deposit_total,
+// 								SUM(asset_value) AS asset_total,
+// 								SUM(asset_value - deposit_value) AS gain,
+// 								DATE_FORMAT(epoch, '%b %Y') AS period,
+// 								EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+// 								FROM asset_log
+// 								LEFT JOIN asset_list
+// 								ON asset_log.asset_id = asset_list.id
+// 								LEFT JOIN asset_classes
+// 								ON asset_classes.id = asset_list.asset_class
+// 								WHERE asset_classes.id ".$vars['modifier']." :asset_id
+// 								GROUP BY period, yearMonth
+// 								ORDER BY yearMonth ASC", $data);
+
 		while ($period = $this->db->fetch($q)) {
 			// Calculate Gain Difference
 			$period['gain_delta'] = 0;
