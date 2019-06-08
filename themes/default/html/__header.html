@@ -139,7 +139,7 @@ body {
 
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="/">
+                <a class="nav-link {% if menu_item == 'dashboard' %}active{% endif %}" href="/">
                   Dashboard
                 </a>
               </li>
@@ -168,7 +168,7 @@ body {
             <ul class="nav flex-column">
             {% for asset in assets %}
               <li class="nav-item">
-                <a class="nav-link" href="/asset/{{ asset.id }}">
+                <a class="nav-link {% if menu_item == 'asset/' ~ asset.id %}active{% endif %}" href="/asset/{{ asset.id }}">
                   <small>{{ asset.description }}</small>
                 </a>
               </li>
