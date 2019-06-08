@@ -24,19 +24,19 @@ class Router {
 		$this->router->get('/', function() {
 			$this->page->setVar('menu_item', 'dashboard');
 			$this->page->setVar('modifier', '>');
-			$this->page->setVar('asset_id', '0');
-			$this->page->display('asset_view');
+			$this->page->setVar('item_id', '0');
+			$this->page->display('item_view');
 		});
 
-		$this->router->get('/asset/{assetID}', function($assetID) {
-			$this->page->setVar('menu_item', 'asset/'.$assetID);
+		$this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
+			$this->page->setVar('menu_item', 'view/'.$type.'/'.$itemID);
 			$this->page->setVar('modifier', '=');
-			$this->page->setVar('asset_id', $assetID);
-			$this->page->display('asset_view');
+			$this->page->setVar('item_id', $itemID);
+			$this->page->display('item_view');
 		});
 
-		$this->router->get('/viewtype/{type}', function($viewType) {
-			$this->page->setVar('nav_item', $viewType);
+		$this->router->get('/viewtype/{type}', function($type) {
+			$this->page->setVar('nav_item', $type);
 			$this->page->setFrame(false, false);
 			$this->page->display('view_changer');
 		});

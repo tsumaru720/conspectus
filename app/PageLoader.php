@@ -45,6 +45,12 @@ class PageLoader {
 		}
 	}
 
+	public function resolveView($view) {
+		if ($view == 'asset') { return 'asset'; }
+		elseif ($view == 'class') { return 'class'; }
+		else { return 'asset'; }
+	}
+
 	private function checkInterface($var) {
 		if (!$var instanceof ThemeInterface) {
 			//TODO theme this - but by this point we already have "Document" declared...

@@ -7,18 +7,11 @@ class Document extends Theme {
 		$this->vars = $vars;
 		$page = $main->getPage();
 
-		if ($vars['nav_item'] == 'asset') {
-			$page->setView('asset');
-		} elseif ($vars['nav_item'] == 'class') {
-			$page->setView('class');
-		} else {
-			$page->setView('asset');
-		}
-		
+		$page->setView($page->resolveView($vars['nav_item']));
+
 		header("Location: /");
 		die();
-		//header("Location: http://www.redirect.to.url.com/")
-		//header('HTTP/1.1 404 Not Found');
+
 	}
 
 }

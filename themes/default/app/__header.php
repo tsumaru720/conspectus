@@ -7,17 +7,20 @@ class Header extends Theme {
 	public function __construct(&$main, &$twig, $vars) {
 
 		$this->db = $main->getDB();
+		$this->page = $main->getPage();
 
-		if ($vars['nav_item'] == "asset") {
+		$view = $this->page->resolveView($vars['nav_item']);
+
+		if ($view == "asset") {
 			$vars['view_string'] = "Assets";
 			$q = $this->db->query("SELECT * from asset_list ORDER BY description ASC");
-		} elseif ($vars['nav_item'] == "class") {
+		} elseif ($view == "class") {
 			$vars['view_string'] = "Classes";
 			$q = $this->db->query("SELECT * from asset_classes ORDER BY description ASC");
 		}
 
-		while ($asset = $this->db->fetch($q)) {
-			$vars['assets'][] = $asset;
+		while ($item = $this->db->fetch($q)) {
+			$vars['items'][] = $item;
 		}
 
 		$this->vars = $vars;

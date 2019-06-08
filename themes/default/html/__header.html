@@ -179,11 +179,11 @@ body {
             </h6>
 
             <ul class="nav flex-column">
-            {% for asset in assets %}
+            {% for item in items %}
               <li class="nav-item">
-                <a class="nav-link {% if menu_item == 'asset/' ~ asset.id %}active{% endif %}" href="/asset/{{ asset.id }}">
+                <a class="nav-link {% if menu_item == 'view/' ~ nav_item ~ '/' ~ item.id %}active{% endif %}" href="/view/{{nav_item}}/{{ item.id }}">
                   <!--<small>{{ asset.description }}</small>-->
-                  {{ asset.description }}
+                  {{ item.description }}
                 </a>
               </li>
               {% endfor %}
