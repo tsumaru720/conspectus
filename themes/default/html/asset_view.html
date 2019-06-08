@@ -8,7 +8,7 @@
 				<h4>Current Value<br>{{ mostRecent.asset_str }}</h4>
 			</div>
 			<div class="pt-2 col-sm ml-5" style="background-color: {% if mostRecent.gain < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
-				<h4>Overall Gain<br>{{ mostRecent.gain_str }}</h4>
+				<h4>Current Gain<br>{{ mostRecent.gain_str }}</h4>
 			</div>
 			<div class="pt-2 col-sm ml-5" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
 				<h4>Growth<br>{{ mostRecent.growth_str }}%</h4>
@@ -16,24 +16,24 @@
 		</div>
 
 		<div class="row text-center">
-			<canvas class="mt-4 w-100" id="total_chart" width="900" height="175"></canvas>
+			<canvas class="mt-4 w-100" id="total_chart" width="900" height="150"></canvas>
 		</div>
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="gain_chart" width="900" height="250"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="growth_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="growth_chart" width="900" height="250"></canvas>
 			</div>
 		</div>
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_delta_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="gain_delta_chart" width="900" height="250"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="value_delta_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="value_delta_chart" width="900" height="250"></canvas>
 			</div>
 		</div>
 
@@ -129,7 +129,7 @@ var gains_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Gains',
+            label: 'Total Gain',
             data: data,
 			borderColor: border_colours,
             backgroundColor: bg_colours,
@@ -174,7 +174,7 @@ var growth_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Growth',
+            label: 'Total Growth',
 			borderColor: 'rgb(255, 0, 0)',
 			backgroundColor: 'rgb(255, 0, 0)',
 			fill: false,
@@ -225,7 +225,7 @@ var gains_delta_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Gains',
+            label: 'Change',
             data: data,
 			borderColor: border_colours,
             backgroundColor: bg_colours,
@@ -273,7 +273,7 @@ var value_delta_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Gains',
+            label: 'Change',
             data: data,
 			borderColor: border_colours,
             backgroundColor: bg_colours,

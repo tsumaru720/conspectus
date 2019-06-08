@@ -8,7 +8,7 @@ class Document extends Theme {
 	public function __construct(&$main, &$twig, $vars) {
 
 		$vars['page_title'] = $this->pageTitle;
-		
+
 		$this->db = $main->getDB();
 		$data = array(':asset_id' => $vars['asset_id']);
 		
@@ -30,7 +30,7 @@ class Document extends Theme {
 								DATE_FORMAT(epoch, '%b %Y') AS period,
 								EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
 								FROM asset_log
-                                WHERE asset_id ".$vars['modifier']." :asset_id
+								WHERE asset_id ".$vars['modifier']." :asset_id
 								GROUP BY period, yearMonth
 								ORDER BY yearMonth ASC", $data);
 
@@ -39,8 +39,8 @@ class Document extends Theme {
 			$period['gain_delta'] = 0;
 			$period['value_delta'] = 0;
 			if (isset($last)) {
-				$period['gain_delta'] = ($period['gain'] - $last['gain']);
-				$period['value_delta'] = ($period['asset_total'] - $last['asset_total']);
+				$period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2);
+				$period['value_delta'] = number_format($period['asset_total'] - $last['asset_total'] - $period['gain_delta'], 2);
 			}
 			if ($period['deposit_total'] > 0) {
 				$period['growth'] = (($period['gain'] / $period['deposit_total'])*100);
