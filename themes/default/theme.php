@@ -16,7 +16,7 @@ abstract class Theme implements ThemeInterface {
 		return $this->pageTitle;
 	}
 
-	public function debug($str) {
+	public function dump($str) {
 		echo "<!-- \n\n";
 		var_dump($str);
 		echo "\n\n-->";
