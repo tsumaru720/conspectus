@@ -10,7 +10,14 @@ class Document extends Theme {
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
+		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
+
+		if ($page->resolveView($vars['type']) != $vars['nav_item']) {
+			$page->setView($page->resolveView($vars['type']));
+			header("Location: ". $_SERVER['REQUEST_URI']);
+			die();
+		}
 
 		if ($vars['nav_item'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT SUM(deposit_value) AS deposit_total,

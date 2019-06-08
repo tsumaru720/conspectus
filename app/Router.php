@@ -18,6 +18,7 @@ class Router {
 
 	private function setGlobals() {
 		$this->page->setVar('nav_item', $_SESSION['view']);
+		$this->page->setVar('type', $_SESSION['view']);
 	}
 
 	private function addRoutes() {
@@ -32,6 +33,7 @@ class Router {
 			$this->page->setVar('menu_item', 'view/'.$type.'/'.$itemID);
 			$this->page->setVar('modifier', '=');
 			$this->page->setVar('item_id', $itemID);
+			$this->page->setVar('type', $type);
 			$this->page->display('item_view');
 		});
 
