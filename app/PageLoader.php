@@ -3,6 +3,7 @@
 class PageLoader {
 
 	private $theme = 'default';
+	private $viewType = 'asset';
 	private $main = null;
 	private $twig = null;
 	private $vars = array();
@@ -12,10 +13,19 @@ class PageLoader {
 
 	public function __construct(&$main) {
 		$this->main = $main;
+
+		if (!array_key_exists('view', $_SESSION)) {
+			$_SESSION['view'] = $this->viewType;
+		}
 	}
 
 	public function setTheme($theme) {
 		$this->$theme = $theme;
+	}
+
+	public function setView($view) {
+		$this->viewType = $view;
+		$_SESSION['view'] = $this->viewType;
 	}
 
 	public function setVar($name, $value) {

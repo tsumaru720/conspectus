@@ -8,11 +8,16 @@ class Router {
 	public function __construct(&$page) {
 		$this->page = $page;
 		$this->router = new \Bramus\Router\Router();
+		$this->setGlobals();
 		$this->addRoutes();
 	}
 	
 	public function run() {
 		$this->router->run();
+	}
+
+	private function setGlobals() {
+		$this->page->setVar('nav_item', $_SESSION['view']);
 	}
 
 	private function addRoutes() {
@@ -28,6 +33,12 @@ class Router {
 			$this->page->setVar('modifier', '=');
 			$this->page->setVar('asset_id', $assetID);
 			$this->page->display('asset_view');
+		});
+
+		$this->router->get('/viewtype/{type}', function($viewType) {
+			$this->page->setVar('nav_item', $viewType);
+			$this->page->setFrame(false, false);
+			$this->page->display('view_changer');
 		});
 
 		$this->router->set404(function() {

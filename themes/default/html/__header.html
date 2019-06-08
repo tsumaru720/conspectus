@@ -30,7 +30,9 @@ body {
 	padding-bottom: .5rem;
 }
 
-
+.navbar-nav .nav-item {
+	font-size: 1rem;
+}
 
 
 /*
@@ -121,10 +123,21 @@ body {
 
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-md">
 		<span class="navbar-brand h1 col-sm-3 col-md-2 mr-0 mb-0">TBC</span>
-    </nav>
-  
 
-
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="px-2 nav-item {% if nav_item == 'asset' %}active{% endif %}">
+					<a class="nav-link" href="/viewtype/asset">Asset Graphs</a>
+				</li>
+				<li class="px-2 nav-item {% if nav_item == 'class' %}active{% endif %}">
+					<a class="nav-link" href="/viewtype/class">Class Graphs</a>
+				</li>
+				<li class="px-2 nav-item {% if nav_item == 'custom' %}active{% endif %}">
+					<a class="nav-link" href="/viewtype/custom">Custom Graphs</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
     <div class="container-fluid">
       <div class="row">
@@ -161,7 +174,7 @@ body {
             </ul>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-				<span>Assets</span>
+				<span>{{ view_string }}</span>
 				<span data-feather="list"></span>
             </h6>
 
@@ -169,7 +182,8 @@ body {
             {% for asset in assets %}
               <li class="nav-item">
                 <a class="nav-link {% if menu_item == 'asset/' ~ asset.id %}active{% endif %}" href="/asset/{{ asset.id }}">
-                  <small>{{ asset.description }}</small>
+                  <!--<small>{{ asset.description }}</small>-->
+                  {{ asset.description }}
                 </a>
               </li>
               {% endfor %}
