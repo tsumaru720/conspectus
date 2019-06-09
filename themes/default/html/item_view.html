@@ -56,6 +56,16 @@
 // 	grey: 'rgb(201, 203, 207)'
 // };
 
+function currencyFormat(tooltipItem, data) {
+	var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+	if (label) {
+		label += ': ';
+	}
+	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+	return label;
+}
+
 var labels = [
 {% for data in periodData %}
 	'{{ data.period }}',
@@ -106,10 +116,15 @@ var total_chart = new Chart(ctx, {
                 ticks: {
                     beginAtZero: true,
 					callback: function(label, index, labels) {
-                        return "£" + label.toFixed(2);
+						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
+        },
+        tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
         }
     }
 });
@@ -156,10 +171,15 @@ var gains_chart = new Chart(ctx, {
                 ticks: {
                     beginAtZero: true,
 					callback: function(label, index, labels) {
-                        return "£" + label.toFixed(2);
+						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
+        },
+        tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
         }
     }
 });
@@ -267,10 +287,15 @@ var gains_delta_chart = new Chart(ctx, {
                 ticks: {
                     beginAtZero: true,
 					callback: function(label, index, labels) {
-                        return "£" + label.toFixed(2);
+						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
+        },
+        tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
         }
     }
 });
@@ -315,10 +340,15 @@ var value_delta_chart = new Chart(ctx, {
                 ticks: {
                     beginAtZero: true,
 					callback: function(label, index, labels) {
-                        return "£" + label.toFixed(2);
+						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
+        },
+        tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
         }
     }
 });
