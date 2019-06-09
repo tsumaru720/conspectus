@@ -46,11 +46,15 @@
 // https://www.chartjs.org/samples/latest/charts/bar/stacked.html
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
 
-//total
-//gain
-//growth
-//gain_delta
-//value_delta
+// window.chartColors = {
+// 	red: 'rgb(255, 99, 132)',
+// 	orange: 'rgb(255, 159, 64)',
+// 	yellow: 'rgb(255, 205, 86)',
+// 	green: 'rgb(75, 192, 192)',
+// 	blue: 'rgb(54, 162, 235)',
+// 	purple: 'rgb(153, 102, 255)',
+// 	grey: 'rgb(201, 203, 207)'
+// };
 
 var labels = [
 {% for data in periodData %}
@@ -169,6 +173,12 @@ var data = [
 {% endfor %}
 ];
 
+var data2 = [
+{% for data in periodData %}
+	'{{ data.gain_performance }}',
+{% endfor %}
+];
+
 var ctx = document.getElementById('growth_chart');
 var growth_chart = new Chart(ctx, {
     type: 'line',
@@ -182,6 +192,15 @@ var growth_chart = new Chart(ctx, {
 			lineTension: 0.1,
 			borderWidth: 2,
             data: data,
+            borderWidth: 1
+        }, {
+            label: 'Growth Performance',
+			borderColor: 'rgb(153, 102, 255)',
+			backgroundColor: 'rgb(153, 102, 255)',
+			fill: false,
+			lineTension: 0.1,
+			borderWidth: 2,
+            data: data2,
             borderWidth: 1
         }]
     },

@@ -77,8 +77,10 @@ class Document extends Theme {
 			}
 			if ($period['deposit_total'] > 0) {
 				$period['growth'] = (($period['gain'] / $period['deposit_total'])*100);
+				$period['gain_performance'] = number_format((($period['gain_delta'] * 12)/$period['deposit_total']) * 100, 2);
 			} else {
 				$period['growth'] = 0;
+				$period['gain_performance'] = 0;
 			}
 			$period['growth_str'] = number_format($period['growth'],2);
 
