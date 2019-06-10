@@ -1,0 +1,181 @@
+<h2>{{ page_title }}</h2></div>
+	<div class="container-fluid pr-5">
+		<div class="row text-center">
+			<canvas class="mt-4 w-100" id="breakdown" ></canvas>
+			<!--width="900" height="200"-->
+		</div>
+		<div class="row text-center">
+			<div class="pt-2 col-sm">
+				<canvas class="mt-4 w-100" id="pie"></canvas>
+			</div>
+			<div class="pt-2 col-sm">
+				&nbsp;
+			</div>
+		</div>
+	</div>
+
+<!-- Graphs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+
+function currencyFormat(tooltipItem, data) {
+	var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+	if (label) {
+		label += ': ';
+	}
+	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+	return label;
+}
+
+function pastel_colour(input_str) {
+  var baseRed = 100;
+  var baseGreen = 100;
+  var baseBlue = 100;
+
+  var seed = 0;
+  for (i = 0; i < input_str.length; i++) {
+    seed ^= input_str.charCodeAt(i);
+  }
+
+  var rand_1 = Math.abs((Math.sin(seed++) * 10000)) % 360;
+  var rand_2 = Math.abs((Math.sin(seed++) * 10000)) % 360;
+  var rand_3 = Math.abs((Math.sin(seed++) * 10000)) % 360;
+
+  var red = Math.round((rand_1 + baseRed) / 2);
+  var green = Math.round((rand_2 + baseGreen) / 2);
+  var blue = Math.round((rand_3 + baseBlue) / 2);
+
+  return 'rgba('+red+','+green+','+blue+',1)';
+}
+
+var labels = [
+{% for label in labels %}
+	'{{ label }}',
+{% endfor %}
+];
+
+// TOTALS CHART
+var data = {
+	labels: labels,
+	datasets: [
+	{% for dataset in log %}
+	{
+		label: '{{ dataset.name|raw }}',
+		backgroundColor: pastel_colour('{{ dataset.name|raw }}'),
+		borderColor: pastel_colour('{{ dataset.name|raw }}'),
+		borderWidth: 1,
+		data: [
+			{% for data in dataset.data %}
+				'{{ data }}',
+			{% endfor %}
+		]
+	},
+	{% endfor %}
+	]
+};
+
+var ctx = document.getElementById('breakdown');
+var total_chart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+		animation: false,
+		aspectRatio: 4,
+        legend: {
+			display: true,
+			position: 'right'
+		},
+        scales: {
+            yAxes: [{
+				stacked: true,
+                ticks: {
+                    beginAtZero: true,
+					callback: function(label, index, labels) {
+						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    }
+                }
+            }],
+			xAxes: [{
+				stacked: true,
+			}]
+        },
+        tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
+        }
+    }
+});
+
+
+var labels = [
+{% for asset in mostRecent %}
+	'{{ asset.name|raw }}',
+{% endfor %}
+];
+
+var data = {
+	labels: labels,
+	datasets: [{
+		backgroundColor: [
+		{% for asset in mostRecent %}
+			pastel_colour('{{ asset.name|raw }}'),
+		{% endfor %}
+		],
+		data: [
+			{% for asset in mostRecent %}
+				'{{ asset.value }}',
+			{% endfor %}
+		]
+	}]
+};
+
+
+var ctx = document.getElementById('pie');
+var total_chart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+		animation: false,
+        legend: {
+			display: true,
+			position: 'right'
+		},
+    }
+});
+
+
+
+// type: 'pie',
+// data: {
+// 	datasets: [{
+// 		data: [
+// 			randomScalingFactor(),
+// 			randomScalingFactor(),
+// 			randomScalingFactor(),
+// 			randomScalingFactor(),
+// 			randomScalingFactor(),
+// 		],
+// 		backgroundColor: [
+// 			window.chartColors.red,
+// 			window.chartColors.orange,
+// 			window.chartColors.yellow,
+// 			window.chartColors.green,
+// 			window.chartColors.blue,
+// 		],
+// 		label: 'Dataset 1'
+// 	}],
+// 	labels: [
+// 		'Red',
+// 		'Orange',
+// 		'Yellow',
+// 		'Green',
+// 		'Blue'
+// 	]
+// },
+// options: {
+// 	responsive: true
+// }
+
+</script>

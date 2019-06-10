@@ -43,6 +43,11 @@ class Router {
 			$this->page->display('view_changer');
 		});
 
+		$this->router->get('/breakdown', function() {
+			$this->page->setVar('menu_item', 'breakdown');
+			$this->page->display('breakdown');
+		});
+
 		$this->router->set404(function() {
 			$this->page->setFrame(false, false);
 			$this->page->display('http_404');
