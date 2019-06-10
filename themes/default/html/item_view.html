@@ -11,7 +11,7 @@
 				<h4>Total Return<br>{{ mostRecent.gain_str }}</h4>
 			</div>
 			<div class="pt-2 col-sm ml-5" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
-				<h4>Growth<br>{{ mostRecent.growth_str }}%</h4>
+				<h4>Total Return<br>{{ mostRecent.growth_str }}%</h4>
 			</div>
 		</div>
 
@@ -93,7 +93,7 @@ var data = {
 		borderColor: 'rgb(255, 159, 64)',
 		backgroundColor: 'rgb(255, 159, 64)',
 		fill: false,
-		lineTension: 0.1,
+		lineTension: 0.3,
 		borderWidth: 2,
 		data: [
 			{% for data in periodData %}
@@ -151,7 +151,7 @@ var gains_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Total Gain',
+            label: 'Total Return',
             data: data,
 			borderColor: border_colours,
             backgroundColor: bg_colours,
@@ -161,7 +161,7 @@ var gains_chart = new Chart(ctx, {
     options: {
 		title: {
 			display: true,
-			text: "Gain over time"
+			text: "Total return over time"
 		},
 		animation: false,
         legend: {
@@ -207,11 +207,11 @@ var growth_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Total Growth',
+            label: 'Total Return',
 			borderColor: 'rgb(255, 0, 0)',
 			backgroundColor: 'rgb(255, 0, 0)',
 			fill: false,
-			lineTension: 0.1,
+			lineTension: 0.3,
 			borderWidth: 2,
             data: data,
             borderWidth: 1
@@ -220,7 +220,7 @@ var growth_chart = new Chart(ctx, {
 			borderColor: 'rgb(153, 102, 255)',
 			backgroundColor: 'rgb(153, 102, 255)',
 			fill: false,
-			lineTension: 0.1,
+			lineTension: 0.3,
 			borderWidth: 2,
             data: data2,
             borderWidth: 1
@@ -229,7 +229,7 @@ var growth_chart = new Chart(ctx, {
     options: {
 		title: {
 			display: true,
-			text: "Growth over time"
+			text: "Total return over time"
 		},
 		animation: false,
         legend: {
@@ -277,7 +277,7 @@ var gains_delta_chart = new Chart(ctx, {
     options: {
 		title: {
 			display: true,
-			text: "Monthly gain change"
+			text: "Monthly return change"
 		},
 		animation: false,
         legend: {

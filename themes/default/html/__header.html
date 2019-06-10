@@ -131,13 +131,18 @@ body {
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
 				<li class="px-2 nav-item {% if nav_item == 'asset' %}active{% endif %}">
-					<a class="nav-link" href="/viewtype/asset">Asset Graphs</a>
+					<a class="nav-link" href="/viewtype/asset">Asset View</a>
 				</li>
 				<li class="px-2 nav-item {% if nav_item == 'class' %}active{% endif %}">
-					<a class="nav-link" href="/viewtype/class">Class Graphs</a>
+					<a class="nav-link" href="/viewtype/class">Class View</a>
 				</li>
 				<li class="px-2 nav-item {% if nav_item == 'custom' %}active{% endif %}">
-					<a class="nav-link" href="/viewtype/custom">Custom Graphs</a>
+					<a class="nav-link" href="/viewtype/custom">Custom Views</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav mr-2">
+				<li class="px-2 nav-item {% if nav_item == 'settings' %}active{% endif %}">
+					<a class="nav-link disabled" href="/settings">Settings</a>
 				</li>
 			</ul>
 		</div>
@@ -161,7 +166,7 @@ body {
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link disabled" href="/">
+                <a class="nav-link {% if menu_item == 'breakdown' %}active{% endif %}" href="/breakdown">
                   Breakdown
                 </a>
               </li>
