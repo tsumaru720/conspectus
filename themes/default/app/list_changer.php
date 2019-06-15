@@ -7,7 +7,7 @@ class Document extends Theme {
 		$this->vars = $vars;
 		$page = $main->getPage();
 
-		$page->setView($page->resolveView($vars['nav_item']));
+		$page->setListType($page->resolveListType($vars['nav_item']));
 
 		header("Location: /");
 		die();

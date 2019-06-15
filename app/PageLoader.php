@@ -3,7 +3,7 @@
 class PageLoader {
 
 	private $theme = 'default';
-	private $viewType = 'asset';
+	private $listType = 'asset';
 	private $main = null;
 	private $twig = null;
 	private $vars = array();
@@ -14,8 +14,8 @@ class PageLoader {
 	public function __construct(&$main) {
 		$this->main = $main;
 
-		if (!array_key_exists('view', $_SESSION)) {
-			$_SESSION['view'] = $this->viewType;
+		if (!array_key_exists('list_type', $_SESSION)) {
+			$_SESSION['list_type'] = $this->listType;
 		}
 	}
 
@@ -23,9 +23,9 @@ class PageLoader {
 		$this->$theme = $theme;
 	}
 
-	public function setView($view) {
-		$this->viewType = $view;
-		$_SESSION['view'] = $this->viewType;
+	public function setListType($type) {
+		$this->listType = $type;
+		$_SESSION['list_type'] = $this->listType;
 	}
 
 	public function setVar($name, $value) {
@@ -45,9 +45,9 @@ class PageLoader {
 		}
 	}
 
-	public function resolveView($view) {
-		if ($view == 'asset') { return 'asset'; }
-		elseif ($view == 'class') { return 'class'; }
+	public function resolveListType($type) {
+		if ($type == 'asset') { return 'asset'; }
+		elseif ($type == 'class') { return 'class'; }
 		else { return 'asset'; }
 	}
 

@@ -17,8 +17,8 @@ class Router {
 	}
 
 	private function setGlobals() {
-		$this->page->setVar('nav_item', $_SESSION['view']);
-		$this->page->setVar('type', $_SESSION['view']);
+		$this->page->setVar('nav_item', $_SESSION['list_type']);
+		$this->page->setVar('type', $_SESSION['list_type']);
 	}
 
 	private function addRoutes() {
@@ -37,10 +37,10 @@ class Router {
 			$this->page->display('item_view');
 		});
 
-		$this->router->get('/viewtype/{type}', function($type) {
+		$this->router->get('/listtype/{type}', function($type) {
 			$this->page->setVar('nav_item', $type);
 			$this->page->setFrame(false, false);
-			$this->page->display('view_changer');
+			$this->page->display('list_changer');
 		});
 
 		$this->router->get('/breakdown', function() {

@@ -13,8 +13,8 @@ class Document extends Theme {
 		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
 
-		if ($page->resolveView($vars['type']) != $vars['nav_item']) {
-			$page->setView($page->resolveView($vars['type']));
+		if ($page->resolveListType($vars['type']) != $vars['nav_item']) {
+			$page->setListType($page->resolveListType($vars['type']));
 			header("Location: ". $_SERVER['REQUEST_URI']);
 			die();
 		}

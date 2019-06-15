@@ -9,13 +9,11 @@ class Header extends Theme {
 		$this->db = $main->getDB();
 		$this->page = $main->getPage();
 
-		$view = $this->page->resolveView($vars['nav_item']);
+		$type = $this->page->resolveListType($vars['nav_item']);
 
-		if ($view == "asset") {
-			$vars['view_string'] = "Assets";
+		if ($type == "asset") {
 			$q = $this->db->query("SELECT * from asset_list ORDER BY description ASC");
-		} elseif ($view == "class") {
-			$vars['view_string'] = "Classes";
+		} elseif ($type == "class") {
 			$q = $this->db->query("SELECT * from asset_classes ORDER BY description ASC");
 		}
 
