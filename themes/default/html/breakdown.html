@@ -84,7 +84,11 @@ var total_chart = new Chart(ctx, {
 		aspectRatio: 4,
         legend: {
 			display: true,
-			position: 'right'
+			position: 'right',
+			labels: {
+				boxWidth: 10,
+				fontSize: 9,
+			}
 		},
         scales: {
             yAxes: [{
@@ -140,7 +144,11 @@ var total_chart = new Chart(ctx, {
 		animation: false,
         legend: {
 			display: true,
-			position: 'right'
+			position: 'right',
+			labels: {
+				boxWidth: 10,
+				fontSize: 9,
+			}
 		},
     }
 });

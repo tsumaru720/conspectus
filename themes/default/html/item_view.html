@@ -111,7 +111,11 @@ var total_chart = new Chart(ctx, {
 		animation: false,
         legend: {
 			display: true,
-			position: 'right'
+			position: 'right',
+			labels: {
+				boxWidth: 10,
+				fontSize: 9,
+			}
 		},
         scales: {
             yAxes: [{
@@ -233,8 +237,12 @@ var growth_chart = new Chart(ctx, {
 		},
 		animation: false,
         legend: {
-			display: false,
-			position: 'right'
+			display: true,
+			position: 'right',
+			labels: {
+				boxWidth: 10,
+				fontSize: 9,
+			}
 		},
         scales: {
             yAxes: [{
