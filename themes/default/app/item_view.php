@@ -72,13 +72,13 @@ class Document extends Theme {
 			$period['gain_delta'] = 0;
 			$period['value_delta'] = 0;
 			if (isset($last)) {
-				$period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2);
-				$period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2);
+				$period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2, '.', '');
+				$period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2, '.', '');
 			}
 
 			if ($period['deposit_total'] > 0) {
-				$period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2);
-				$period['gain_performance'] = number_format((($period['gain_delta'] * 12)/$period['deposit_total']) * 100, 2);
+				$period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2, '.', '');
+				$period['gain_performance'] = number_format((($period['gain_delta'] * 12)/$period['deposit_total']) * 100, 2, '.', '');
 			} else {
 				$period['gain_performance'] = 0;
 				if ($period['gain'] > 0) {
