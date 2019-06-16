@@ -21,19 +21,19 @@
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_chart" width="900" height="250"></canvas>
+				<canvas class="my-1 w-100" id="gain_chart" width="900" height="300"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="growth_chart" width="900" height="250"></canvas>
+				<canvas class="my-1 w-100" id="growth_chart" width="900" height="300"></canvas>
 			</div>
 		</div>
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_delta_chart" width="900" height="250"></canvas>
+				<canvas class="my-1 w-100" id="gain_delta_chart" width="900" height="300"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="value_delta_chart" width="900" height="250"></canvas>
+				<canvas class="my-1 w-100" id="value_delta_chart" width="900" height="300"></canvas>
 			</div>
 		</div>
 
@@ -93,7 +93,7 @@ var data = {
 		borderColor: 'rgb(255, 159, 64)',
 		backgroundColor: 'rgb(255, 159, 64)',
 		fill: false,
-		lineTension: 0.3,
+		lineTension: 0.1,
 		borderWidth: 2,
 		data: [
 			{% for data in periodData %}
