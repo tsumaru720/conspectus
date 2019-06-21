@@ -23,7 +23,7 @@ class Router {
 
 	private function addRoutes() {
 		$this->router->get('/', function() {
-			$this->page->setVar('menu_item', 'dashboard');
+			$this->page->setVar('menu_item', 'overview');
 			$this->page->setVar('modifier', '>');
 			$this->page->setVar('item_id', '0');
 			$this->page->display('item_view');
