@@ -12,8 +12,10 @@ class Header extends Theme {
 		$type = $this->page->resolveListType($vars['nav_item']);
 
 		if ($type == "asset") {
+			$vars['view_string'] = "Assets";
 			$q = $this->db->query("SELECT * from asset_list ORDER BY description ASC");
 		} elseif ($type == "class") {
+			$vars['view_string'] = "Classes";
 			$q = $this->db->query("SELECT * from asset_classes ORDER BY description ASC");
 		}
 

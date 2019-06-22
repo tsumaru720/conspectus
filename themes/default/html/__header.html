@@ -99,6 +99,21 @@ body {
   text-transform: uppercase;
 }
 
+.nav-pills .nav-item {
+	margin-left: 2px;
+	margin-right: 2px;
+	color: black;
+}
+.nav-pills .nav-link.active {
+	background-color: #a0caf3;
+	color: black;
+}
+
+.nav-pills .nav-link:hover {
+	background-color: #fccb9f;
+}
+
+
 /*
  * Content
  */
@@ -154,40 +169,7 @@ body {
           <div class="sidebar-sticky">
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
-				<span>View Type</span>
-                <span data-feather="bar-chart-2"></span>
-            </h6>
-
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link {% if menu_item == 'overview' %}active{% endif %}" href="/">
-                  Overview
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if menu_item == 'breakdown' %}active{% endif %}" href="/breakdown">
-                  Breakdown
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="/">
-                  Analytics
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="/">
-                  Projections
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="/">
-                  Log
-                </a>
-              </li>
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-				<span>Lists</span>
+				<span>{{ view_string }}</span>
 				<span data-feather="list"></span>
             </h6>
 
