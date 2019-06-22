@@ -68,19 +68,23 @@ class Document extends Theme {
 		}
 
 		while ($period = $this->db->fetch($dataQuery)) {
-			// Calculate Gain Difference
 			$period['gain_delta'] = 0;
 			$period['value_delta'] = 0;
+			$period['gain_performance'] = 0;
+
 			if (isset($last)) {
 				$period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2, '.', '');
 				$period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2, '.', '');
+
+				if ($last['asset_total'] > 0) {
+					$period['gain_performance'] = ((($period['asset_total'] - $period['value_delta'] - $last['asset_total']) / $last['asset_total']) * 12);
+					$period['gain_performance'] = number_format($period['gain_performance'] * 100, 2, '.', '');
+				}
 			}
 
 			if ($period['deposit_total'] > 0) {
 				$period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2, '.', '');
-				$period['gain_performance'] = number_format((($period['gain_delta'] * 12)/$period['deposit_total']) * 100, 2, '.', '');
 			} else {
-				$period['gain_performance'] = 0;
 				if ($period['gain'] > 0) {
 					$period['growth'] = 100;
 				} else {

@@ -220,13 +220,14 @@ var growth_chart = new Chart(ctx, {
             data: data,
             borderWidth: 1
         }, {
-            label: 'Effective Yield',
+            label: 'Effective Rate',
 			borderColor: 'rgb(153, 102, 255)',
 			backgroundColor: 'rgb(153, 102, 255)',
 			fill: false,
 			lineTension: 0.3,
 			borderWidth: 2,
             data: data2,
+            hidden: false,
             borderWidth: 1
         }]
     },
@@ -351,7 +352,7 @@ var value_delta_chart = new Chart(ctx, {
                     beginAtZero: true,
 					callback: function(label, index, labels) {
 						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    }
+                    },
                 }
             }]
         },
