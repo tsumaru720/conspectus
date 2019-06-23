@@ -24,7 +24,7 @@
 <script>
 
 function currencyFormat(tooltipItem, data) {
-	var label = data.datasets[tooltipItem.datasetIndex].label || '';
+	var label = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
 
 	if (label) {
 		label += ': ';
@@ -155,6 +155,19 @@ var total_chart = new Chart(ctx, {
 				fontSize: 9,
 			}
 		},
+		scale: {
+			ticks: {
+				beginAtZero: true,
+				callback: function(label, index, labels) {
+					return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+				}
+			}
+        },
+		tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
+        }
     }
 });
 
