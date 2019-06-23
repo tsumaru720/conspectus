@@ -32,13 +32,22 @@ class Router {
 		$this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
 			$this->page->setVar('left_menu', $type.'/'.$itemID);
 			$this->page->setVar('modifier', '=');
-			$this->page->setVar('item_id', $itemID);
 			$this->page->setVar('type', $type);
+			$this->page->setVar('item_id', $itemID);
 			$this->page->display('item_view');
 		});
 
 		$this->router->get('/breakdown', function() {
+			$this->page->setVar('left_menu', 'all');
 			$this->page->setVar('nav_item', 'breakdown');
+			$this->page->display('breakdown');
+		});
+
+		$this->router->get('/breakdown/{type}/{itemID}', function($type, $itemID) {
+			$this->page->setVar('left_menu', $type.'/'.$itemID);
+			$this->page->setVar('nav_item', 'breakdown');
+			$this->page->setVar('type', $type);
+			$this->page->setVar('item_id', $itemID);
 			$this->page->display('breakdown');
 		});
 
