@@ -1,7 +1,7 @@
 <?php
 
-require_once('config.php');
-require_once('app/MySQL.php');
+require_once('../config.php');
+require_once('../app/MySQL.php');
 
 $mysql = new MySQL($config['SQL_HOSTNAME'], $config['SQL_PORT'], $config['SQL_USERNAME'], $config['SQL_PASSWORD'], $config['SQL_DATABASE']);
 
