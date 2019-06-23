@@ -13,6 +13,8 @@ class Document extends Theme {
 		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
 
+		$vars['single_asset'] = true;
+
 		if ($vars['type'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT
 											SUM(deposit_value) AS deposit_total,
@@ -44,7 +46,6 @@ class Document extends Theme {
 					$this->pageTitle = "Asset View - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 					$vars['asset_class'] = $item['class'];
-					$vars['single_asset'] = true;
 				} else {
 					echo "invalid asset";
 					die();
@@ -72,11 +73,20 @@ class Document extends Theme {
 										ORDER BY
 											yearMonth ASC", $data);
 			if ($vars['item_id'] > 0) {
-				$nameQuery = $this->db->query("SELECT description FROM asset_classes WHERE id = :item_id;", $data);
+				$nameQuery = $this->db->query("SELECT
+												count(asset_list.description) as count,
+												asset_classes.description AS description
+											FROM
+												asset_list
+											LEFT JOIN asset_classes ON asset_class = asset_classes.id
+											WHERE
+												asset_classes.id = :item_id;", $data);
 				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Class View - ".$item['description'];
 					$vars['page_title'] = $item['description'];
-					$vars['single_asset'] = false;
+					if ($item['count'] > 1) {
+						$vars['single_asset'] = false;
+					}
 				} else {
 					echo "invalid asset";
 					die();
