@@ -29,7 +29,8 @@ function currencyFormat(tooltipItem, data) {
 	if (label) {
 		label += ': ';
 	}
-	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+	var value = tooltipItem.yLabel || data.datasets[0].data[tooltipItem.index];
+	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
 	return label;
 }
 
