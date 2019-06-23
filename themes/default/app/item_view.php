@@ -10,7 +10,6 @@ class Document extends Theme {
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
-		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
 
 		$vars['single_asset'] = false;

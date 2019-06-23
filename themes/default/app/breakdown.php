@@ -10,19 +10,64 @@ class Document extends Theme {
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
-		$page = $main->getPage();
 
-		$logQuery = $this->db->query("SELECT asset_id, 
-								description,
-								deposit_value,
-								asset_value,
-								(asset_value - deposit_value) AS gain,
-								DATE_FORMAT(epoch, '%b %Y') AS period,
-								EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
-								FROM asset_log
-								LEFT JOIN asset_list
-								ON asset_log.asset_id = asset_list.id
-								ORDER BY yearMonth ASC, description ASC");
+		if ($vars['type'] == 'asset') {
+			$logQuery = $this->db->query("SELECT
+											asset_id,
+											description,
+											deposit_value,
+											asset_value,
+											(asset_value - deposit_value) AS gain,
+											DATE_FORMAT(epoch, '%b %Y') AS period,
+											EXTRACT(YEAR_MONTH
+										FROM
+											epoch) AS yearMonth
+										FROM
+											asset_log
+										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+										ORDER BY
+											yearMonth ASC,
+											description ASC");
+		} elseif ($vars['type'] == 'class') {
+			$data = array(':item_id' => $vars['item_id']);
+			$logQuery = $this->db->query("SELECT
+											asset_id,
+											asset_list.description,
+											deposit_value,
+											asset_value,
+											(asset_value - deposit_value) AS gain,
+											DATE_FORMAT(epoch, '%b %Y') AS period,
+											EXTRACT(YEAR_MONTH
+										FROM
+											epoch) AS yearMonth
+										FROM
+											asset_log
+										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+										LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+										WHERE
+											asset_classes.id = :item_id
+										ORDER BY
+											yearMonth ASC,
+											description ASC", $data);
+			if ($vars['item_id'] > 0) {
+				$nameQuery = $this->db->query("SELECT
+												asset_classes.description AS description
+											FROM
+												asset_list
+											LEFT JOIN asset_classes ON asset_class = asset_classes.id
+											WHERE
+												asset_classes.id = :item_id;", $data);
+				if ($item = $this->db->fetch($nameQuery)) {
+					$this->pageTitle = "Class Breakdown - ".$item['description'];
+					$vars['page_title'] = $item['description'];
+				} else {
+					echo "invalid asset";
+					die();
+					//TODO make this error nicer
+				}
+			}
+		}
+
 
 		while ($log = $this->db->fetch($logQuery)) {
 			$vars['labels'][$log['yearMonth']] = $log['period'];
