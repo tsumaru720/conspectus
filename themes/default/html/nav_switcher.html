@@ -4,7 +4,8 @@
 	<div class="col">
 		<nav class="nav nav-pills nav-fill">
 			<a class="nav-item nav-link {% if nav_item == 'overview' %}active disabled{% endif %}" href="/"><span data-feather="home"></span> <small>Overview</small></a>
-			<a class="nav-item nav-link {% if nav_item == 'breakdown' %}active disabled{% endif %}" href="/breakdown"><span data-feather="bar-chart-2"></span> <small>Breakdown</small></a>
+			<a class="nav-item nav-link {% if nav_item == 'breakdown' %}active disabled{% endif %} {% if single_asset == 'true' %}disabled{% endif %}" href="/breakdown">
+				<span data-feather="bar-chart-2"></span> <small>Breakdown</small></a>
 			<a class="nav-item nav-link disabled" href="#"><span data-feather="percent"></span> <small>Analytics</small></a>
 			<a class="nav-item nav-link disabled" href="#"><span data-feather="trending-up"></span> <small>Projections</small></a>
 			<a class="nav-item nav-link disabled" href="#"><span data-feather="book-open"></span> <small>Ledger</small></a>
