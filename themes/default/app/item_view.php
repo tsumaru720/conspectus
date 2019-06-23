@@ -13,13 +13,7 @@ class Document extends Theme {
 		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
 
-		if ($page->resolveListType($vars['type']) != $vars['nav_item']) {
-			$page->setListType($page->resolveListType($vars['type']));
-			header("Location: ". $_SERVER['REQUEST_URI']);
-			die();
-		}
-
-		if ($vars['nav_item'] == 'asset') {
+		if ($vars['type'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT SUM(deposit_value) AS deposit_total,
 									SUM(asset_value) AS asset_total,
 									SUM(asset_value - deposit_value) AS gain,
@@ -33,14 +27,15 @@ class Document extends Theme {
 				$nameQuery = $this->db->query("SELECT description FROM asset_list WHERE id = :item_id;", $data);
 				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Asset View - ".$item['description'];
-					$vars['page_title'] = $this->pageTitle;
+					$vars['page_title'] = $item['description'];
+					$vars['single_asset'] = true;
 				} else {
 					echo "invalid asset";
 					die();
 					//TODO make this error nicer
 				}
 			}
-		} elseif ($vars['nav_item'] == 'class') {
+		} elseif ($vars['type'] == 'class') {
 	 		$dataQuery = $this->db->query("SELECT SUM(deposit_value) AS deposit_total,
 	 								SUM(asset_value) AS asset_total,
 	 								SUM(asset_value - deposit_value) AS gain,
@@ -58,7 +53,8 @@ class Document extends Theme {
 				$nameQuery = $this->db->query("SELECT description FROM asset_classes WHERE id = :item_id;", $data);
 				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Class View - ".$item['description'];
-					$vars['page_title'] = $this->pageTitle;
+					$vars['page_title'] = $item['description'];
+					$vars['single_asset'] = false;
 				} else {
 					echo "invalid asset";
 					die();

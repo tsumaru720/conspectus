@@ -3,7 +3,6 @@
 class PageLoader {
 
 	private $theme = 'default';
-	private $listType = 'asset';
 	private $main = null;
 	private $twig = null;
 	private $vars = array();
@@ -13,19 +12,10 @@ class PageLoader {
 
 	public function __construct(&$main) {
 		$this->main = $main;
-
-		if (!array_key_exists('list_type', $_SESSION)) {
-			$_SESSION['list_type'] = $this->listType;
-		}
 	}
 
 	public function setTheme($theme) {
 		$this->$theme = $theme;
-	}
-
-	public function setListType($type) {
-		$this->listType = $type;
-		$_SESSION['list_type'] = $this->listType;
 	}
 
 	public function setVar($name, $value) {
@@ -43,12 +33,6 @@ class PageLoader {
 		} else {
 			return __DIR__ . '/../themes/default/'.$location;
 		}
-	}
-
-	public function resolveListType($type) {
-		if ($type == 'asset') { return 'asset'; }
-		elseif ($type == 'class') { return 'class'; }
-		else { return 'asset'; }
 	}
 
 	private function checkInterface($var) {

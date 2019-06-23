@@ -10,7 +10,6 @@ class Main {
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
 
-		session_start();
 		$this->page = new PageLoader($this);
 		$this->loadConfig();
 		$this->initDB();
@@ -26,7 +25,6 @@ class Main {
 	}
 	
 	private function loadConfig() {
-
 		// Placeholder for default config settings
 		$config = array();
 
@@ -42,11 +40,6 @@ class Main {
 
 		if (array_key_exists('THEME', $this->config)) {
 			$this->page->setTheme($this->config['THEME']);
-		}
-		if (array_key_exists('VIEW', $this->config) && !array_key_exists('view', $_SESSION)) {
-			// This should only set the default view if we dont already have one
-			// User might have changed it in the UI
-			$this->page->setView($this->config['VIEW']);
 		}
 	}
 

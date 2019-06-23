@@ -148,7 +148,7 @@ body {
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-md">
 		<span class="navbar-brand h1 col-sm-3 col-md-2 mr-0 mb-0">Conspectus</span>
 
-		<div class="collapse navbar-collapse">
+<!--		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
 				<li class="px-2 nav-item {% if nav_item == 'asset' %}active{% endif %}">
 					<a class="nav-link" href="/listtype/asset">Asset List</a>
@@ -165,7 +165,7 @@ body {
 					<a class="nav-link disabled" href="/settings">Settings</a>
 				</li>
 			</ul>
-		</div>
+		</div>-->
 	</nav>
 
     <div class="container-fluid">
@@ -174,15 +174,29 @@ body {
           <div class="sidebar-sticky">
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
-				<span>{{ view_string }}</span>
+				<span>Classes</span>
 				<span data-feather="list"></span>
             </h6>
 
             <ul class="nav flex-column">
-            {% for item in items %}
+            {% for item in class_menu_items %}
               <li class="nav-item">
-                <a class="nav-link {% if menu_item == 'view/' ~ nav_item ~ '/' ~ item.id %}active{% endif %}" href="/view/{{nav_item}}/{{ item.id }}">
-                  <!--<small>{{ asset.description }}</small>-->
+                <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/view/class/{{ item.id }}">
+                  {{ item.description }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+				<span>Assets</span>
+				<span data-feather="list"></span>
+            </h6>
+
+            <ul class="nav flex-column">
+            {% for item in asset_menu_items %}
+              <li class="nav-item">
+                <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/view/asset/{{ item.id }}">
                   {{ item.description }}
                 </a>
               </li>
