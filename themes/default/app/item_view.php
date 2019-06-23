@@ -13,7 +13,7 @@ class Document extends Theme {
 		$page = $main->getPage();
 		$data = array(':item_id' => $vars['item_id']);
 
-		$vars['single_asset'] = true;
+		$vars['single_asset'] = false;
 
 		if ($vars['type'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT
@@ -46,6 +46,7 @@ class Document extends Theme {
 					$this->pageTitle = "Asset View - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 					$vars['asset_class'] = $item['class'];
+					$vars['single_asset'] = true;
 				} else {
 					echo "invalid asset";
 					die();
@@ -84,8 +85,8 @@ class Document extends Theme {
 				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Class View - ".$item['description'];
 					$vars['page_title'] = $item['description'];
-					if ($item['count'] > 1) {
-						$vars['single_asset'] = false;
+					if ($item['count'] == 1) {
+						$vars['single_asset'] = true;
 					}
 				} else {
 					echo "invalid asset";
