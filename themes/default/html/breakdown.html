@@ -7,6 +7,7 @@
 			<!--width="900" height="200"-->
 		</div>
 		<div class="row text-center">
+		{% if left_menu != 'all' %}
 			<div class="pt-2 col">
 				&nbsp;
 			</div>
@@ -16,6 +17,14 @@
 			<div class="pt-2 col-4">
 				&nbsp;
 			</div>
+		{% else %}
+			<div class="pt-2 col">
+				<canvas class="mt-4 w-100" id="pie"></canvas>
+			</div>
+			<div class="pt-2 col">
+				<canvas class="mt-4 w-100" id="pie2"></canvas>
+			</div>
+		{% endif %}
 		</div>
 	</div>
 
@@ -163,5 +172,54 @@ var total_chart = new Chart(ctx, {
         }
     }
 });
+
+{% if left_menu == 'all' %}
+
+var labels = [
+{% for class in class_mostRecent %}
+	'{{ class.name|raw }}',
+{% endfor %}
+];
+
+var data = {
+	labels: labels,
+	datasets: [{
+		backgroundColor: [
+		{% for class in class_mostRecent %}
+			pastel_colour('{{ class.name|raw }}'),
+		{% endfor %}
+		],
+		data: [
+			{% for class in class_mostRecent %}
+				'{{ class.value }}',
+			{% endfor %}
+		]
+	}]
+};
+
+
+var ctx = document.getElementById('pie2');
+var total_chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+    options: {
+		animation: false,
+        legend: {
+			display: true,
+			position: 'right',
+			labels: {
+				boxWidth: 10,
+				fontSize: 9,
+			}
+		},
+		tooltips: {
+			callbacks: {
+				label: currencyFormat
+			}
+        }
+    }
+});
+
+{% endif %}
 
 </script>

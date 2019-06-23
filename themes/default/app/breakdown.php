@@ -33,9 +33,7 @@ class Document extends Theme {
 			$logQuery = $this->db->query("SELECT
 											asset_id,
 											asset_list.description,
-											deposit_value,
 											asset_value,
-											(asset_value - deposit_value) AS gain,
 											DATE_FORMAT(epoch, '%b %Y') AS period,
 											EXTRACT(YEAR_MONTH
 										FROM
@@ -77,6 +75,7 @@ class Document extends Theme {
 			
 			$last['log'][$log['asset_id']]['name'] = $log['description'];
 			$last['log'][$log['asset_id']]['value'] = $log['asset_value'];
+			$last['yearMonth'] = $log['yearMonth'];
 		}
 
 		usort($last['log'], function($a, $b) {
@@ -91,6 +90,36 @@ class Document extends Theme {
 					ksort($vars['log'][$key]['data']);
 				}
 			}
+		}
+
+		if ($vars['left_menu'] == 'all') {
+			$data = array(':yearMonth' => $last['yearMonth']);
+			$logQuery = $this->db->query("SELECT
+											asset_classes.id,
+											asset_classes.description as description,
+											sum(asset_value) as asset_value,
+											DATE_FORMAT(epoch, '%b %Y') AS period,
+											EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+										FROM
+											asset_log
+										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+										LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+										WHERE
+											EXTRACT(YEAR_MONTH FROM epoch) = :yearMonth
+										GROUP BY
+											period,
+											yearMonth,
+											asset_classes.id,
+											asset_classes.description
+										ORDER BY
+											yearMonth ASC,
+											description ASC", $data);
+			while ($log = $this->db->fetch($logQuery)) {
+				$vars['class_mostRecent'][] = array('name' => $log['description'], 'value' => $log['asset_value']);
+			}
+			usort($vars['class_mostRecent'], function($a, $b) {
+				return $b['value'] - $a['value'];
+			});
 		}
 
 		$this->vars = $vars;
