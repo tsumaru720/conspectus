@@ -7,10 +7,13 @@
 			<!--width="900" height="200"-->
 		</div>
 		<div class="row text-center">
-			<div class="pt-2 col-sm">
+			<div class="pt-2 col">
+				&nbsp;
+			</div>
+			<div class="pt-2 col-6">
 				<canvas class="mt-4 w-100" id="pie"></canvas>
 			</div>
-			<div class="pt-2 col-sm">
+			<div class="pt-2 col-4">
 				&nbsp;
 			</div>
 		</div>
@@ -153,6 +156,7 @@ var total_chart = new Chart(ctx, {
 			}
 		},
 		scale: {
+			display: false,
 			ticks: {
 				beginAtZero: true,
 				callback: function(label, index, labels) {
@@ -167,38 +171,5 @@ var total_chart = new Chart(ctx, {
         }
     }
 });
-
-
-
-// type: 'pie',
-// data: {
-// 	datasets: [{
-// 		data: [
-// 			randomScalingFactor(),
-// 			randomScalingFactor(),
-// 			randomScalingFactor(),
-// 			randomScalingFactor(),
-// 			randomScalingFactor(),
-// 		],
-// 		backgroundColor: [
-// 			window.chartColors.red,
-// 			window.chartColors.orange,
-// 			window.chartColors.yellow,
-// 			window.chartColors.green,
-// 			window.chartColors.blue,
-// 		],
-// 		label: 'Dataset 1'
-// 	}],
-// 	labels: [
-// 		'Red',
-// 		'Orange',
-// 		'Yellow',
-// 		'Green',
-// 		'Blue'
-// 	]
-// },
-// options: {
-// 	responsive: true
-// }
 
 </script>
