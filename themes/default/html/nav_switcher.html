@@ -4,12 +4,12 @@
 	<div class="col">
 		<nav class="nav nav-pills nav-fill">
 			<a class="nav-item nav-link
-						{% if nav_item == 'overview' %} active disabled{% endif %}"
+						{% if nav_item == 'overview' %} active{% endif %}"
 					href="{% if item_id > 0 %} /view/{{type}}/{{item_id}} {% else %} / {% endif %}">
 				<span data-feather="home"></span> <small>Overview</small>
 			</a>
 			<a class="nav-item nav-link
-						{% if nav_item == 'breakdown' %} active disabled{% endif %}
+						{% if nav_item == 'breakdown' %} active{% endif %}
 						{% if single_asset == 'true' %} disabled{% endif %}"
 					href="{% if item_id > 0 %} /breakdown/{{type}}/{{item_id}} {% else %} /breakdown {% endif %}">
 				<span data-feather="bar-chart-2"></span> <small>Breakdown</small>
