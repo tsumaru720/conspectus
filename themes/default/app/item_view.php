@@ -89,7 +89,7 @@ class Document extends Theme {
 						$vars['single_asset'] = true;
 					}
 				} else {
-					echo "invalid asset";
+					echo "invalid class";
 					die();
 					//TODO make this error nicer
 				}

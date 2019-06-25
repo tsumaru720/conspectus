@@ -59,7 +59,7 @@ class Document extends Theme {
 					$this->pageTitle = "Class Breakdown - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 				} else {
-					echo "invalid asset";
+					echo "invalid class";
 					die();
 					//TODO make this error nicer
 				}
