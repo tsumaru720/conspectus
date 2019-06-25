@@ -13,21 +13,21 @@ class Document extends Theme {
 
 		if ($vars['type'] == 'asset') {
 			$logQuery = $this->db->query("SELECT
-											asset_id,
-											description,
-											deposit_value,
-											asset_value,
-											(asset_value - deposit_value) AS gain,
-											DATE_FORMAT(epoch, '%b %Y') AS period,
-											EXTRACT(YEAR_MONTH
-										FROM
-											epoch) AS yearMonth
-										FROM
-											asset_log
-										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
-										ORDER BY
-											yearMonth ASC,
-											description ASC");
+			                                asset_id,
+			                                description,
+			                                deposit_value,
+			                                asset_value,
+			                                (asset_value - deposit_value) AS gain,
+			                                DATE_FORMAT(epoch, '%b %Y') AS period,
+			                                EXTRACT(YEAR_MONTH
+			                            FROM
+			                                epoch) AS yearMonth
+			                            FROM
+			                                asset_log
+			                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+			                            ORDER BY
+			                                yearMonth ASC,
+			                                description ASC");
 		} elseif ($vars['type'] == 'class') {
 			if (is_numeric($vars['item_id']) && $vars['item_id'] > 0) {
 				$data = array(':item_id' => $vars['item_id']);
@@ -37,30 +37,30 @@ class Document extends Theme {
 				//TODO make this error nicer
 			}
 			$logQuery = $this->db->query("SELECT
-											asset_id,
-											asset_list.description,
-											asset_value,
-											DATE_FORMAT(epoch, '%b %Y') AS period,
-											EXTRACT(YEAR_MONTH
-										FROM
-											epoch) AS yearMonth
-										FROM
-											asset_log
-										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
-										LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
-										WHERE
-											asset_classes.id = :item_id
-										ORDER BY
-											yearMonth ASC,
-											description ASC", $data);
+			                                asset_id,
+			                                asset_list.description,
+			                                asset_value,
+			                                DATE_FORMAT(epoch, '%b %Y') AS period,
+			                                EXTRACT(YEAR_MONTH
+			                            FROM
+			                                epoch) AS yearMonth
+			                            FROM
+			                                asset_log
+			                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+			                            LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+			                            WHERE
+			                                asset_classes.id = :item_id
+			                            ORDER BY
+			                                yearMonth ASC,
+			                                description ASC", $data);
 			if ($vars['item_id'] > 0) {
 				$nameQuery = $this->db->query("SELECT
-												asset_classes.description AS description
-											FROM
-												asset_list
-											LEFT JOIN asset_classes ON asset_class = asset_classes.id
-											WHERE
-												asset_classes.id = :item_id;", $data);
+				                                asset_classes.description AS description
+				                            FROM
+				                                asset_list
+				                            LEFT JOIN asset_classes ON asset_class = asset_classes.id
+				                            WHERE
+				                                asset_classes.id = :item_id;", $data);
 				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Class Breakdown - ".$item['description'];
 					$vars['page_title'] = $item['description'];
@@ -105,25 +105,25 @@ class Document extends Theme {
 		if ($vars['left_menu'] == 'all') {
 			$data = array(':yearMonth' => $last['yearMonth']);
 			$logQuery = $this->db->query("SELECT
-											asset_classes.id,
-											asset_classes.description as description,
-											sum(asset_value) as asset_value,
-											DATE_FORMAT(epoch, '%b %Y') AS period,
-											EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
-										FROM
-											asset_log
-										LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
-										LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
-										WHERE
-											EXTRACT(YEAR_MONTH FROM epoch) = :yearMonth
-										GROUP BY
-											period,
-											yearMonth,
-											asset_classes.id,
-											asset_classes.description
-										ORDER BY
-											yearMonth ASC,
-											description ASC", $data);
+			                                asset_classes.id,
+			                                asset_classes.description as description,
+			                                sum(asset_value) as asset_value,
+			                                DATE_FORMAT(epoch, '%b %Y') AS period,
+			                                EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+			                            FROM
+			                                asset_log
+			                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+			                            LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+			                            WHERE
+			                                EXTRACT(YEAR_MONTH FROM epoch) = :yearMonth
+			                            GROUP BY
+			                                period,
+			                                yearMonth,
+			                                asset_classes.id,
+			                                asset_classes.description
+			                            ORDER BY
+			                                yearMonth ASC,
+			                                description ASC", $data);
 			while ($log = $this->db->fetch($logQuery)) {
 				$vars['class_mostRecent'][] = array('name' => $log['description'], 'value' => $log['asset_value']);
 			}
