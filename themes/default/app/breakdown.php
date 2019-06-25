@@ -29,7 +29,13 @@ class Document extends Theme {
 											yearMonth ASC,
 											description ASC");
 		} elseif ($vars['type'] == 'class') {
-			$data = array(':item_id' => $vars['item_id']);
+			if (is_numeric($vars['item_id'])) {
+				$data = array(':item_id' => $vars['item_id']);
+			} else {
+				echo "bad id";
+				die();
+				//TODO make this error nicer
+			}
 			$logQuery = $this->db->query("SELECT
 											asset_id,
 											asset_list.description,

@@ -10,7 +10,13 @@ class Document extends Theme {
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
-		$data = array(':item_id' => $vars['item_id']);
+		if (is_numeric($vars['item_id'])) {
+			$data = array(':item_id' => $vars['item_id']);
+		} else {
+			echo "bad id";
+			die();
+			//TODO make this error nicer
+		}
 
 		$vars['single_asset'] = false;
 
