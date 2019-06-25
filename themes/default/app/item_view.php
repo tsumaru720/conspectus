@@ -81,7 +81,8 @@ class Document extends Theme {
 											LEFT JOIN asset_classes ON asset_class = asset_classes.id
 											WHERE
 												asset_classes.id = :item_id;", $data);
-				if ($item = $this->db->fetch($nameQuery)) {
+				$item = $this->db->fetch($nameQuery); // count() in the query will ensure this always exists
+				if (($item['count'] > 0) && ($item['description'] != 'NULL')) {
 					$this->pageTitle = "Class View - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 					if ($item['count'] == 1) {
