@@ -94,6 +94,10 @@ class Document extends Theme {
 					//TODO make this error nicer
 				}
 			}
+		} else {
+			echo "invalid type";
+			die();
+			//TODO make this error nicer
 		}
 
 		while ($period = $this->db->fetch($dataQuery)) {
