@@ -29,7 +29,7 @@ class Document extends Theme {
 											yearMonth ASC,
 											description ASC");
 		} elseif ($vars['type'] == 'class') {
-			if (is_numeric($vars['item_id'])) {
+			if (is_numeric($vars['item_id']) && $vars['item_id'] > 0) {
 				$data = array(':item_id' => $vars['item_id']);
 			} else {
 				echo "bad id";
