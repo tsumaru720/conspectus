@@ -10,13 +10,16 @@ class Document extends Theme {
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
-		if (is_numeric($vars['item_id']) && $vars['item_id'] > 0) {
-			$data = array(':item_id' => $vars['item_id']);
-		} else {
-			echo "bad id";
-			die();
-			//TODO make this error nicer
+		$data = array(':item_id' => $vars['item_id']);
+
+		if ($vars['left_menu'] != 'all') {
+			if (!is_numeric($vars['item_id']) || $vars['item_id'] < 0) {
+				echo "bad id";
+				die();
+				//TODO make this error nicer
+			}
 		}
+
 		$vars['single_asset'] = false;
 
 		if ($vars['type'] == 'asset') {
