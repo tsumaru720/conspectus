@@ -20,10 +20,10 @@
     var element = $(this);
 
     element.on('shown.bs.collapse', function () {
-      window.localStorage.setItem(element.attr('id') + "_collapsed", false);
+      window.localStorage.setItem(element.attr('id') + "_collapsed", "false");
     })
     element.on('hidden.bs.collapse', function () {
-      window.localStorage.setItem(element.attr('id') + "_collapsed", true);
+      window.localStorage.setItem(element.attr('id') + "_collapsed", "true");
     })
   });
 
@@ -31,7 +31,7 @@
       $('[data-save-state]').each(function() {
         var element = $(this);
         var descr = element.attr('id');
-        var state = window.localStorage.getItem(descr + "_collapsed") || true;
+        var state = window.localStorage.getItem(descr + "_collapsed") || "false";
 
         if (state == "true") {
           //Hidden
