@@ -92,9 +92,10 @@ body {
   font-size: 1.5rem;
 }
 
-.sidebar-heading {
+.sidebar-heading, .sidebar-heading a:hover {
   font-size: .75rem;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .nav-pills .nav-item {
@@ -171,53 +172,59 @@ body {
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
 
-			<h1 class="sidebar-brand px-3 mt-2 mb-2 "><b>Conspectus</b></h1>
+			       <h1 class="sidebar-brand px-3 mt-2 mb-2 "><b>Conspectus</b></h1>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-				<span>General</span>
+              <a class="text-muted" href="#general" data-toggle="collapse">General</a>
             </h6>
 
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link {% if left_menu == 'all' %}active{% endif %}" href="/">All Assets</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="/">Input Data</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="/">Settings</a>
-              </li>
-            </ul>
+            <div class="collapse show" id="general">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link {% if left_menu == 'all' %}active{% endif %}" href="/">All Assets</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="/">Input Data</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="/">Settings</a>
+                </li>
+              </ul>
+            </div>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-				<span>Classes</span>
-				<a class="nav-link add-button" title="Add new asset class" href="#"><span data-feather="plus-square"></span></a>
+              <a class="text-muted" href="#classList" data-toggle="collapse">Classes</a>
+              <a class="nav-link add-button" title="Add new asset class" href="#"><span data-feather="plus-square"></span></a>
             </h6>
 
-            <ul class="nav flex-column">
-            {% for item in class_menu_items %}
-              <li class="nav-item">
-                <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/view/class/{{ item.id }}">
-                  {{ item.description }}
-                </a>
-              </li>
-              {% endfor %}
-            </ul>
+            <div class="collapse show" id="classList">
+              <ul class="nav flex-column">
+              {% for item in class_menu_items %}
+                <li class="nav-item">
+                  <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/view/class/{{ item.id }}">
+                    {{ item.description }}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-				<span>Assets</span>
-				<a class="nav-link add-button" title="Add new asset" href="#"><span data-feather="plus-square"></span></a>
+              <a class="text-muted" href="#assetList" data-toggle="collapse">Assets</a>
+              <a class="nav-link add-button" title="Add new asset" href="#"><span data-feather="plus-square"></span></a>
             </h6>
 
-            <ul class="nav flex-column">
-            {% for item in asset_menu_items %}
-              <li class="nav-item">
-                <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/view/asset/{{ item.id }}">
-                  {{ item.description }}
-                </a>
-              </li>
-              {% endfor %}
-            </ul>
+            <div class="collapse show" id="assetList">
+              <ul class="nav flex-column">
+              {% for item in asset_menu_items %}
+                <li class="nav-item">
+                  <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/view/asset/{{ item.id }}">
+                    {{ item.description }}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
 
           </div>
 
