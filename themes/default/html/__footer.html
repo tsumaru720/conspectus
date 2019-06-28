@@ -10,10 +10,46 @@
     <!-- Icons -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script> <!--https://feathericons.com/-->
 	<script src="https://kit.fontawesome.com/1994d78096.js"></script>
-    <script>
-      feather.replace()
-    </script>
+  <script>
+    feather.replace()
+  </script>
 
+  <script>
+
+  $('[data-save-state]').each(function() {
+    var element = $(this);
+
+    element.on('shown.bs.collapse', function () {
+      window.localStorage.setItem(element.attr('id') + "_collapsed", false);
+    })
+    element.on('hidden.bs.collapse', function () {
+      window.localStorage.setItem(element.attr('id') + "_collapsed", true);
+    })
+  });
+
+  $(function() {
+      $('[data-save-state]').each(function() {
+        var element = $(this);
+        var descr = element.attr('id');
+        var state = window.localStorage.getItem(descr + "_collapsed") || true;
+
+        if (state == "true") {
+          //Hidden
+          element.collapse('hide');
+        } else {
+          //Visible
+          element.collapse('show');
+        }
+
+        // increase transition duration for a nicer animation after initial page load.
+        setTimeout(function() {
+          element.css('transition-duration','0.35s')
+        },10);
+
+      })
+  });
+
+  </script>
 
   </body>
 </html>

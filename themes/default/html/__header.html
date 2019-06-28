@@ -99,6 +99,10 @@ body {
   text-decoration: none;
 }
 
+.sidebar .collapsing {
+  transition-duration: 0s;
+}
+
 .nav-pills .nav-item {
 	margin-left: 2px;
 	margin-right: 2px;
@@ -179,7 +183,7 @@ body {
               <a class="text-muted" href="#general" data-toggle="collapse">General</a>
             </h6>
 
-            <div class="collapse show" id="general">
+            <div class="collapse" id="general" data-save-state>
               <ul class="nav flex-column">
                 <li class="nav-item">
                   <a class="nav-link {% if left_menu == 'all' %}active{% endif %}" href="/">All Assets</a>
@@ -198,7 +202,7 @@ body {
               <a class="nav-link add-button" title="Add new asset class" href="#"><span data-feather="plus-square"></span></a>
             </h6>
 
-            <div class="collapse show" id="classList">
+            <div class="collapse" id="classList" data-save-state>
               <ul class="nav flex-column">
               {% for item in class_menu_items %}
                 <li class="nav-item">
@@ -215,7 +219,7 @@ body {
               <a class="nav-link add-button" title="Add new asset" href="#"><span data-feather="plus-square"></span></a>
             </h6>
 
-            <div class="collapse show" id="assetList">
+            <div class="collapse" id="assetList" data-save-state>
               <ul class="nav flex-column">
               {% for item in asset_menu_items %}
                 <li class="nav-item">
