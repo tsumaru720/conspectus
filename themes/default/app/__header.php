@@ -7,7 +7,6 @@ class Header extends Theme {
 	public function __construct(&$main, &$twig, $vars) {
 
 		$this->db = $main->getDB();
-		$this->page = $main->getPage();
 
 		$q = $this->db->query("SELECT * from asset_classes ORDER BY description ASC");
 		while ($item = $this->db->fetch($q)) {

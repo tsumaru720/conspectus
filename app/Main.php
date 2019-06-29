@@ -4,18 +4,18 @@ class Main {
 
 	private $config = null;
 	private $db = null;
-	private $page = null;
+	private $pageLoader = null;
 	private $router = null;
 
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
 
-		$this->page = new PageLoader($this);
+		$this->pageLoader = new PageLoader($this);
 		$this->loadConfig();
 		$this->initDB();
 
 		// If we get this far, initial loading _seems_ ok
-		$this->router = new Router($this->page);
+		$this->router = new Router($this->pageLoader);
 		$this->router->run();
 
 	}
@@ -39,7 +39,7 @@ class Main {
 		}
 
 		if (array_key_exists('THEME', $this->config)) {
-			$this->page->setTheme($this->config['THEME']);
+			$this->pageLoader->setTheme($this->config['THEME']);
 		}
 	}
 
@@ -58,10 +58,10 @@ class Main {
 	}
 
 	public function fatalErr($errorCode, $errorStr) {
-		$this->page->setFrame(false, false);
-		$this->page->setVar('error_code', $errorCode);
-		$this->page->setVar('error_string', $errorStr);
-		$this->page->display('loading_error');
+		$this->pageLoader->setFrame(false, false);
+		$this->pageLoader->setVar('error_code', $errorCode);
+		$this->pageLoader->setVar('error_string', $errorStr);
+		$this->pageLoader->display('loading_error');
 		die();
 	}
 	
@@ -69,7 +69,7 @@ class Main {
 		return $this->db;
 	}
 
-	public function getPage() {
-		return $this->page;
+	public function getPageLoader() {
+		return $this->pageLoader;
 	}
 }
