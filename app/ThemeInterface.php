@@ -8,5 +8,9 @@ interface ThemeInterface {
 
 	public function getTitle();
 
+	public function setRegister($type, $value);
+
+	public function getRegister($type);
+
 }
 

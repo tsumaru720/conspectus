@@ -54,13 +54,15 @@ class PageLoader {
 
 		$doc = new Document($this->main, $this->twig, $this->vars);
 		$this->checkInterface($doc);
-
 		$this->setVar('page_title', $doc->getTitle());
+		$scriptRegister = $doc->getRegister('script');
+		$styleRegister = $doc->getRegister('style');
 
 		if ($this->displayHeader) {
 			include $this->resolveTheme('app/__header.php');
 			$header = new Header($this->main, $this->twig, $this->vars);
 			$this->checkInterface($header);
+			$header->setRegister('style', $styleRegister);
 			$header->render();
 		}
 
@@ -70,6 +72,7 @@ class PageLoader {
 			include $this->resolveTheme('app/__footer.php');
 			$footer = new Footer($this->main, $this->twig, $this->vars);
 			$this->checkInterface($footer);
+			$footer->setRegister('script', $scriptRegister);
 			$footer->render();
 		}
 	}

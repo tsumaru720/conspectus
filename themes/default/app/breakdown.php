@@ -132,6 +132,7 @@ class Document extends Theme {
 			});
 		}
 
+		//$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");
 		$this->vars = $vars;
 		$this->document = $twig->load('breakdown.html');
 	}
