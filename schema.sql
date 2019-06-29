@@ -4,8 +4,9 @@ CREATE TABLE `asset_classes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `asset_classes` VALUES (1,'Cash'),(2,'Shares');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `asset_list` (
@@ -13,8 +14,9 @@ CREATE TABLE `asset_list` (
   `asset_class` int(11) NOT NULL,
   `description` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `asset_list` VALUES (1,1,'Bank Savings'),(2,2,'Apple Inc.');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `asset_log` (
@@ -24,5 +26,5 @@ CREATE TABLE `asset_log` (
   `deposit_value` decimal(13,2) NOT NULL,
   `asset_value` decimal(13,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=442 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
