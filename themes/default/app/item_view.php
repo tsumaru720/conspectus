@@ -144,7 +144,7 @@ class Document extends Theme {
 		$last['gain_str'] = $this->prettify($last['gain']);
 		$vars['mostRecent'] = $last;
 
-		$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");
+		//$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");
 		$this->vars = $vars;
 		$this->document = $twig->load('item_view.html');
 	}
