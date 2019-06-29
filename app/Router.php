@@ -10,6 +10,7 @@ class Router {
 		$this->router = new \Bramus\Router\Router();
 		$this->setGlobals();
 		$this->addRoutes();
+		Theme::customRoutes($this->router, $this->page);
 	}
 	
 	public function run() {

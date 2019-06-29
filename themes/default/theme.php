@@ -30,6 +30,13 @@ abstract class Theme implements ThemeInterface {
 		return $this->register[$type];
 	}
 
+	public static function customRoutes(&$router, &$page) {
+		// Theme specific routes go here.
+		// Basically any new pages you want to add that're
+		// not handled by the core set of routes
+		return;
+	}
+
 	public function dump($str) {
 		echo "<!-- \n\n";
 		var_dump($str);

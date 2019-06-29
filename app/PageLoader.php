@@ -12,6 +12,7 @@ class PageLoader {
 
 	public function __construct(&$main) {
 		$this->main = $main;
+		include $this->resolveTheme('theme.php');
 	}
 
 	public function setTheme($theme) {
@@ -48,8 +49,6 @@ class PageLoader {
 		$loader->prependPath($this->resolveTheme('html'));
 		$this->twig = new \Twig\Environment($loader);
 
-		// Loadin the main theme class/interface
-		include $this->resolveTheme('theme.php');
 		include $this->resolveTheme('app/'.$pageName.'.php');
 
 		$doc = new Document($this->main, $this->twig, $this->vars);

@@ -12,5 +12,7 @@ interface ThemeInterface {
 
 	public function getRegister($type);
 
+	public static function customRoutes(&$router, &$page);
+
 }
 
