@@ -6,5 +6,7 @@ interface ThemeInterface {
 
 	public function render();
 
+	public function getTitle();
+
 }
 
