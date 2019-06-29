@@ -88,48 +88,50 @@ class Document extends Theme {
 			$last['yearMonth'] = $log['yearMonth'];
 		}
 
-		usort($last['log'], function($a, $b) {
-			return $b['value'] - $a['value'];
-		});
-		$vars['mostRecent'] = $last['log'];
-
-		foreach ($vars['log'] as $key => $entry) {
-			foreach ($vars['labels'] as $period => $v) {
-				if (!array_key_exists($period, $entry['data'])) {
-					$vars['log'][$key]['data'][$period] = 0;
-					ksort($vars['log'][$key]['data']);
-				}
-			}
-		}
-
-		if ($vars['left_menu'] == 'all') {
-			$data = array(':yearMonth' => $last['yearMonth']);
-			$logQuery = $this->db->query("SELECT
-			                                asset_classes.id,
-			                                asset_classes.description as description,
-			                                sum(asset_value) as asset_value,
-			                                DATE_FORMAT(epoch, '%b %Y') AS period,
-			                                EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
-			                            FROM
-			                                asset_log
-			                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
-			                            LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
-			                            WHERE
-			                                EXTRACT(YEAR_MONTH FROM epoch) = :yearMonth
-			                            GROUP BY
-			                                period,
-			                                yearMonth,
-			                                asset_classes.id,
-			                                asset_classes.description
-			                            ORDER BY
-			                                yearMonth ASC,
-			                                description ASC", $data);
-			while ($log = $this->db->fetch($logQuery)) {
-				$vars['class_mostRecent'][] = array('name' => $log['description'], 'value' => $log['asset_value']);
-			}
-			usort($vars['class_mostRecent'], function($a, $b) {
+		if (isset($last)) {  // Probably no entries if this doesnt pass
+			usort($last['log'], function($a, $b) {
 				return $b['value'] - $a['value'];
 			});
+			$vars['mostRecent'] = $last['log'];
+
+			foreach ($vars['log'] as $key => $entry) {
+				foreach ($vars['labels'] as $period => $v) {
+					if (!array_key_exists($period, $entry['data'])) {
+						$vars['log'][$key]['data'][$period] = 0;
+						ksort($vars['log'][$key]['data']);
+					}
+				}
+			}
+
+			if ($vars['left_menu'] == 'all') {
+				$data = array(':yearMonth' => $last['yearMonth']);
+				$logQuery = $this->db->query("SELECT
+				                                asset_classes.id,
+				                                asset_classes.description as description,
+				                                sum(asset_value) as asset_value,
+				                                DATE_FORMAT(epoch, '%b %Y') AS period,
+				                                EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+				                            FROM
+				                                asset_log
+				                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+				                            LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+				                            WHERE
+				                                EXTRACT(YEAR_MONTH FROM epoch) = :yearMonth
+				                            GROUP BY
+				                                period,
+				                                yearMonth,
+				                                asset_classes.id,
+				                                asset_classes.description
+				                            ORDER BY
+				                                yearMonth ASC,
+				                                description ASC", $data);
+				while ($log = $this->db->fetch($logQuery)) {
+					$vars['class_mostRecent'][] = array('name' => $log['description'], 'value' => $log['asset_value']);
+				}
+				usort($vars['class_mostRecent'], function($a, $b) {
+					return $b['value'] - $a['value'];
+				});
+			}
 		}
 
 		//$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");

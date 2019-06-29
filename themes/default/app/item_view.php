@@ -139,10 +139,12 @@ class Document extends Theme {
 
 		}
 
-		$last['deposit_str'] = $this->prettify($last['deposit_total']);
-		$last['asset_str'] = $this->prettify($last['asset_total']);
-		$last['gain_str'] = $this->prettify($last['gain']);
-		$vars['mostRecent'] = $last;
+		if (isset($last)) {  // Probably no entries if this doesnt pass
+			$last['deposit_str'] = $this->prettify($last['deposit_total']);
+			$last['asset_str'] = $this->prettify($last['asset_total']);
+			$last['gain_str'] = $this->prettify($last['gain']);
+			$vars['mostRecent'] = $last;
+		}
 
 		//$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");
 		$this->vars = $vars;
