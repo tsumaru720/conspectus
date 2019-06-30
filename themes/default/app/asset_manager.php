@@ -52,16 +52,27 @@ class Document extends Theme {
 			$validated = true;
 			if (($description == false) || $class == false) {
 				$validated = false;
+				$this->vars['error_code'] = "EMPTY";
+				$this->vars['error_string'] = "Input is empty";
 			}
 
-			$data = array(':description' => $description);
-			$q = $this->db->query("SELECT COUNT(id) as count from asset_list WHERE description = :description", $data);
-			$result = $this->db->fetch($q);
-
-			if ($result['count'] > 0) {
-				// Name specified already exists - its an exact match
-				// Probably dont want duplicates.
+			if (strlen($description) > 40) {
+				// 40 is the size set our DB schema
 				$validated = false;
+				$this->vars['error_code'] = "STRLEN";
+				$this->vars['error_string'] = "Asset name is too long - Max: 40";
+			} else {
+				$data = array(':description' => $description);
+				$q = $this->db->query("SELECT COUNT(id) as count from asset_list WHERE description = :description", $data);
+				$result = $this->db->fetch($q);
+
+				if ($result['count'] > 0) {
+					// Name specified already exists - its an exact match
+					// Probably dont want duplicates.
+					$validated = false;
+					$this->vars['error_code'] = "DUPLICATE";
+					$this->vars['error_string'] = "Asset with that name already exists";
+				}
 			}
 
 			$data = array(':class_id' => $class);
@@ -72,6 +83,8 @@ class Document extends Theme {
 				// ID provided doesnt exist.
 				$class = false;
 				$validated = false;
+				$this->vars['error_code'] = "404";
+				$this->vars['error_string'] = "Class not found";
 			}
 			
 			if ($validated == false) {
@@ -104,6 +117,7 @@ class Document extends Theme {
 		if (!array_key_exists($key, $_POST)) {
 			return false;
 		} else {
+			$_POST[$key] = trim($_POST[$key]);
 			if ($_POST[$key] == "") {
 				return false;
 			}
