@@ -40,8 +40,27 @@ function currencyFormat(tooltipItem, data) {
 	if (label) {
 		label += ': ';
 	}
-	var value = tooltipItem.yLabel || data.datasets[0].data[tooltipItem.index];
+
+	if (tooltipItem.yLabel) {
+		var type = "bar";
+		var value = tooltipItem.yLabel;
+	} else {
+		var type = "pie";
+		var value = data.datasets[0].data[tooltipItem.index];
+	}
+
 	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
+
+	if (type == "pie") {
+		var total = 0.00;
+		data.datasets[0].data.forEach(function(value) {
+			total = total + parseFloat(value);
+		});
+		var percent = ((parseFloat(value) / total) * 100);
+		percent = percent.toFixed(2);
+
+		label += " (" + percent + "%)";
+	}
 	return label;
 }
 
