@@ -25,7 +25,7 @@
 		<div class="form-group row mb-1">
 			<label class="col-sm-2 col-form-label text-right" for="description">Display Name</label>
 			<div class="col-sm-3">
-				<input type="text" class="form-control form-control-sm {% if form_description is defined and form_description == false %}is-invalid{% endif %}" name="description" id="description"  value="{% if form_description is defined %}{{form_description}}{% endif %}" required>
+				<input type="text" class="form-control form-control-sm {% if form_description is defined and form_description == false %}is-invalid{% endif %}" name="description" id="description"  value="{% if form_description is defined %}{{form_description}}{% endif %}" maxlength="40" required>
 			</div>
 		</div>
 
