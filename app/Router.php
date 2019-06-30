@@ -18,13 +18,13 @@ class Router {
 	}
 
 	private function setGlobals() {
-		$this->page->setVar('nav_item', 'overview');
-		$this->page->setVar('type', 'asset');
+		$this->page->setVar('left_menu', 'all');
 	}
 
 	private function addRoutes() {
 		$this->router->get('/', function() {
-			$this->page->setVar('left_menu', 'all');
+			$this->page->setVar('nav_item', 'overview');
+			$this->page->setVar('type', 'asset');
 			$this->page->setVar('modifier', '>');
 			$this->page->setVar('item_id', '0');
 			$this->page->display('item_view');
@@ -32,15 +32,16 @@ class Router {
 
 		$this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
 			$this->page->setVar('left_menu', $type.'/'.$itemID);
-			$this->page->setVar('modifier', '=');
+			$this->page->setVar('nav_item', 'overview');
 			$this->page->setVar('type', $type);
+			$this->page->setVar('modifier', '=');
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('item_view');
 		});
 
 		$this->router->get('/breakdown', function() {
-			$this->page->setVar('left_menu', 'all');
 			$this->page->setVar('nav_item', 'breakdown');
+			$this->page->setVar('type', 'asset');
 			$this->page->display('breakdown');
 		});
 
@@ -50,6 +51,11 @@ class Router {
 			$this->page->setVar('type', $type);
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('breakdown');
+		});
+
+		$this->router->match('GET|POST', '/asset/new', function() {
+			$this->page->setVar('action', 'new');
+			$this->page->display('asset_manager');
 		});
 
 		$this->router->set404(function() {
