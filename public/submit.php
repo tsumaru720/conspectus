@@ -96,7 +96,12 @@ if ($_POST) {
 
 if ($display_form == true) {
 		?>
-
+	<script>
+		function removeElement(elementId) {
+			var element = document.getElementById(elementId + "_form");
+			element.parentNode.removeChild(element);
+		}
+	</script>
 	<form method="post">
 	<div class="form-group row">
 	        <div class="col-4 text-center font-weight-bold">
@@ -124,7 +129,7 @@ if ($display_form == true) {
 
 			$values = $mysql->fetch($q3);
 			?>
-			<div class="form-group row" style="margin-bottom: 5px;">
+			<div class="form-group row" style="margin-bottom: 5px;" id="<?php echo $asset['id']; ?>_form">
 			        <div class="col-4 text-right">
 					<span><?php echo '('.$asset['id'].') '.$asset['description']; ?></span> -
 					<span class="small"><?php echo $asset_class['description']; ?></span>
@@ -135,6 +140,8 @@ if ($display_form == true) {
 			        <div class="col-2 <?php echo !is_valid($asset['id']."_latest") ? 'has-danger' : ''; ?>">
 			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
 			        </div>
+			        <a onclick="removeElement(<?php echo $asset['id']; ?>)" href="javascript:void(0);"><small>Delete</small></a>
+
 			</div>
 			<?php
 		}
