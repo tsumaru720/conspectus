@@ -144,6 +144,12 @@ class Document extends Theme {
 			$last['asset_str'] = $this->prettify($last['asset_total']);
 			$last['gain_str'] = $this->prettify($last['gain']);
 			$vars['mostRecent'] = $last;
+		} else {
+			$last['deposit_str'] = $this->prettify('0');
+			$last['asset_str'] = $this->prettify('0');
+			$last['gain_str'] = $this->prettify('0');
+			$last['growth_str'] = '0';
+			$vars['mostRecent'] = $last;
 		}
 
 		//$this->setRegister('script', "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js");
