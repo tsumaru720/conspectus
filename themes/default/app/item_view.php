@@ -148,7 +148,7 @@ class Document extends Theme {
 			$last['deposit_str'] = $this->prettify('0');
 			$last['asset_str'] = $this->prettify('0');
 			$last['gain_str'] = $this->prettify('0');
-			$last['growth_str'] = '0';
+			$last['growth_str'] = '0.00';
 			$vars['mostRecent'] = $last;
 		}
 
