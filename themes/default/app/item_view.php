@@ -123,7 +123,7 @@ class Document extends Theme {
 				}
 			}
 
-			if ($period['deposit_total'] > 0) {
+			if ($period['deposit_total'] != 0) {
 				$period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2, '.', '');
 			} else {
 				if ($period['gain'] > 0) {
