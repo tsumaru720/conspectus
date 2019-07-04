@@ -18,24 +18,24 @@
 		</div>
 
 		<div class="row text-center">
-			<canvas class="mt-4 w-100" id="total_chart" width="900" height="150"></canvas>
+			<canvas class="mt-4 w-100" id="total_chart"></canvas>
 		</div>
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="gain_chart"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="growth_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="growth_chart"></canvas>
 			</div>
 		</div>
 
 		<div class="row text-center">
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_delta_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="gain_delta_chart"></canvas>
 			</div>
 			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="value_delta_chart" width="900" height="300"></canvas>
+				<canvas class="my-1 w-100" id="value_delta_chart"></canvas>
 			</div>
 		</div>
 
@@ -113,6 +113,7 @@ var total_chart = new Chart(ctx, {
     data: data,
     options: {
 		animation: false,
+		aspectRatio: 5.5,
         legend: {
 			display: true,
 			position: 'right',
@@ -172,6 +173,7 @@ var gains_chart = new Chart(ctx, {
 			text: "Total return over time"
 		},
 		animation: false,
+		aspectRatio: 2.5,
         legend: {
 			display: false,
 			position: 'right'
@@ -241,6 +243,7 @@ var growth_chart = new Chart(ctx, {
 			text: "Total return over time"
 		},
 		animation: false,
+		aspectRatio: 2.5,
         legend: {
 			display: true,
 			position: 'right',
@@ -293,6 +296,7 @@ var gains_delta_chart = new Chart(ctx, {
 			text: "Monthly return change"
 		},
 		animation: false,
+		aspectRatio: 2.5,
         legend: {
 			display: false,
 			position: 'right'
@@ -346,6 +350,7 @@ var value_delta_chart = new Chart(ctx, {
 			text: "Monthly value change"
 		},
 		animation: false,
+		aspectRatio: 2.5,
         legend: {
 			display: false,
 			position: 'right'
