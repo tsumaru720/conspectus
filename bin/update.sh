@@ -24,9 +24,5 @@ else
 	fi
 fi
 
-GITPULL=$(git pull | grep -c "Already")
-
-if [ "$GITPULL" != "1" ]; then
-	#We changed something
-	$COMPOSER install -d "../"
-fi
+git pull
+$COMPOSER install -d "../"
