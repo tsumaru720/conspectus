@@ -2,6 +2,8 @@
 
 class Main {
 
+	private $dbSchema = 1;
+
 	private $config = null;
 	private $db = null;
 	private $pageLoader = null;
@@ -12,7 +14,7 @@ class Main {
 
 		$this->pageLoader = new PageLoader($this);
 		$this->loadConfig();
-		$this->initDB();
+		$this->initDB($this->dbSchema);
 
 		// If we get this far, initial loading _seems_ ok
 		$this->router = new Router($this->pageLoader);
@@ -43,7 +45,7 @@ class Main {
 		}
 	}
 
-	private function initDB() {
+	private function initDB($expectedVersion) {
 		$this->db = new MySQL($this->config['SQL_HOSTNAME'],
 							$this->config['SQL_PORT'],
 							$this->config['SQL_USERNAME'],
@@ -55,6 +57,24 @@ class Main {
 			$this->fatalErr('DB_403', 'Unable to connect to database server; Please check the credentials provided');
 		}
 
+		$data = array(':database' => $this->config['SQL_DATABASE']);
+		$q = $db->query("SELECT
+    	                     COUNT(TABLE_NAME) AS count
+		                 FROM
+		                     information_schema.tables
+		                 WHERE
+		                     table_schema = :database AND TABLE_NAME = 'settings'
+		                 LIMIT 1", $data);
+		$r = $db->fetch($q);
+		if ($r['count'] > 0) {
+			$q = $db->query("SELECT value from settings WHERE setting = 'db_version'");
+			$r = $db->fetch($q);
+			if ($r['value'] != $expectedVersion) {
+				$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
+			}
+		} else {
+			$this->fatalErr('DB_404', 'Database appears incomplete. Please ensure first setup has been performed');
+		}
 	}
 
 	public function fatalErr($errorCode, $errorStr) {
