@@ -111,15 +111,31 @@ class Document extends Theme {
 		while ($period = $this->db->fetch($dataQuery)) {
 			$period['gain_delta'] = 0;
 			$period['value_delta'] = 0;
-			$period['gain_performance'] = 0;
+			$period['growth_annualized'] = 0;
+			$period['growth_factor'] = 0;
+			$period['twr'] = 0;
+			$period['twr_str'] = 0;
 
 			if (isset($last)) {
 				$period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2, '.', '');
 				$period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2, '.', '');
 
-				if ($last['asset_total'] > 0) {
-					$period['gain_performance'] = ((($period['asset_total'] - $period['value_delta'] - $last['asset_total']) / $last['asset_total']) * 12);
-					$period['gain_performance'] = number_format($period['gain_performance'] * 100, 2, '.', '');
+				if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
+					$period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
+					if ($last['twr'] == 0) {
+						$period['twr'] = $period['growth_factor'];
+					} else {
+						$period['twr'] = $last['twr'] * $period['growth_factor'];
+					}
+					if ($period['twr'] != 0) {
+						$period['twr_str'] = ($period['twr'] - 1) * 100;
+						$period['twr_str'] = number_format($period['twr_str'],2);
+					}
+				}
+
+				if ($last['asset_total'] != 0) {
+					$period['growth_annualized'] = ($period['growth_factor'] - 1) * 12;
+					$period['growth_annualized'] = number_format($period['growth_annualized'] * 100, 2, '.', '');
 				}
 			}
 
@@ -133,10 +149,8 @@ class Document extends Theme {
 				}
 			}
 			$period['growth_str'] = number_format($period['growth'],2);
-
 			$vars['periodData'][] = $period;
 			$last = $period;
-
 		}
 
 		if (isset($last)) {  // Probably no entries if this doesnt pass
@@ -149,6 +163,7 @@ class Document extends Theme {
 			$last['asset_str'] = $this->prettify('0');
 			$last['gain_str'] = $this->prettify('0');
 			$last['growth_str'] = '0.00';
+			$last['twr_str'] = '0.00';
 			$vars['mostRecent'] = $last;
 		}
 
