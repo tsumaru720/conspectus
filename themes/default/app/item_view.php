@@ -134,7 +134,7 @@ class Document extends Theme {
 				}
 
 				if ($last['asset_total'] != 0) {
-					$period['growth_annualized'] = $period['gain_delta'] / $last['asset_total'] * 12;
+					$period['growth_annualized'] = pow($period['growth_factor'], 12) - 1;
 					$period['growth_annualized'] = number_format($period['growth_annualized'] * 100, 2, '.', '');
 				}
 			}
