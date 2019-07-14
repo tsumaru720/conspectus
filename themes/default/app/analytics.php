@@ -25,8 +25,6 @@ class Document extends Theme {
 		}
 		$data = array(':item_id' => $vars['item_id']);
 
-		//$vars['single_asset'] = false;
-
 		if ($vars['type'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT
 			                                SUM(deposit_value) AS deposit_total,
@@ -57,7 +55,6 @@ class Document extends Theme {
 					$this->pageTitle = "Analytics - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 					$vars['asset_class'] = $item['class'];
-					//$vars['single_asset'] = true;
 				} else {
 					echo "invalid asset";
 					die();
@@ -96,9 +93,6 @@ class Document extends Theme {
 				if (($item['count'] > 0) && ($item['description'] != 'NULL')) {
 					$this->pageTitle = "Analytics - ".$item['description'];
 					$vars['page_title'] = $item['description'];
-					//if ($item['count'] == 1) {
-						//$vars['single_asset'] = true;
-					//}
 				} else {
 					echo "invalid class";
 					die();
