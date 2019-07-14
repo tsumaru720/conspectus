@@ -14,7 +14,9 @@
 					href="{% if item_id > 0 %} /breakdown/{{type}}/{{item_id}} {% else %} /breakdown {% endif %}">
 				<span data-feather="bar-chart-2"></span> <small>Breakdown</small>
 			</a>
-			<a class="nav-item nav-link disabled" href="#">
+			<a class="nav-item nav-link
+						{% if nav_item == 'analytics' %} active{% endif %}"
+					href="{% if item_id > 0 %} /analytics/{{type}}/{{item_id}} {% else %} /analytics {% endif %}">
 				<span data-feather="percent"></span> <small>Analytics</small>
 			</a>
 			<a class="nav-item nav-link disabled" href="#">

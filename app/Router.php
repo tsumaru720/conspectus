@@ -25,8 +25,6 @@ class Router {
 		$this->router->get('/', function() {
 			$this->page->setVar('nav_item', 'overview');
 			$this->page->setVar('type', 'asset');
-			$this->page->setVar('modifier', '>');
-			$this->page->setVar('item_id', '0');
 			$this->page->display('item_view');
 		});
 
@@ -34,7 +32,6 @@ class Router {
 			$this->page->setVar('left_menu', $type.'/'.$itemID);
 			$this->page->setVar('nav_item', 'overview');
 			$this->page->setVar('type', $type);
-			$this->page->setVar('modifier', '=');
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('item_view');
 		});
@@ -51,6 +48,20 @@ class Router {
 			$this->page->setVar('type', $type);
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('breakdown');
+		});
+
+		$this->router->get('/analytics', function() {
+			$this->page->setVar('nav_item', 'analytics');
+			$this->page->setVar('type', 'asset');
+			$this->page->display('analytics');
+		});
+
+		$this->router->get('/analytics/{type}/{itemID}', function($type, $itemID) {
+			$this->page->setVar('left_menu', $type.'/'.$itemID);
+			$this->page->setVar('nav_item', 'analytics');
+			$this->page->setVar('type', $type);
+			$this->page->setVar('item_id', $itemID);
+			$this->page->display('analytics');
 		});
 
 		$this->router->match('GET|POST', '/asset/new', function() {
