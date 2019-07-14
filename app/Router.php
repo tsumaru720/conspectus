@@ -23,14 +23,20 @@ class Router {
 
 	private function addRoutes() {
 		$this->router->get('/', function() {
-			$this->page->setVar('nav_item', 'overview');
+			$this->page->setVar('nav_item', 'view');
+			$this->page->setVar('type', 'asset');
+			$this->page->display('item_view');
+		});
+
+		$this->router->get('/view', function() {
+			$this->page->setVar('nav_item', 'view');
 			$this->page->setVar('type', 'asset');
 			$this->page->display('item_view');
 		});
 
 		$this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
 			$this->page->setVar('left_menu', $type.'/'.$itemID);
-			$this->page->setVar('nav_item', 'overview');
+			$this->page->setVar('nav_item', 'view');
 			$this->page->setVar('type', $type);
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('item_view');

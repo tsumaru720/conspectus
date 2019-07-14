@@ -11,6 +11,20 @@ class Document extends Theme {
 
 		$this->db = $main->getDB();
 
+		if ($vars['left_menu'] != 'all') {
+			if (!is_numeric($vars['item_id']) || $vars['item_id'] < 0) {
+				echo "bad id";
+				die();
+				//TODO make this error nicer
+			} else {
+				$vars['modifier'] = "=";
+			}
+		} else {
+			$vars['item_id'] = 0;
+			$vars['modifier'] = ">";
+		}
+		$data = array(':item_id' => $vars['item_id']);
+
 		if ($vars['type'] == 'asset') {
 			$logQuery = $this->db->query("SELECT
 			                                asset_id,
@@ -19,23 +33,35 @@ class Document extends Theme {
 			                                asset_value,
 			                                (asset_value - deposit_value) AS gain,
 			                                DATE_FORMAT(epoch, '%b %Y') AS period,
-			                                EXTRACT(YEAR_MONTH
-			                            FROM
-			                                epoch) AS yearMonth
+			                                EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
 			                            FROM
 			                                asset_log
 			                            LEFT JOIN asset_list ON asset_log.asset_id = asset_list.id
+			                            WHERE
+			                                asset_id ".$vars['modifier']." :item_id
 			                            ORDER BY
 			                                yearMonth ASC,
-			                                description ASC");
-		} elseif ($vars['type'] == 'class') {
-			if (is_numeric($vars['item_id']) && $vars['item_id'] > 0) {
-				$data = array(':item_id' => $vars['item_id']);
-			} else {
-				echo "bad id";
-				die();
-				//TODO make this error nicer
+			                                description ASC", $data);
+			if ($vars['item_id'] > 0) {
+				$nameQuery = $this->db->query("SELECT
+				                                asset_list.description,
+				                                asset_classes.description AS class
+				                            FROM
+				                                asset_list
+				                            LEFT JOIN asset_classes ON asset_class = asset_classes.id
+				                            WHERE
+				                                asset_list.id = :item_id;", $data);
+				if ($item = $this->db->fetch($nameQuery)) {
+					$this->pageTitle = "Breakdown - ".$item['description'];
+					$vars['page_title'] = $item['description'];
+					$vars['asset_class'] = $item['class'];
+				} else {
+					echo "invalid asset";
+					die();
+					//TODO make this error nicer
+				}
 			}
+		} elseif ($vars['type'] == 'class') {
 			$logQuery = $this->db->query("SELECT
 			                                asset_id,
 			                                asset_list.description,

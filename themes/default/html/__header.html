@@ -33,10 +33,10 @@
             <div class="collapse" id="general" data-save-state>
               <ul class="nav flex-column">
                 <li class="nav-item">
-                  <a class="nav-link {% if left_menu == 'all' %}active{% endif %}" href="/">All Assets</a>
+                  <a class="nav-link {% if left_menu == 'all' %}active{% endif %}" href="/{{nav_item}}">All Assets</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="submit.php">Input Data</a>
+                  <a class="nav-link" href="/submit.php">Input Data</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link disabled" href="/">Settings</a>
@@ -53,7 +53,7 @@
               <ul class="nav flex-column">
               {% for item in class_menu_items %}
                 <li class="nav-item">
-                  <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/view/class/{{ item.id }}">
+                  <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/class/{{ item.id }}">
                     {{ item.description }}
                   </a>
                 </li>
@@ -70,7 +70,7 @@
               <ul class="nav flex-column">
               {% for item in asset_menu_items %}
                 <li class="nav-item">
-                  <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/view/asset/{{ item.id }}">
+                  <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/asset/{{ item.id }}">
                     {{ item.description }}
                   </a>
                 </li>
