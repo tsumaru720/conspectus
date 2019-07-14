@@ -138,7 +138,12 @@ class Document extends Theme {
 			$start = $vars['periodData'][$period['year']]['start'];
 			$end = $vars['periodData'][$period['year']]['end'];
 
-			$vars['periodData'][$period['year']]['increase'] = number_format((($end / $start) - 1) * 100, 2, '.', '');
+			if ($start != 0) {
+				$vars['periodData'][$period['year']]['increase'] = number_format((($end / $start) - 1) * 100, 2, '.', '');
+			} else {
+				$vars['periodData'][$period['year']]['start'] = $period['asset_total'];
+				$vars['periodData'][$period['year']]['increase'] = 0;
+			}
 
 			$last = $period;
 		}
