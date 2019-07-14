@@ -29,21 +29,21 @@ class Document extends Theme {
 
 		if ($vars['type'] == 'asset') {
 			$dataQuery = $this->db->query("SELECT
-											SUM(deposit_value) AS deposit_total,
-											SUM(asset_value) AS asset_total,
-											DATE_FORMAT(epoch, '%b %Y') AS period,
-											EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth,
-											EXTRACT(YEAR FROM epoch) AS year
-										FROM
-											asset_log
-										WHERE
-											asset_id ".$vars['modifier']." :item_id
-										GROUP BY
-											period,
-											yearMonth,
-											year
-										ORDER BY
-											yearMonth ASC", $data);
+			                                SUM(deposit_value) AS deposit_total,
+			                                SUM(asset_value) AS asset_total,
+			                                DATE_FORMAT(epoch, '%b %Y') AS period,
+			                                EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth,
+			                                EXTRACT(YEAR FROM epoch) AS year
+			                            FROM
+			                                asset_log
+			                            WHERE
+			                                asset_id ".$vars['modifier']." :item_id
+			                            GROUP BY
+			                                period,
+			                                yearMonth,
+			                                year
+			                            ORDER BY
+			                                yearMonth ASC", $data);
 			if ($vars['item_id'] > 0) {
 				$nameQuery = $this->db->query("SELECT
 				                                asset_list.description,
