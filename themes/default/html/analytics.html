@@ -6,6 +6,9 @@
 			<div class="pt-2 col-4">
 				<canvas class="mt-4 w-100" id="yearly"></canvas>
 			</div>
+			<div class="pt-2 col-4">
+				<canvas class="mt-4 w-100" id="total"></canvas>
+			</div>
 			<div class="pt-2 col">
 				&nbsp;
 			</div>
@@ -23,7 +26,7 @@ var labels = [
 
 var data = [
 {% for data in periodData %}
-	'{{ data.value }}',
+	'{{ data.twr }}',
 {% endfor %}
 ];
 
@@ -53,6 +56,60 @@ var yearly_chart = new Chart(ctx, {
 		title: {
 			display: true,
 			text: "Time-Weighted performance"
+		},
+		animation: false,
+		aspectRatio: 1,
+        legend: {
+			display: false,
+			position: 'right'
+		},
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+					callback: function(label, index, labels) {
+                        return label.toFixed(2) + "%";
+                    }
+                }
+            }]
+        }
+    }
+});
+
+///////////////////////////////
+
+var data = [
+{% for data in periodData %}
+	'{{ data.increase }}',
+{% endfor %}
+];
+
+var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+bg_colours.pop();
+border_colours.pop();
+bg_colours.push('rgba(255, 159, 64, 0.2)');
+border_colours.push('rgba(255, 159, 64, 1)');
+
+
+var ctx = document.getElementById('total');
+var total_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Total Value Change',
+            data: data,
+			borderColor: border_colours,
+            backgroundColor: bg_colours,
+            borderWidth: 1
+        }]
+    },
+    options: {
+		title: {
+			display: true,
+			text: "Total Value Change"
 		},
 		animation: false,
 		aspectRatio: 1,

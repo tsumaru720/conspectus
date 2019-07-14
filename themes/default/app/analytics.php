@@ -129,30 +129,37 @@ class Document extends Theme {
 
 			if (!isset($vars['periodData'][$period['year']])) {
 				$vars['periodData'][$period['year']]['label'] = $period['year'];
-				$vars['periodData'][$period['year']]['value'] = 0;
+				$vars['periodData'][$period['year']]['twr'] = 0;
+				$vars['periodData'][$period['year']]['start'] = $period['asset_total'];
 			}
 
-			if ($vars['periodData'][$period['year']]['value'] == 0) {
-				$vars['periodData'][$period['year']]['value'] = $period['growth_factor'];
+			if ($vars['periodData'][$period['year']]['twr'] == 0) {
+				$vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
 			} else {
-				$vars['periodData'][$period['year']]['value'] = $vars['periodData'][$period['year']]['value'] * $period['growth_factor'];
+				$vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
 			}
+
+			$vars['periodData'][$period['year']]['end'] = $period['asset_total'];
+
+			$start = $vars['periodData'][$period['year']]['start'];
+			$end = $vars['periodData'][$period['year']]['end'];
+
+			$vars['periodData'][$period['year']]['increase'] = number_format((($end / $start) - 1) * 100, 2, '.', '');
 
 			$last = $period;
 		}
 
 
 		foreach ($vars['periodData'] as $key => $value) {
-			if ($value['value'] != 0) {
-				$value['value'] = ($value['value'] - 1) * 100;
-				$vars['periodData'][$key]['value'] = number_format($value['value'],2);
+			if ($value['twr'] != 0) {
+				$value['twr'] = ($value['twr'] - 1) * 100;
+				$vars['periodData'][$key]['twr'] = number_format($value['twr'],2);
 			}
 		}
 
 		$this->vars = $vars;
 		$this->document = $twig->load('analytics.html');
 	}
-
 
 }
 //TODO Deal with no results (Fresh install?)
