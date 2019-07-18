@@ -1,0 +1,129 @@
+{% include "nav_switcher.html" %}
+</div>
+
+	<div class="container-fluid pr-5 text-center justify-content-md-center">
+		<div class="row">
+			<div class="pt-2 col">
+				&lt;Projection Graph&gt;
+			</div>
+		</div>
+        <div class="row">
+            <div class="pt-2 col">
+                Table
+            </div>
+            <div class="pt-2 col">
+
+                <div class="row text-center justify-content-md-center">
+                    <div class="pt-2 col-lg-4 ml-3 rounded" style="background-color: rgba(54, 162, 235, 0.5); ">
+                        <h4><small>Base Target<br>{{ initial.percent_str }}%</small></h4>
+                    </div>
+                    <div class="pt-2 col-lg-4 ml-3 rounded" style="background-color: rgba(54, 162, 235, 0.5)">
+                        <h4><small>Revised Target<br>{{ revised.percent_str }}%</small></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <canvas class="mt-4 w-100" id="targets"></canvas>
+                </div>
+            </div>
+        </div>
+	</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+
+function currencyFormat(tooltipItem, data) {
+    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+    if (label) {
+        label += ' ' + tooltipItem.xLabel + ': ';
+    }
+    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+    return label;
+}
+
+var labels = [
+{% for data in initial.data %}
+	'{{ data.year }}',
+{% endfor %}
+];
+
+var data = [
+{% for data in initial.data %}
+    '{{ data.value }}',
+{% endfor %}
+];
+
+var data2 = [
+{% for data in actual.data %}
+    '{{ data.value }}',
+{% endfor %}
+];
+
+var data3 = [
+{% for data in revised.data %}
+    '{{ data.value }}',
+{% endfor %}
+];
+
+var ctx = document.getElementById('targets');
+var yearly_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Base target for',
+            stack: 'Stack 0',
+            data: data,
+            backgroundColor: 'rgba(105, 105, 105, 0.2)',
+            borderColor: 'rgba(105, 105, 105, 1)',
+            borderWidth: 1
+        },{
+            label: 'Actual for',
+            stack: 'Stack 1',
+            data: data2,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        },{
+            label: 'Revised target for',
+            stack: 'Stack 1',
+            data: data3,
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Target Asset Value"
+        },
+        animation: false,
+        aspectRatio: 1.25,
+        legend: {
+            display: false,
+            position: 'right'
+        },
+        scales: {
+            xAxes: [{
+                stacked: true
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    }
+                }, 
+                stacked: true
+            }]
+        },
+        tooltips: {
+            callbacks: {
+                label: currencyFormat
+            }
+        }
+    }
+});
+
+</script>

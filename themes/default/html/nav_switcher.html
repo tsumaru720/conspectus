@@ -18,7 +18,9 @@
 					href="{% if item_id > 0 %} /analytics/{{type}}/{{item_id}} {% else %} /analytics {% endif %}">
 				<span data-feather="percent"></span> <small>Analytics</small>
 			</a>
-			<a class="nav-item nav-link disabled" href="#">
+			<a class="nav-item nav-link
+						{% if nav_item == 'projections' %} active{% endif %}"
+					href="{% if item_id > 0 %} /projections/{{type}}/{{item_id}} {% else %} /projections {% endif %}">
 				<span data-feather="trending-up"></span> <small>Projections</small>
 			</a>
 			<a class="nav-item nav-link disabled" href="#">

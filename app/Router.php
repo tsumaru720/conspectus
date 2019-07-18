@@ -70,6 +70,20 @@ class Router {
 			$this->page->display('analytics');
 		});
 
+		$this->router->get('/projections', function() {
+			$this->page->setVar('nav_item', 'projections');
+			$this->page->setVar('type', 'asset');
+			$this->page->display('projections');
+		});
+
+		$this->router->get('/projections/{type}/{itemID}', function($type, $itemID) {
+			$this->page->setVar('left_menu', $type.'/'.$itemID);
+			$this->page->setVar('nav_item', 'projections');
+			$this->page->setVar('type', $type);
+			$this->page->setVar('item_id', $itemID);
+			$this->page->display('projections');
+		});
+
 		$this->router->match('GET|POST', '/asset/new', function() {
 			$this->page->setVar('action', 'new');
 			$this->page->display('asset_manager');
