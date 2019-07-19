@@ -127,9 +127,15 @@ class Document extends Theme {
 
 		$displayYears = ($curYear + 10) - $startYear;
 		$vars['initial'] = $this->seedTargets($startYear, $endYear, $startValue, $endValue, $displayYears);
-		$vars['revised'] = $this->seedTargets($curYear + 1, $endYear, $vars['actual']['data'][$curYear]['value'], $endValue, $displayYears);
+		$vars['revised'] = $this->seedTargets($curYear, $endYear, $vars['actual']['data'][$curYear - 1]['value'], $endValue, $displayYears);
 
-		$revised_seed = array_fill(0, ($curYear - $startYear + 1), 0);
+		if ($vars['revised']['data'][$curYear]['value'] < $vars['actual']['data'][$curYear]['value']) {
+			$vars['revised']['data'][$curYear]['value'] = 0;
+		} else {
+			$vars['revised']['data'][$curYear]['value'] = $vars['revised']['data'][$curYear]['value'] - $vars['actual']['data'][$curYear]['value'];
+		}
+
+		$revised_seed = array_fill(0, ($curYear - $startYear), 0);
 		$vars['revised']['data'] = array_merge($revised_seed, $vars['revised']['data']);
 
 //var_dump($vars);
@@ -152,8 +158,8 @@ class Document extends Theme {
 		for ($i = 0; $i < $years; $i++) {
 			if ($i == $returnAmount) { break; }
 			$value = $value * $percent;
-			$targets['data'][$i]['year'] = $startYear + $i;
-			$targets['data'][$i]['value'] = number_format($value, 2, '.', '');
+			$targets['data'][$startYear + $i]['year'] = $startYear + $i;
+			$targets['data'][$startYear + $i]['value'] = number_format($value, 2, '.', '');
 		}
 		return $targets;
 	}
