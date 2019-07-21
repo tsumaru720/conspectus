@@ -126,8 +126,13 @@ class Document extends Theme {
 		}
 
 		$displayYears = ($curYear + 10) - $startYear;
+
+		$previousYear = $curYear - 1;
+		if (!array_key_exists($previousYear, $vars['actual']['data'])) {
+			$previousYear = $curYear;
+		}
 		$vars['initial'] = $this->seedTargets($startYear, $endYear, $startValue, $endValue, $displayYears);
-		$vars['revised'] = $this->seedTargets($curYear, $endYear, $vars['actual']['data'][$curYear - 1]['value'], $endValue, $displayYears);
+		$vars['revised'] = $this->seedTargets($curYear, $endYear, $vars['actual']['data'][$previousYear]['value'], $endValue, $displayYears);
 
 		if ($vars['revised']['data'][$curYear]['value'] < $vars['actual']['data'][$curYear]['value']) {
 			$vars['revised']['data'][$curYear]['value'] = 0;
