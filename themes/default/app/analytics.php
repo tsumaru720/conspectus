@@ -109,28 +109,30 @@ class Document extends Theme {
 			$period['value_delta'] = 0;
 			$period['growth_factor'] = 0;
 
+			if (!isset($vars['periodData'][$period['year']])) {
+				if ($period['year'] == date("Y")) {
+					$vars['periodData'][$period['year']]['label'] = "YTD";
+				} else {
+					$vars['periodData'][$period['year']]['label'] = $period['year'];
+				}
+				$vars['periodData'][$period['year']]['twr'] = 0;
+				$vars['periodData'][$period['year']]['start'] = $period['asset_total'];
+			}
+
 			if (isset($last)) {
 				$period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2, '.', '');
 
 				if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
 					$period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
 				}
-			}
 
-			if ($period['year'] == date("Y")) {
-				$period['year'] = "YTD";
-			}
-
-			if (!isset($vars['periodData'][$period['year']])) {
-				$vars['periodData'][$period['year']]['label'] = $period['year'];
-				$vars['periodData'][$period['year']]['twr'] = 0;
-				$vars['periodData'][$period['year']]['start'] = $period['asset_total'];
-			}
-
-			if ($vars['periodData'][$period['year']]['twr'] == 0) {
-				$vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
-			} else {
-				$vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
+				if ($vars['periodData'][$period['year']]['twr'] == 0) {
+					if ($period['year'] == $last['year']) {
+						$vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
+					}
+				} else {
+					$vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
+				}
 			}
 
 			$vars['periodData'][$period['year']]['end'] = $period['asset_total'];
