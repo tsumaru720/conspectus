@@ -2,6 +2,11 @@
 
 class Main {
 
+	// Used in constructor when loading the class if we only want to initialize and not render.
+	// For example: $main = new Main(Main::INIT_ONLY);
+	// Primarily use for importing config/DB objects for upgrades, without rendering pages
+	const INIT_ONLY = true;
+
 	private $dbSchema = 1;
 
 	private $config = null;
@@ -9,7 +14,7 @@ class Main {
 	private $pageLoader = null;
 	private $router = null;
 
-	public function __construct() {
+	public function __construct($initOnly = false) {
 		spl_autoload_register(array($this,'classLoader'));
 
 		$this->pageLoader = new PageLoader($this);
@@ -17,9 +22,11 @@ class Main {
 		$this->initDB($this->dbSchema);
 
 		// If we get this far, initial loading _seems_ ok
-		$this->router = new Router($this->pageLoader);
-		$this->router->run();
-
+		// Check if we should go further...
+		if (!$initOnly) {
+			$this->router = new Router($this->pageLoader);
+			$this->router->run();
+		}
 	}
 
 	private function classLoader($class) {
