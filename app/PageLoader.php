@@ -16,7 +16,7 @@ class PageLoader {
 	}
 
 	public function setTheme($theme) {
-		$this->$theme = $theme;
+		$this->theme = $theme;
 	}
 
 	public function setVar($name, $value) {
