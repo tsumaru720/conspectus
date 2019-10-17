@@ -45,8 +45,14 @@ class PageLoader {
 	}
 
 	public function display($pageName) {
+		// Add default path and custom theme path for template search
 		$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
 		$loader->prependPath($this->resolveTheme('html'));
+
+		// Also define a "default" namespace so we can always reference default
+		// templates from within custom ones.
+		$loader->addPath(__DIR__.'/../themes/default/html', 'default');
+
 		$this->twig = new \Twig\Environment($loader);
 
 		include $this->resolveTheme('app/'.$pageName.'.php');
