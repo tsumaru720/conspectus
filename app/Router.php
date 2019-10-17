@@ -19,24 +19,21 @@ class Router {
 
 	private function setGlobals() {
 		$this->page->setVar('left_menu', 'all');
+		$this->page->setVar('nav_item', 'view');
+		$this->page->setVar('type', 'asset');
 	}
 
 	private function addRoutes() {
 		$this->router->get('/', function() {
-			$this->page->setVar('nav_item', 'view');
-			$this->page->setVar('type', 'asset');
 			$this->page->display('item_view');
 		});
 
 		$this->router->get('/view', function() {
-			$this->page->setVar('nav_item', 'view');
-			$this->page->setVar('type', 'asset');
 			$this->page->display('item_view');
 		});
 
 		$this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
 			$this->page->setVar('left_menu', $type.'/'.$itemID);
-			$this->page->setVar('nav_item', 'view');
 			$this->page->setVar('type', $type);
 			$this->page->setVar('item_id', $itemID);
 			$this->page->display('item_view');
@@ -44,7 +41,6 @@ class Router {
 
 		$this->router->get('/breakdown', function() {
 			$this->page->setVar('nav_item', 'breakdown');
-			$this->page->setVar('type', 'asset');
 			$this->page->display('breakdown');
 		});
 
@@ -58,7 +54,6 @@ class Router {
 
 		$this->router->get('/analytics', function() {
 			$this->page->setVar('nav_item', 'analytics');
-			$this->page->setVar('type', 'asset');
 			$this->page->display('analytics');
 		});
 
@@ -72,7 +67,6 @@ class Router {
 
 		$this->router->get('/projections', function() {
 			$this->page->setVar('nav_item', 'projections');
-			$this->page->setVar('type', 'asset');
 			$this->page->display('projections');
 		});
 
