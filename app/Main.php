@@ -2,11 +2,18 @@
 
 class Main {
 
-	// Used in constructor when loading the class if we only want to initialize and not render.
-	// For example: $main = new Main(Main::INIT_ONLY);
-	// Primarily use for importing config/DB objects for upgrades, without rendering pages
-	const INIT_ONLY = true;
+	// Control variables for when we dont want to simply render the page
 
+	// initOnly will load, parse and test our config and create a DB object
+	// but wont do any rendering
+	public static $initOnly = false;
+
+	// dbUpgrade signals that we are intentionally calling this with a mismatched
+	// db version - we're probably doing this to do some DB modifications, but still
+	// need to parse the config and test we can actually connect.
+	public static $dbUpgrade = false;
+
+	// The current expected database schema version.
 	private $dbSchema = 1;
 
 	private $config = null;
@@ -14,7 +21,7 @@ class Main {
 	private $pageLoader = null;
 	private $router = null;
 
-	public function __construct($initOnly = false) {
+	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
 
 		$this->pageLoader = new PageLoader($this);
@@ -23,7 +30,7 @@ class Main {
 
 		// If we get this far, initial loading _seems_ ok
 		// Check if we should go further...
-		if (!$initOnly) {
+		if (!Main::$initOnly) {
 			$this->router = new Router($this->pageLoader);
 			$this->router->run();
 		}
@@ -77,7 +84,9 @@ class Main {
 			$q = $db->query("SELECT value from settings WHERE setting = 'db_version'");
 			$r = $db->fetch($q);
 			if ($r['value'] != $expectedVersion) {
-				$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
+				if (!Main::$dbUpgrade) {
+					$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
+				}
 			}
 		} else {
 			$this->fatalErr('DB_404', 'Database appears incomplete. Please ensure first setup has been performed');
