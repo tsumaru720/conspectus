@@ -13,8 +13,16 @@ class Main {
 	// need to parse the config and test we can actually connect.
 	public static $dbUpgrade = false;
 
+	// Variable to control output method. Initially this will be used for when we
+	// need to bail and generate an error - mostly with config/db loading.
+	// Variable allows us to change this to "cli" for example when initiating DB upgrade
+	// from command line
+	//
+	// Current supported values are "cli" and <anything else>
+	public static $outputMethod = 'html';
+
 	// The current expected database schema version.
-	private $dbSchema = 1;
+	private $expectedSchema = 1;
 
 	private $config = null;
 	private $db = null;
@@ -24,9 +32,14 @@ class Main {
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
 
+		if (Main::$dbUpgrade) {
+			// initOnly is implied
+			Main::$initOnly = true;
+		}
+
 		$this->pageLoader = new PageLoader($this);
 		$this->loadConfig();
-		$this->initDB($this->dbSchema);
+		$this->initDB($this->expectedSchema);
 
 		// If we get this far, initial loading _seems_ ok
 		// Check if we should go further...
@@ -59,7 +72,7 @@ class Main {
 		}
 	}
 
-	private function initDB($expectedVersion) {
+	private function initDB($expectedSchema) {
 		$this->db = new MySQL($this->config['SQL_HOSTNAME'],
 							$this->config['SQL_PORT'],
 							$this->config['SQL_USERNAME'],
@@ -83,7 +96,7 @@ class Main {
 		if ($r['count'] > 0) {
 			$q = $db->query("SELECT value from settings WHERE setting = 'db_version'");
 			$r = $db->fetch($q);
-			if ($r['value'] != $expectedVersion) {
+			if ($r['value'] != $expectedSchema) {
 				if (!Main::$dbUpgrade) {
 					$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
 				}
@@ -94,10 +107,16 @@ class Main {
 	}
 
 	public function fatalErr($errorCode, $errorStr) {
-		$this->pageLoader->setFrame(false, false);
-		$this->pageLoader->setVar('error_code', $errorCode);
-		$this->pageLoader->setVar('error_string', $errorStr);
-		$this->pageLoader->display('loading_error');
+		if (Main::$outputMethod == 'cli') {
+			// This likely doesnt need to be themed so can just output our default error
+			echo $errorStr;
+			echo "\n";
+		} else {
+			$this->pageLoader->setFrame(false, false);
+			$this->pageLoader->setVar('error_code', $errorCode);
+			$this->pageLoader->setVar('error_string', $errorStr);
+			$this->pageLoader->display('loading_error');
+		}
 		die();
 	}
 	
