@@ -150,11 +150,12 @@ class Document extends Theme {
 			$last = $period;
 		}
 
-
-		foreach ($vars['periodData'] as $key => $value) {
-			if ($value['twr'] != 0) {
-				$value['twr'] = ($value['twr'] - 1) * 100;
-				$vars['periodData'][$key]['twr'] = number_format($value['twr'],2);
+		if (array_key_exists('periodData', $vars)) {
+			foreach ($vars['periodData'] as $key => $value) {
+				if ($value['twr'] != 0) {
+					$value['twr'] = ($value['twr'] - 1) * 100;
+					$vars['periodData'][$key]['twr'] = number_format($value['twr'],2);
+				}
 			}
 		}
 

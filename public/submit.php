@@ -131,8 +131,8 @@ if ($display_form == true) {
 			?>
 			<div class="form-group row" style="margin-bottom: 5px;" id="<?php echo $asset['id']; ?>_form">
 			        <div class="col-4 text-right">
-					<span><?php echo '('.$asset['id'].') '.$asset['description']; ?></span> -
-					<span class="small"><?php echo $asset_class['description']; ?></span>
+					<span><?php echo '('.$asset['id'].') '.htmlspecialchars($asset['description']); ?></span> -
+					<span class="small"><?php echo htmlspecialchars($asset_class['description']); ?></span>
 			        </div>
 			        <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">
 			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>

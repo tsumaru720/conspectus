@@ -125,12 +125,24 @@ class Document extends Theme {
 			$vars['actual']['data'][$year]['value'] = $period['asset_total'];
 		}
 
+		// Account for no historic data
+		if (!array_key_exists('actual', $vars)) {
+			$year = $curYear;
+			$startYear = $year;
+			$startValue = 0;
+			$vars['actual']['data'][$year]['year'] = $year;
+			$vars['actual']['data'][$year]['value'] = 0;
+			$vars['startYear'] = $startYear;
+			$vars['startValue'] = $startValue;
+		}
+
 		$displayYears = ($curYear + 10) - $startYear;
 
 		$previousYear = $curYear - 1;
 		if (!array_key_exists($previousYear, $vars['actual']['data'])) {
 			$previousYear = $curYear;
 		}
+
 		$vars['initial'] = $this->seedTargets($startYear, $endYear, $startValue, $endValue, $displayYears);
 		$vars['revised'] = $this->seedTargets($curYear, $endYear, $vars['actual']['data'][$previousYear]['value'], $endValue, $displayYears);
 
@@ -151,7 +163,12 @@ class Document extends Theme {
 
 	private function seedTargets($startYear, $endYear, $startValue, $endValue, $returnAmount = 0) {
 		$years = $endYear - $startYear;
-		$percent = pow(($endValue / $startValue), (1 / $years));
+
+		if ($startValue != 0) {
+			$percent = pow(($endValue / $startValue), (1 / $years));
+		} else {
+			$percent = 1;
+		}
 		$targets['percent'] = $percent;
 		$targets['percent_str'] = number_format(($percent - 1) * 100, 2);
 
