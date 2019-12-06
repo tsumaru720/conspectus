@@ -157,6 +157,24 @@ class Document extends Theme {
 			$last['asset_str'] = $this->prettify($last['asset_total']);
 			$last['gain_str'] = $this->prettify($last['gain']);
 			$vars['mostRecent'] = $last;
+
+			/////////// STANDARD DEVIATION ///////////
+			$values = count($vars['periodData']);
+			$x = 0;
+			foreach ($vars['periodData'] as $data){
+				// TODO: Move this to main loop ^^^
+				$x = $x + $data['growth_annualized'];
+			}
+			$mean = $x / $values;
+			$x = 0;
+			foreach ($vars['periodData'] as $data){
+				$deviation = pow($data['growth_annualized'] - $mean, 2);
+				$x = $x + $deviation;
+			}
+			$variance = $x / $values;
+			$vars['std_dev'] = sqrt($variance);
+			/////////// STANDARD DEVIATION ///////////
+
 		} else {
 			$last['deposit_str'] = $this->prettify('0');
 			$last['asset_str'] = $this->prettify('0');

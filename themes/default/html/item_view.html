@@ -242,7 +242,7 @@ var growth_chart = new Chart(ctx, {
 			lineTension: 0.3,
 			borderWidth: 2,
             data: data2,
-            hidden: false,
+            hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
             borderWidth: 1
         }, {
             label: 'Time-Weighted Return',
