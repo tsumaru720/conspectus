@@ -82,15 +82,12 @@ class Document extends Theme {
 			                                yearMonth ASC", $data);
 			if ($vars['item_id'] > 0) {
 				$nameQuery = $this->db->query("SELECT
-				                                count(asset_list.description) as count,
 				                                asset_classes.description AS description
 				                            FROM
-				                                asset_list
-				                            LEFT JOIN asset_classes ON asset_class = asset_classes.id
+				                                asset_classes
 				                            WHERE
 				                                asset_classes.id = :item_id;", $data);
-				$item = $this->db->fetch($nameQuery); // count() in the query will ensure this always exists
-				if (($item['count'] > 0) && ($item['description'] != 'NULL')) {
+				if ($item = $this->db->fetch($nameQuery)) {
 					$this->pageTitle = "Analytics - ".$item['description'];
 					$vars['page_title'] = $item['description'];
 				} else {

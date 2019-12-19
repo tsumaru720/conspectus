@@ -83,8 +83,7 @@ class Document extends Theme {
 				$nameQuery = $this->db->query("SELECT
 				                                asset_classes.description AS description
 				                            FROM
-				                                asset_list
-				                            LEFT JOIN asset_classes ON asset_class = asset_classes.id
+				                                asset_classes
 				                            WHERE
 				                                asset_classes.id = :item_id;", $data);
 				if ($item = $this->db->fetch($nameQuery)) {
