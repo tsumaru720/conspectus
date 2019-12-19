@@ -163,6 +163,7 @@ var data = {
 			pastel_colour('{{ asset.name|raw }}'),
 		{% endfor %}
 		],
+		borderWidth: 1,
 		data: [
 			{% for asset in mostRecent %}
 				'{{ asset.value }}',
@@ -210,6 +211,7 @@ var data = {
 			pastel_colour('{{ class.name|raw }}'),
 		{% endfor %}
 		],
+		borderWidth: 1,
 		data: [
 			{% for class in class_mostRecent %}
 				'{{ class.value }}',
