@@ -118,7 +118,14 @@ class Document extends Theme {
 			usort($last['log'], function($a, $b) {
 				return $b['value'] - $a['value'];
 			});
+			// Used for Pie Charts
 			$vars['mostRecent'] = $last['log'];
+			// Remove zero values from recent data
+			foreach ($vars['mostRecent'] as $key => $entry) {
+				if ($entry['value'] <= 0) {
+					unset($vars['mostRecent'][$key]);
+				}
+			}
 
 			foreach ($vars['log'] as $key => $entry) {
 				foreach ($vars['labels'] as $period => $v) {
