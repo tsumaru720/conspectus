@@ -63,10 +63,8 @@ class Document extends Theme {
 				$this->vars['error_string'] = "Asset name is too long - Max: 40";
 			} else {
 				$data = array(':description' => $description);
-				$q = $this->db->query("SELECT COUNT(id) as count from asset_list WHERE description = :description", $data);
-				$result = $this->db->fetch($q);
-
-				if ($result['count'] > 0) {
+				$q = $this->db->query("SELECT id from asset_list WHERE description = :description", $data);
+				if ($q->rowCount() > 0) {
 					// Name specified already exists - its an exact match
 					// Probably dont want duplicates.
 					$validated = false;
@@ -76,10 +74,8 @@ class Document extends Theme {
 			}
 
 			$data = array(':class_id' => $class);
-			$q = $this->db->query("SELECT COUNT(id) as count from asset_classes WHERE id = :class_id", $data);
-			$result = $this->db->fetch($q);
-			
-			if ($result['count'] == 0) {
+			$q = $this->db->query("SELECT id from asset_classes WHERE id = :class_id", $data);
+			if ($q->rowCount() == 0) {
 				// ID provided doesnt exist.
 				$class = false;
 				$validated = false;
