@@ -22,8 +22,9 @@ class Main {
 	public static $outputMethod = 'html';
 
 	// The current expected database schema version.
-	private $expectedSchema = 1;
+	public static $expectedSchema = 1;
 
+	// variable initialization
 	private $config = null;
 	private $db = null;
 	private $pageLoader = null;
@@ -39,7 +40,7 @@ class Main {
 
 		$this->pageLoader = new PageLoader($this);
 		$this->loadConfig();
-		$this->initDB($this->expectedSchema);
+		$this->initDB(Main::$expectedSchema);
 
 		// If we get this far, initial loading _seems_ ok
 		// Check if we should go further...
@@ -80,29 +81,34 @@ class Main {
 							$this->config['SQL_DATABASE']
 						);
 		$db = $this->db;
-		if (!is_object($db->getHandle())) {
-			$this->fatalErr('DB_403', 'Unable to connect to database server; Please check the credentials provided');
-		}
 
-		$data = array(':database' => $this->config['SQL_DATABASE']);
-		$q = $db->query("SELECT
-    	                     COUNT(TABLE_NAME) AS count
-		                 FROM
-		                     information_schema.tables
-		                 WHERE
-		                     table_schema = :database AND TABLE_NAME = 'settings'
-		                 LIMIT 1", $data);
-		$r = $db->fetch($q);
-		if ($r['count'] > 0) {
-			$q = $db->query("SELECT value from settings WHERE setting = 'db_version'");
-			$r = $db->fetch($q);
-			if ($r['value'] != $expectedSchema) {
-				if (!Main::$dbUpgrade) {
-					$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
-				}
+		// Only do further checks if we're not upgrading the database
+		if (!Main::$dbUpgrade) {
+			if ($e = $db->getError()) {
+				//Some kind of connection/access error occured
+				$this->fatalErr('MYSQL_'.$e['code'], $e['message']);
 			}
-		} else {
-			$this->fatalErr('DB_404', 'Database appears incomplete. Please ensure first setup has been performed');
+
+			$data = array(':database' => $this->config['SQL_DATABASE']);
+			$q = $db->query("SELECT
+	    	                     COUNT(TABLE_NAME) AS count
+			                 FROM
+			                     information_schema.tables
+			                 WHERE
+			                     table_schema = :database AND TABLE_NAME = 'settings'
+			                 LIMIT 1", $data);
+			$r = $db->fetch($q);
+			if ($r['count'] > 0) {
+				$q = $db->query("SELECT value from settings WHERE setting = 'db_version'");
+				$r = $db->fetch($q);
+				if ($r['value'] != $expectedSchema) {
+					if (!Main::$dbUpgrade) {
+						$this->fatalErr('DB_SCHEMA', 'Database schema upgrade is required');
+					}
+				}
+			} else {
+				$this->fatalErr('DB_404', 'Database appears incomplete. Please ensure first setup has been performed');
+			}
 		}
 	}
 
@@ -126,5 +132,9 @@ class Main {
 
 	public function getPageLoader() {
 		return $this->pageLoader;
+	}
+
+	public function getConfig() {
+		return $this->config;
 	}
 }

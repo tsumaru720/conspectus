@@ -3,13 +3,17 @@
 class MySQL {
 
 	private $handle = null;
+	private $error = null;
 
 	public function __construct($host, $port, $username, $password, $database) {
 		try {
 			$this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password);
 		}
 		catch(PDOException $e) {
-			return null; //do nothing
+			// Handle this ourselves
+			// stack traces on failed connections can include passwords
+			$this->error['code'] = $e->getCode();
+			$this->error['message'] = $e->getMessage();
 		}
 
 	}
@@ -23,7 +27,7 @@ class MySQL {
 			$qh->execute();
 		}
 
-		if ($qh->errorInfo()) { echo $qh->errorInfo()[2]; }
+		if ($qh->errorInfo()[1]) { echo "ERROR: ".$qh->errorInfo()[2]."\n"; }
 
 		return $qh;
 	}
@@ -39,6 +43,10 @@ class MySQL {
 
 	public function getInsertID() {
 		return $this->handle->lastInsertId();
+	}
+
+	public function getError() {
+		return $this->error;
 	}
 
 }
