@@ -51,6 +51,8 @@ while ($currentSchema < Main::$expectedSchema) {
 	$currentSchema = $appliedSchema;
 }
 
+echo "Nothing more to do.\n";
+
 //---------
 
 function schemaUpdate($newSchema) {

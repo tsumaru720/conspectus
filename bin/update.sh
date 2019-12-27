@@ -26,3 +26,4 @@ fi
 
 git pull
 $COMPOSER install -d "../"
+php db.php
