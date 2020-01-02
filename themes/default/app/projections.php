@@ -143,10 +143,12 @@ class Document extends Theme {
 		$vars['initial'] = $this->seedTargets($startYear, $endYear, $startValue, $endValue, $displayYears);
 		$vars['revised'] = $this->seedTargets($curYear, $endYear, $vars['actual']['data'][$previousYear]['value'], $endValue, $displayYears);
 
-		if ($vars['revised']['data'][$curYear]['value'] < $vars['actual']['data'][$curYear]['value']) {
-			$vars['revised']['data'][$curYear]['value'] = 0;
-		} else {
-			$vars['revised']['data'][$curYear]['value'] = $vars['revised']['data'][$curYear]['value'] - $vars['actual']['data'][$curYear]['value'];
+		if (array_key_exists($curYear, $vars['actual']['data'])) {
+			if ($vars['revised']['data'][$curYear]['value'] < $vars['actual']['data'][$curYear]['value']) {
+				$vars['revised']['data'][$curYear]['value'] = 0;
+			} else {
+				$vars['revised']['data'][$curYear]['value'] = $vars['revised']['data'][$curYear]['value'] - $vars['actual']['data'][$curYear]['value'];
+			}
 		}
 
 		$revised_seed = array_fill(0, ($curYear - $startYear), 0);
