@@ -101,7 +101,7 @@ class Document extends Theme {
 			die();
 			//TODO make this error nicer
 		}
-
+			//TODO Tidy up this whole mess of code - a lot of it can be put in generic functions
 		while ($period = $this->db->fetch($dataQuery)) {
 			$period['value_delta'] = 0;
 			$period['growth_factor'] = 0;
@@ -114,6 +114,7 @@ class Document extends Theme {
 				}
 				$vars['periodData'][$period['year']]['twr'] = 0;
 				$vars['periodData'][$period['year']]['start'] = $period['asset_total'];
+
 			}
 
 			if (isset($last)) {
@@ -122,10 +123,22 @@ class Document extends Theme {
 				if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
 					$period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
 				}
-
 				if ($vars['periodData'][$period['year']]['twr'] == 0) {
 					if ($period['year'] == $last['year']) {
 						$vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
+					} else {
+						// Add TWR factor to previous year
+						if ($vars['periodData'][$last['year']]['twr'] == 0) {
+							$vars['periodData'][$last['year']]['twr'] = $period['growth_factor'];
+						} else {
+							$vars['periodData'][$last['year']]['twr'] = $vars['periodData'][$last['year']]['twr'] * $period['growth_factor'];
+						}
+
+						// Recalculate value percentage increase for the year
+						$vars['periodData'][$last['year']]['end'] = $period['asset_total'];
+						$start = $vars['periodData'][$last['year']]['start'];
+						$end = $vars['periodData'][$last['year']]['end'];
+						$vars['periodData'][$last['year']]['increase'] = number_format((($end / $start) - 1) * 100, 2, '.', '');
 					}
 				} else {
 					$vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
