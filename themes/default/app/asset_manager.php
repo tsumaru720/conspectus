@@ -89,6 +89,7 @@ class Document extends Theme {
 				$this->vars['form_class'] = $class;
 			} else {
 				$this->vars['success'] = true;
+				$this->vars['form_class'] = $class; //Pre-select last chosen class (easier when adding lots)
 				$data = array(':description' => $description, ':class_id' => $class);
 				$q = $this->db->query("INSERT INTO `asset_list` (`id`, `asset_class`, `description`) VALUES (NULL, :class_id, :description)", $data);
 			}
