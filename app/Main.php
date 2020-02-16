@@ -29,6 +29,7 @@ class Main {
 	private $db = null;
 	private $pageLoader = null;
 	private $router = null;
+	private $entity = null;
 
 	public function __construct() {
 		spl_autoload_register(array($this,'classLoader'));
@@ -45,6 +46,7 @@ class Main {
 		// If we get this far, initial loading _seems_ ok
 		// Check if we should go further...
 		if (!Main::$initOnly) {
+			$this->entity = new EntityManager($this);
 			$this->router = new Router($this->pageLoader);
 			$this->router->run();
 		}
@@ -136,5 +138,9 @@ class Main {
 
 	public function getConfig() {
 		return $this->config;
+	}
+
+	public function getEntityManager() {
+		return $this->entity;
 	}
 }

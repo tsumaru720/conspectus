@@ -4,12 +4,14 @@ class Document extends Theme {
 
 	protected $pageTitle = 'Dashboard';
 	private $db = null;
+	private $entity = null;
 
 	public function __construct(&$main, &$twig, $vars) {
 
 		$vars['page_title'] = $this->pageTitle;
 
 		$this->db = $main->getDB();
+		$this->entity = $main->getEntityManager();
 
 		if ($vars['left_menu'] != 'all') {
 			if (!is_numeric($vars['item_id']) || $vars['item_id'] < 0) {
@@ -44,20 +46,13 @@ class Document extends Theme {
 			                            ORDER BY
 			                                yearMonth ASC", $data);
 			if ($vars['item_id'] > 0) {
-				$nameQuery = $this->db->query("SELECT
-				                                asset_list.description,
-				                                asset_classes.description AS class
-				                            FROM
-				                                asset_list
-				                            LEFT JOIN asset_classes ON asset_class = asset_classes.id
-				                            WHERE
-				                                asset_list.id = :item_id;", $data);
-				if ($item = $this->db->fetch($nameQuery)) {
-					$this->pageTitle = "Asset View - ".$item['description'];
-					$vars['page_title'] = $item['description'];
-					$vars['asset_class'] = $item['class'];
+				$asset = $this->entity->getAsset($vars['item_id']);
+				if ($asset) {
+					$this->pageTitle = "Asset View - ".$asset->getDescription();
+					$vars['page_title'] = $asset->getDescription();
+					$vars['asset_class'] = $asset->getClass();
 				} else {
-					echo "invalid asset";
+					echo "Invalid Asset";
 					die();
 					//TODO make this error nicer
 				}
