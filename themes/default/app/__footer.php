@@ -2,10 +2,10 @@
 
 class Footer extends Theme {
 
-	public function __construct(&$main, &$twig, $vars) {
+    public function __construct(&$main, &$twig, $vars) {
 
-		$this->vars = $vars;
-		$this->document = $twig->load('__footer.html');
-	}
+        $this->vars = $vars;
+        $this->document = $twig->load('__footer.html');
+    }
 
 }
