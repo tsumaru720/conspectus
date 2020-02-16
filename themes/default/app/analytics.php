@@ -4,13 +4,14 @@ class Document extends Theme {
 
     protected $pageTitle = 'Analytics';
     private $db = null;
+    private $entityManager = null;
 
     public function __construct(&$main, &$twig, $vars) {
 
         $vars['page_title'] = $this->pageTitle;
 
         $this->db = $main->getDB();
-        $this->entity = $main->getEntityManager();
+        $this->entityManager = $main->getEntityManager();
 
         if ($vars['left_menu'] != 'all') {
             if (!is_numeric($vars['item_id']) || $vars['item_id'] < 0) {
@@ -44,7 +45,9 @@ class Document extends Theme {
                                         ORDER BY
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
-                $asset = $this->entity->getAsset($vars['item_id']);
+                $asset = $this->entityManager->getAsset($vars['item_id']);
+                $object = $asset;
+
                 if ($asset) {
                     $this->pageTitle = "Analytics - ".$asset->getDescription();
                     $vars['page_title'] = $asset->getDescription();
@@ -75,7 +78,7 @@ class Document extends Theme {
                                         ORDER BY
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
-                $class = $this->entity->getClass($vars['item_id']);
+                $class = $this->entityManager->getClass($vars['item_id']);
                 if ($class) {
                     $this->pageTitle = "Analytics - ".$class->getDescription();
                     $vars['page_title'] = $class->getDescription();
