@@ -65,8 +65,10 @@ body {
   color: inherit;
 }
 
-.sidebar-brand {
+.sidebar-brand, .sidebar-brand a, .sidebar-brand a:hover {
   font-size: 1.5rem;
+  text-decoration: none;
+  color: black;
 }
 
 .sidebar-heading, .sidebar-heading a:hover {
