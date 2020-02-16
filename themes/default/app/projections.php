@@ -75,15 +75,10 @@ class Document extends Theme {
                                         ORDER BY
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
-                $nameQuery = $this->db->query("SELECT
-                                                asset_classes.description AS description
-                                            FROM
-                                                asset_classes
-                                            WHERE
-                                                asset_classes.id = :item_id;", $data);
-                if ($item = $this->db->fetch($nameQuery)) {
-                    $this->pageTitle = "Projections - ".$item['description'];
-                    $vars['page_title'] = $item['description'];
+                $class = $this->entity->getClass($vars['item_id']);
+                if ($class) {
+                    $this->pageTitle = "Projections - ".$class->getDescription();
+                    $vars['page_title'] = $class->getDescription();
                 } else {
                     echo "invalid class";
                     die();

@@ -30,7 +30,21 @@ class EntityManager {
     }
 
     public function getClass($classID) {
+        $data = array(':item_id' => $classID);
 
+        $q = $this->db->query("SELECT
+                                    asset_classes.id AS id,
+                                    asset_classes.description AS description
+                                FROM
+                                    asset_classes
+                                WHERE
+                                    asset_classes.id = :item_id;", $data);
+
+        if ($item = $this->db->fetch($q)) {
+            return new ClassEntity($item);
+        } else {
+            return false;
+        }
     }
 
 
