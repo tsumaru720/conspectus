@@ -45,11 +45,11 @@ class Document extends Theme {
                                             yearMonth ASC,
                                             description ASC", $data);
             if ($vars['item_id'] > 0) {
-                $asset = $this->entityManager->getAsset($vars['item_id']);
-                if ($asset) {
-                    $this->pageTitle = "Breakdown - ".$asset->getDescription();
-                    $vars['page_title'] = $asset->getDescription();
-                    $vars['asset_class'] = $asset->getClass();
+                $entity = $this->entityManager->getAsset($vars['item_id']);
+                if ($entity) {
+                    $this->pageTitle = "Breakdown - ".$entity->getDescription();
+                    $vars['page_title'] = $entity->getDescription();
+                    $vars['asset_class'] = $entity->getClass();
                 } else {
                     echo "invalid asset";
                     die();
@@ -75,10 +75,10 @@ class Document extends Theme {
                                             yearMonth ASC,
                                             description ASC", $data);
             if ($vars['item_id'] > 0) {
-                $class = $this->entityManager->getClass($vars['item_id']);
-                if ($class) {
-                    $this->pageTitle = "Breakdown - ".$class->getDescription();
-                    $vars['page_title'] = $class->getDescription();
+                $entity = $this->entityManager->getClass($vars['item_id']);
+                if ($entity) {
+                    $this->pageTitle = "Breakdown - ".$entity->getDescription();
+                    $vars['page_title'] = $entity->getDescription();
                 } else {
                     echo "invalid class";
                     die();

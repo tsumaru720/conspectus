@@ -45,13 +45,12 @@ class Document extends Theme {
                                         ORDER BY
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
-                $asset = $this->entityManager->getAsset($vars['item_id']);
-                $object = $asset;
+                $entity = $this->entityManager->getAsset($vars['item_id']);
 
-                if ($asset) {
-                    $this->pageTitle = "Analytics - ".$asset->getDescription();
-                    $vars['page_title'] = $asset->getDescription();
-                    $vars['asset_class'] = $asset->getClass();
+                if ($entity) {
+                    $this->pageTitle = "Analytics - ".$entity->getDescription();
+                    $vars['page_title'] = $entity->getDescription();
+                    $vars['asset_class'] = $entity->getClass();
                 } else {
                     echo "invalid asset";
                     die();
@@ -78,10 +77,10 @@ class Document extends Theme {
                                         ORDER BY
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
-                $class = $this->entityManager->getClass($vars['item_id']);
-                if ($class) {
-                    $this->pageTitle = "Analytics - ".$class->getDescription();
-                    $vars['page_title'] = $class->getDescription();
+                $entity = $this->entityManager->getClass($vars['item_id']);
+                if ($entity) {
+                    $this->pageTitle = "Analytics - ".$entity->getDescription();
+                    $vars['page_title'] = $entity->getDescription();
                 } else {
                     echo "invalid class";
                     die();
