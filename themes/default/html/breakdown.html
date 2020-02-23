@@ -97,9 +97,9 @@ var data = {
 	datasets: [
 	{% for dataset in log %}
 	{
-		label: '{{ dataset.name|raw }}',
-		backgroundColor: pastel_colour('{{ dataset.name|raw }}'),
-		borderColor: pastel_colour('{{ dataset.name|raw }}'),
+		label: '{{ dataset.name|escape('js') }}',
+		backgroundColor: pastel_colour('{{ dataset.name|escape('js') }}'),
+		borderColor: pastel_colour('{{ dataset.name|escape('js') }}'),
 		borderWidth: 1,
 		data: [
 			{% for data in dataset.data %}
@@ -151,7 +151,7 @@ var total_chart = new Chart(ctx, {
 
 var labels = [
 {% for asset in mostRecent %}
-	'{{ asset.name|raw }}',
+	'{{ asset.name|escape('js') }}',
 {% endfor %}
 ];
 
@@ -160,7 +160,7 @@ var data = {
 	datasets: [{
 		backgroundColor: [
 		{% for asset in mostRecent %}
-			pastel_colour('{{ asset.name|raw }}'),
+			pastel_colour('{{ asset.name|escape('js') }}'),
 		{% endfor %}
 		],
 		borderWidth: 1,
