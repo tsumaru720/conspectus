@@ -70,6 +70,8 @@ class Document extends Theme {
                 $data['asset_id'] = $this->vars['item_id'];
                 $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description WHERE `asset_list`.`id` = :asset_id", $data);
                 header('Location: /view/asset/'.$data['asset_id']);
+            } else {
+                $this->document = $this->twig->load('asset_manager.html');
             }
         } elseif ($action == "delete") {
             echo "not implemented yet";
