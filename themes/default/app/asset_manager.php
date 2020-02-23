@@ -66,7 +66,7 @@ class Document extends Theme {
             }
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
-            if ($this->entityManager->getAsset($this->vars['item_id'])) {
+            if (!$this->entityManager->getAsset($this->vars['item_id'])) {
                 echo "Invalid Asset";
                 die();
                 //TODO make this error nicer
