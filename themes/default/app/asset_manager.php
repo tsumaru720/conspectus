@@ -18,6 +18,11 @@ class Document extends Theme {
             $this->vars['class_menu_items'][] = $item;
         }
 
+        if ($vars['action'] == "new") {
+            $this->pageTitle .= " - New Asset";
+            $this->vars['action_string'] = "Add new asset";
+        }
+
         // Other requests types should never get this far
         // due to bramus router matching.
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
@@ -30,9 +35,7 @@ class Document extends Theme {
 
     private function processGet($action) {
         if ($action == "new") {
-            $this->pageTitle .= " - New Asset";
-            $vars['page_title'] = $this->pageTitle;
-            $this->document = $this->twig->load('asset_manager_new.html');
+            $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
             echo "not implemented yet";
             die();
@@ -51,8 +54,9 @@ class Document extends Theme {
         if ($action == "new") {
             if ($data = $this->assetValidation()) {
                 $this->db->query("INSERT INTO `asset_list` (`id`, `asset_class`, `description`) VALUES (NULL, :class_id, :description)", $data);
+                $this->vars['success_string'] = "Asset added";
             }
-            $this->document = $this->twig->load('asset_manager_new.html');
+            $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
             echo "not implemented yet";
             die();
