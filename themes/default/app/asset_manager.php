@@ -66,6 +66,11 @@ class Document extends Theme {
             }
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
+            if ($this->entityManager->getAsset($this->vars['item_id'])) {
+                echo "Invalid Asset";
+                die();
+                //TODO make this error nicer
+            }
             if ($data = $this->assetValidation(true)) {
                 $data['asset_id'] = $this->vars['item_id'];
                 $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description WHERE `asset_list`.`id` = :asset_id", $data);
