@@ -83,6 +83,14 @@ class Router {
             $this->page->display('asset_manager');
         });
 
+        $this->router->match('GET|POST', '/asset/edit/{itemID}', function($itemID) {
+            $this->page->setVar('left_menu', 'asset/'.$itemID);
+            $this->page->setVar('nav_item', 'view');
+            $this->page->setVar('item_id', $itemID);
+            $this->page->setVar('action', 'edit');
+            $this->page->display('asset_manager');
+        });
+
         $this->router->set404(function() {
             $this->page->setFrame(false, false);
             $this->page->display('http_404');

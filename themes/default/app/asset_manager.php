@@ -21,6 +21,9 @@ class Document extends Theme {
         if ($vars['action'] == "new") {
             $this->pageTitle .= " - New Asset";
             $this->vars['action_string'] = "Add new asset";
+        } elseif ($vars['action'] == "edit") {
+            $this->pageTitle .= " - Edit Asset";
+            $this->vars['action_string'] = "Edit asset";
         }
 
         // Other requests types should never get this far
@@ -30,15 +33,21 @@ class Document extends Theme {
         } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->processPost($vars['action']);
         }
-        
     }
 
     private function processGet($action) {
         if ($action == "new") {
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
-            echo "not implemented yet";
-            die();
+            if (!$asset = $this->entityManager->getAsset($this->vars['item_id'])) {
+                echo "Invalid Asset";
+                die();
+                //TODO make this error nicer
+            }
+            $this->vars['form_description'] = $asset->getDescription();
+            $this->vars['form_class'] = $asset->getClassID();
+
+            $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "delete") {
             echo "not implemented yet";
             die();
@@ -54,12 +63,14 @@ class Document extends Theme {
         if ($action == "new") {
             if ($data = $this->assetValidation()) {
                 $this->db->query("INSERT INTO `asset_list` (`id`, `asset_class`, `description`) VALUES (NULL, :class_id, :description)", $data);
-                $this->vars['success_string'] = "Asset added";
             }
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
-            echo "not implemented yet";
-            die();
+            if ($data = $this->assetValidation(true)) {
+                $data['asset_id'] = $this->vars['item_id'];
+                $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description WHERE `asset_list`.`id` = :asset_id", $data);
+                header('Location: /view/asset/'.$data['asset_id']);
+            }
         } elseif ($action == "delete") {
             echo "not implemented yet";
             die();
@@ -84,7 +95,7 @@ class Document extends Theme {
         return $_POST[$key];
     }
 
-    private function assetValidation() {
+    private function assetValidation($allowDuplicate = false) {
             $description = $this->validateInput('description');
             $class = $this->validateInput('class');
             $validated = true;
@@ -101,14 +112,16 @@ class Document extends Theme {
                 $this->vars['error_code'] = "STRLEN";
                 $this->vars['error_string'] = "Asset name is too long - Max: 40";
             } else {
-                $data = array(':description' => $description);
-                $q = $this->db->query("SELECT id from asset_list WHERE description = :description", $data);
-                if ($q->rowCount() > 0) {
-                    // Name specified already exists - its an exact match
-                    // Probably dont want duplicates.
-                    $validated = false;
-                    $this->vars['error_code'] = "DUPLICATE";
-                    $this->vars['error_string'] = "Asset with that name already exists";
+                if ($allowDuplicate == false) {
+                    $data = array(':description' => $description);
+                    $q = $this->db->query("SELECT id from asset_list WHERE description = :description", $data);
+                    if ($q->rowCount() > 0) {
+                        // Name specified already exists - its an exact match
+                        // Probably dont want duplicates.
+                        $validated = false;
+                        $this->vars['error_code'] = "DUPLICATE";
+                        $this->vars['error_string'] = "Asset with that name already exists";
+                    }
                 }
             }
 
