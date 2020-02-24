@@ -47,7 +47,7 @@ class Main {
         // Check if we should go further...
         if (!Main::$initOnly) {
             $this->entityManager = new EntityManager($this);
-            $this->router = new Router($this->pageLoader);
+            $this->router = new Router($this);
             $this->router->run();
         }
     }

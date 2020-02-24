@@ -14,13 +14,7 @@ class Document extends Theme {
         $this->entityManager = $main->getEntityManager();
 
         if ($vars['left_menu'] != 'all') {
-            if (!is_numeric($vars['item_id']) || $vars['item_id'] < 0) {
-                echo "bad id";
-                die();
-                //TODO make this error nicer
-            } else {
-                $vars['modifier'] = "=";
-            }
+            $vars['modifier'] = "=";
         } else {
             $vars['item_id'] = 0;
             $vars['modifier'] = ">";
@@ -47,15 +41,9 @@ class Document extends Theme {
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getAsset($vars['item_id']);
-                if ($entity) {
-                    $this->pageTitle = "Asset View - ".$entity->getDescription();
-                    $vars['page_title'] = $entity->getDescription();
-                    $vars['asset_class'] = $entity->getClass();
-                } else {
-                    echo "Invalid Asset";
-                    die();
-                    //TODO make this error nicer
-                }
+                $this->pageTitle = "Asset View - ".$entity->getDescription();
+                $vars['page_title'] = $entity->getDescription();
+                $vars['asset_class'] = $entity->getClass();
             }
         } elseif ($vars['type'] == 'class') {
             $dataQuery = $this->db->query("SELECT
@@ -79,19 +67,9 @@ class Document extends Theme {
                                             yearMonth ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getClass($vars['item_id']);
-                if ($entity) {
-                    $this->pageTitle = "Asset View - ".$entity->getDescription();
-                    $vars['page_title'] = $entity->getDescription();
-                } else {
-                    echo "invalid class";
-                    die();
-                    //TODO make this error nicer
-                }
+                $this->pageTitle = "Asset View - ".$entity->getDescription();
+                $vars['page_title'] = $entity->getDescription();
             }
-        } else {
-            echo "invalid type";
-            die();
-            //TODO make this error nicer
         }
 
         while ($period = $this->db->fetch($dataQuery)) {

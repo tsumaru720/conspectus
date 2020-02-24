@@ -4,15 +4,28 @@ class Router {
 
     private $router = null;
     private $page = null;
+    private $entityManager = null;
 
-    public function __construct(&$page) {
-        $this->page = $page;
+    public function __construct(&$main) {
+        $this->page = $main->getPageLoader();
+        $this->entityManager = $main->getEntityManager();
+
         $this->router = new \Bramus\Router\Router();
         $this->setGlobals();
         $this->addRoutes();
         Theme::customRoutes($this->router, $this->page);
     }
     
+    private function checkExists($type, $itemID) {
+        if ($type == "asset") {
+            return $this->entityManager->getAsset($itemID);
+        } elseif ($type == "class") {
+            return $this->entityManager->getClass($itemID);
+        } else {
+            return false;
+        }
+    }
+
     public function run() {
         $this->router->run();
     }
@@ -33,10 +46,15 @@ class Router {
         });
 
         $this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
-            $this->page->setVar('left_menu', $type.'/'.$itemID);
-            $this->page->setVar('type', $type);
-            $this->page->setVar('item_id', $itemID);
-            $this->page->display('item_view');
+            if (!$this->checkExists($type, $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', $type.'/'.$itemID);
+                $this->page->setVar('type', $type);
+                $this->page->setVar('item_id', $itemID);
+                $this->page->display('item_view');
+            }
         });
 
         $this->router->get('/breakdown', function() {
@@ -45,11 +63,16 @@ class Router {
         });
 
         $this->router->get('/breakdown/{type}/{itemID}', function($type, $itemID) {
-            $this->page->setVar('left_menu', $type.'/'.$itemID);
-            $this->page->setVar('nav_item', 'breakdown');
-            $this->page->setVar('type', $type);
-            $this->page->setVar('item_id', $itemID);
-            $this->page->display('breakdown');
+            if (!$this->checkExists($type, $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', $type.'/'.$itemID);
+                $this->page->setVar('nav_item', 'breakdown');
+                $this->page->setVar('type', $type);
+                $this->page->setVar('item_id', $itemID);
+                $this->page->display('breakdown');
+            }
         });
 
         $this->router->get('/analytics', function() {
@@ -58,11 +81,16 @@ class Router {
         });
 
         $this->router->get('/analytics/{type}/{itemID}', function($type, $itemID) {
-            $this->page->setVar('left_menu', $type.'/'.$itemID);
-            $this->page->setVar('nav_item', 'analytics');
-            $this->page->setVar('type', $type);
-            $this->page->setVar('item_id', $itemID);
-            $this->page->display('analytics');
+            if (!$this->checkExists($type, $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', $type.'/'.$itemID);
+                $this->page->setVar('nav_item', 'analytics');
+                $this->page->setVar('type', $type);
+                $this->page->setVar('item_id', $itemID);
+                $this->page->display('analytics');
+            }
         });
 
         $this->router->get('/projections', function() {
@@ -71,11 +99,16 @@ class Router {
         });
 
         $this->router->get('/projections/{type}/{itemID}', function($type, $itemID) {
-            $this->page->setVar('left_menu', $type.'/'.$itemID);
-            $this->page->setVar('nav_item', 'projections');
-            $this->page->setVar('type', $type);
-            $this->page->setVar('item_id', $itemID);
-            $this->page->display('projections');
+            if (!$this->checkExists($type, $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', $type.'/'.$itemID);
+                $this->page->setVar('nav_item', 'projections');
+                $this->page->setVar('type', $type);
+                $this->page->setVar('item_id', $itemID);
+                $this->page->display('projections');
+            }
         });
 
         $this->router->match('GET|POST', '/asset/new', function() {
@@ -84,11 +117,16 @@ class Router {
         });
 
         $this->router->match('GET|POST', '/asset/edit/{itemID}', function($itemID) {
-            $this->page->setVar('left_menu', 'asset/'.$itemID);
-            $this->page->setVar('nav_item', 'view');
-            $this->page->setVar('item_id', $itemID);
-            $this->page->setVar('action', 'edit');
-            $this->page->display('asset_manager');
+            if (!$this->checkExists('asset', $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', 'asset/'.$itemID);
+                $this->page->setVar('nav_item', 'view');
+                $this->page->setVar('item_id', $itemID);
+                $this->page->setVar('action', 'edit');
+                $this->page->display('asset_manager');
+            }
         });
 
         $this->router->set404(function() {
