@@ -1,7 +1,12 @@
 <?php
 
-$config['SQL_USERNAME'] = 'assets';
-$config['SQL_PASSWORD'] = 'asdfsdf';
-$config['SQL_DATABASE'] = 'asset_tracker';
-$config['SQL_HOSTNAME'] = 'localhost';
-$config['SQL_PORT'] = 3306;
+	function getEnvOrDefault($var, $default) {
+		$result = getEnv($var);
+		return $result === FALSE ? $default : $result;
+	}
+
+	$config['SQL_USERNAME'] = getEnvOrDefault('SQL_USERNAME', 'assets');
+	$config['SQL_PASSWORD'] = getEnvOrDefault('SQL_PASSWORD', 'asdfsdf');
+	$config['SQL_DATABASE'] = getEnvOrDefault('SQL_DATABASE', 'asset_tracker');
+	$config['SQL_HOSTNAME'] = getEnvOrDefault('SQL_HOSTNAME', 'localhost');
+	$config['SQL_PORT'] = getEnvOrDefault('SQL_PORT', 3306);
