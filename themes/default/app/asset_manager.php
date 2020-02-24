@@ -71,7 +71,7 @@ class Document extends Theme {
                 die();
                 //TODO make this error nicer
             }
-            if ($data = $this->assetValidation(true)) {
+            if ($data = $this->assetValidation()) {
                 $data['asset_id'] = $this->vars['item_id'];
                 $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description WHERE `asset_list`.`id` = :asset_id", $data);
                 header('Location: /view/asset/'.$data['asset_id']);
@@ -102,7 +102,7 @@ class Document extends Theme {
         return $_POST[$key];
     }
 
-    private function assetValidation($allowDuplicate = false) {
+    private function assetValidation() {
             $description = $this->validateInput('description');
             $class = $this->validateInput('class');
             $validated = true;
@@ -119,10 +119,16 @@ class Document extends Theme {
                 $this->vars['error_code'] = "STRLEN";
                 $this->vars['error_string'] = "Asset name is too long - Max: 40";
             } else {
-                if ($allowDuplicate == false) {
-                    $data = array(':description' => $description);
-                    $q = $this->db->query("SELECT id from asset_list WHERE description = :description", $data);
-                    if ($q->rowCount() > 0) {
+                $data = array(':description' => $description);
+                $q = $this->db->query("SELECT id from asset_list WHERE description = :description", $data);
+                if ($q->rowCount() > 0) {
+                    $my_id = 0;
+                    $dupe = $this->db->fetch($q);
+                    if (array_key_exists('item_id', $this->vars)) {
+                        $my_id = $this->vars['item_id'];
+                    }
+
+                    if ($dupe['id'] != $my_id) {
                         // Name specified already exists - its an exact match
                         // Probably dont want duplicates.
                         $validated = false;
