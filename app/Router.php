@@ -45,7 +45,7 @@ class Router {
             $this->page->display('item_view');
         });
 
-        $this->router->get('/view/{type}/{itemID}', function($type, $itemID) {
+        $this->router->get('/view/{type}/(\d+)', function($type, $itemID) {
             if (!$this->checkExists($type, $itemID)) {
                 $this->page->setFrame(false, false);
                 $this->page->display('http_404');
@@ -62,7 +62,7 @@ class Router {
             $this->page->display('breakdown');
         });
 
-        $this->router->get('/breakdown/{type}/{itemID}', function($type, $itemID) {
+        $this->router->get('/breakdown/{type}/(\d+)', function($type, $itemID) {
             if (!$this->checkExists($type, $itemID)) {
                 $this->page->setFrame(false, false);
                 $this->page->display('http_404');
@@ -80,7 +80,7 @@ class Router {
             $this->page->display('analytics');
         });
 
-        $this->router->get('/analytics/{type}/{itemID}', function($type, $itemID) {
+        $this->router->get('/analytics/{type}/(\d+)', function($type, $itemID) {
             if (!$this->checkExists($type, $itemID)) {
                 $this->page->setFrame(false, false);
                 $this->page->display('http_404');
@@ -98,7 +98,7 @@ class Router {
             $this->page->display('projections');
         });
 
-        $this->router->get('/projections/{type}/{itemID}', function($type, $itemID) {
+        $this->router->get('/projections/{type}/(\d+)', function($type, $itemID) {
             if (!$this->checkExists($type, $itemID)) {
                 $this->page->setFrame(false, false);
                 $this->page->display('http_404');
@@ -116,7 +116,7 @@ class Router {
             $this->page->display('asset_manager');
         });
 
-        $this->router->match('GET|POST', '/asset/edit/{itemID}', function($itemID) {
+        $this->router->match('GET|POST', '/asset/edit/(\d+)', function($itemID) {
             if (!$this->checkExists('asset', $itemID)) {
                 $this->page->setFrame(false, false);
                 $this->page->display('http_404');

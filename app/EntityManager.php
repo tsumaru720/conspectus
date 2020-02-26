@@ -10,7 +10,7 @@ class EntityManager {
         $this->main = $main;
         $this->db = $main->getDB();
     }
-
+/*
     private function checkInt($int) {
         if (!is_numeric($int) || $int < 0) {
             return false;
@@ -18,16 +18,16 @@ class EntityManager {
             return true;
         }
     }
-
+*/
     public function getAsset($assetID) {
         if ($this->lastAsset instanceof EntityObject) {
             if ($this->lastAsset->getID() == $assetID) { return $this->lastAsset; }
         }
-
+/*
         if (!$this->checkInt($assetID)) {
             return false;
         }
-
+*/
         $data = array(':item_id' => $assetID);
 
         $q = $this->db->query("SELECT
@@ -53,11 +53,11 @@ class EntityManager {
         if ($this->lastClass instanceof EntityObject) {
             if ($this->lastClass->getID() == $classID) { return $this->lastClass; }
         }
-
+/*
         if (!$this->checkInt($classID)) {
             return false;
         }
-
+*/
         $data = array(':item_id' => $classID);
 
         $q = $this->db->query("SELECT
