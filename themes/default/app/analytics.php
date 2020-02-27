@@ -43,6 +43,7 @@ class Document extends Theme {
                 $this->pageTitle = "Analytics - ".$entity->getDescription();
                 $vars['page_title'] = $entity->getDescription();
                 $vars['asset_class'] = $entity->getClass();
+                $vars['asset_class_id'] = $entity->getClassID();
             }
         } elseif ($vars['type'] == 'class') {
             $dataQuery = $this->db->query("SELECT
