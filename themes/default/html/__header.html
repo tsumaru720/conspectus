@@ -21,10 +21,14 @@
 
     <div id="outer" class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar" id="sidebar">
           <div class="sidebar-sticky">
 
 			       <h1 class="sidebar-brand px-3 mt-2 mb-2 "><a href="/"><b>Conspectus</b></a></h1>
+
+             <div class="nav-link">
+                <input class="form-control form-control-sm" placeholder="Search..." data-search-top="nav#sidebar"></input>
+             </div>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <a class="text-muted" href="#general" data-toggle="collapse">General</a>
@@ -52,7 +56,7 @@
             <div class="collapse" id="classList" data-save-state>
               <ul class="nav flex-column">
               {% for item in class_menu_items %}
-                <li class="nav-item">
+                <li class="nav-item" data-searchable-value="{{ item.description }}">
                   <a class="nav-link {% if left_menu == 'class/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/class/{{ item.id }}">
                     {{ item.description }}
                   </a>
@@ -69,7 +73,7 @@
             <div class="collapse" id="assetList" data-save-state>
               <ul class="nav flex-column">
               {% for item in asset_menu_items %}
-                <li class="nav-item">
+                <li class="nav-item" data-searchable-value="{{ item.description }}">
                   <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/asset/{{ item.id }}">
                     {{ item.description }}
                   </a>
