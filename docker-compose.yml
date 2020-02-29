@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+
+  db:
+    image: mariadb:10.4
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: "assets"
+      MYSQL_PASSWORD: "asdfsdf"
+      MYSQL_DATABASE: "asset_tracker"
+  app:
+    build: .
+    restart: always
+    environment:
+      SQL_USERNAME: assets
+      SQL_PASSWORD: asdfsdf
+      SQL_DATABASE: asset_tracker
+      SQL_HOSTNAME: db
+      SQL_PORT: 3306
+    ports:
+      - 8000:80
+    depends_on:
+      - db
