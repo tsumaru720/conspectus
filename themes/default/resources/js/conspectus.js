@@ -7,26 +7,26 @@ function setUpMenuItems () {
 
   document.querySelectorAll('[data-save-state]').forEach((el) => {
     const key = `${el.id}_collapsed`
-    const state = `${el.id}_state`
+    const stateEl = document.getElementById(`${el.id}_state`)
 
     $(el).on('hidden.bs.collapse', () => {
       //Hide
       localStorage.setItem(key, 'true')
-      document.getElementById(state).innerHTML = '+'
+      stateEl.innerHTML = '+'
     })
     $(el).on('shown.bs.collapse', () => {
       //Show
       localStorage.removeItem(key)
-      document.getElementById(state).innerHTML = '-'
+      stateEl.innerHTML = '-'
     })
 
     if (localStorage.getItem(key)) {
       //Hide
-      document.getElementById(state).innerHTML = '+'
+      stateEl.innerHTML = '+'
     } else {
       //Show
       $(el).collapse('show')
-      document.getElementById(state).innerHTML = '-'
+      stateEl.innerHTML = '-'
     }
 
     // Increase transition duration for a nicer animation after initial page load.
