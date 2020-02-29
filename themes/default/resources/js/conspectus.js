@@ -9,12 +9,12 @@ function setUpMenuItems () {
     const key = `${el.id}_collapsed`
     const stateEl = document.getElementById(`${el.id}_state`)
 
-    $(el).on('hidden.bs.collapse', () => {
+    $(el).on('hide.bs.collapse', () => {
       //Hide
       localStorage.setItem(key, 'true')
       stateEl.innerHTML = '+'
     })
-    $(el).on('shown.bs.collapse', () => {
+    $(el).on('show.bs.collapse', () => {
       //Show
       localStorage.removeItem(key)
       stateEl.innerHTML = '-'
