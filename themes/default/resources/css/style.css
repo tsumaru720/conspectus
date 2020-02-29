@@ -77,6 +77,10 @@ body {
   text-decoration: none;
 }
 
+.sidebar-heading .collapse_state {
+  padding-right: 10px;
+}
+
 .sidebar .collapsing {
   transition-duration: 0s;
 }
