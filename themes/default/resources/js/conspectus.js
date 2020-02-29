@@ -1,3 +1,5 @@
+// If you change this file, update the timestamp query string in html/_footer.html.
+
 feather.replace()
 
 function setUpMenuItems () {
