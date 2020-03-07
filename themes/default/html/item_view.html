@@ -1,48 +1,48 @@
 {% include "nav_switcher.html" %}
 </div>
 
-	<div class="container-fluid pr-5">
-		<div class="row text-center justify-content-md-center">
-			<div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: rgba(54, 162, 235, 0.5); ">
-				<h4><small>Total Deposit<br>{{ mostRecent.deposit_str }}</small></h4>
-			</div>
-			<div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: rgba(255, 159, 64, 0.5)">
-				<h4><small>Current Value<br>{{ mostRecent.asset_str }}</small></h4>
-			</div>
-			<div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.gain < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
-				<h4><small>Total Return<br>{{ mostRecent.gain_str }}</small></h4>
-			</div>
-			<div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
-				<h4><small>Total Return<br>{{ mostRecent.growth_str }}%</small></h4>
-			</div>
-			<div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.twr_str < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
-				<h4><small>Time-Weighted<br>{{ mostRecent.twr_str }}%</small></h4>
-			</div>
-		</div>
+    <div class="container-fluid pr-5">
+        <div class="row text-center justify-content-md-center">
+            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: rgba(54, 162, 235, 0.5); ">
+                <h4><small>Total Deposit<br>{{ mostRecent.deposit_str }}</small></h4>
+            </div>
+            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: rgba(255, 159, 64, 0.5)">
+                <h4><small>Current Value<br>{{ mostRecent.asset_str }}</small></h4>
+            </div>
+            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.gain < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+                <h4><small>Total Return<br>{{ mostRecent.gain_str }}</small></h4>
+            </div>
+            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+                <h4><small>Total Return<br>{{ mostRecent.growth_str }}%</small></h4>
+            </div>
+            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.twr_str < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+                <h4><small>Time-Weighted<br>{{ mostRecent.twr_str }}%</small></h4>
+            </div>
+        </div>
 
-		<div class="row text-center">
-			<canvas class="mt-4 w-100" id="total_chart"></canvas>
-		</div>
+        <div class="row text-center">
+            <canvas class="mt-4 w-100" id="total_chart"></canvas>
+        </div>
 
-		<div class="row text-center">
-			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_chart"></canvas>
-			</div>
-			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="growth_chart"></canvas>
-			</div>
-		</div>
+        <div class="row text-center">
+            <div class="pt-2 col-sm">
+                <canvas class="my-1 w-100" id="gain_chart"></canvas>
+            </div>
+            <div class="pt-2 col-sm">
+                <canvas class="my-1 w-100" id="growth_chart"></canvas>
+            </div>
+        </div>
 
-		<div class="row text-center">
-			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="gain_delta_chart"></canvas>
-			</div>
-			<div class="pt-2 col-sm">
-				<canvas class="my-1 w-100" id="value_delta_chart"></canvas>
-			</div>
-		</div>
+        <div class="row text-center">
+            <div class="pt-2 col-sm">
+                <canvas class="my-1 w-100" id="gain_delta_chart"></canvas>
+            </div>
+            <div class="pt-2 col-sm">
+                <canvas class="my-1 w-100" id="value_delta_chart"></canvas>
+            </div>
+        </div>
 
-	</div>
+    </div>
 
 <!-- Graphs -->
 <!-- Cant move this yet - it needs to be loaded before our chart script
@@ -56,58 +56,58 @@ And i want to make that nicer before i move it to its own JS file -->
 // https://startbootstrap.com/themes/sb-admin-2/
 
 // window.chartColors = {
-// 	red: 'rgb(255, 99, 132)',
-// 	orange: 'rgb(255, 159, 64)',
-// 	yellow: 'rgb(255, 205, 86)',
-// 	green: 'rgb(75, 192, 192)',
-// 	blue: 'rgb(54, 162, 235)',
-// 	purple: 'rgb(153, 102, 255)',
-// 	grey: 'rgb(201, 203, 207)'
+//  red: 'rgb(255, 99, 132)',
+//  orange: 'rgb(255, 159, 64)',
+//  yellow: 'rgb(255, 205, 86)',
+//  green: 'rgb(75, 192, 192)',
+//  blue: 'rgb(54, 162, 235)',
+//  purple: 'rgb(153, 102, 255)',
+//  grey: 'rgb(201, 203, 207)'
 // };
 
 function currencyFormat(tooltipItem, data) {
-	var label = data.datasets[tooltipItem.datasetIndex].label || '';
+    var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
-	if (label) {
-		label += ': ';
-	}
-	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
-	return label;
+    if (label) {
+        label += ': ';
+    }
+    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+    return label;
 }
 
 var labels = [
 {% for data in periodData %}
-	'{{ data.period }}',
+    '{{ data.period }}',
 {% endfor %}
 ];
 
 // TOTALS CHART
 var data = {
-	labels: labels,
-	datasets: [{
-		label: 'Deposit Value',
-		backgroundColor: 'rgba(54, 162, 235, 0.2)',
-		borderColor: 'rgba(54, 162, 235, 1)',
-		borderWidth: 1,
-		data: [
-			{% for data in periodData %}
-				'{{ data.deposit_total }}',
-			{% endfor %}
-		]
-	}, {
-		type: 'line',
-		label: 'Asset Value',
-		borderColor: 'rgb(255, 159, 64)',
-		backgroundColor: 'rgb(255, 159, 64)',
-		fill: false,
-		lineTension: 0.025,
-		borderWidth: 2,
-		data: [
-			{% for data in periodData %}
-			'{{ data.asset_total }}',
-			{% endfor %}
-		]
-	}]
+    labels: labels,
+    datasets: [{
+        label: 'Deposit Value',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+        data: [
+            {% for data in periodData %}
+                '{{ data.deposit_total }}',
+            {% endfor %}
+        ]
+    }, {
+        type: 'line',
+        label: 'Asset Value',
+        borderColor: 'rgb(255, 159, 64)',
+        backgroundColor: 'rgb(255, 159, 64)',
+        fill: false,
+        lineTension: 0.025,
+        borderWidth: 2,
+        data: [
+            {% for data in periodData %}
+            '{{ data.asset_total }}',
+            {% endfor %}
+        ]
+    }]
 };
 
 var ctx = document.getElementById('total_chart');
@@ -115,30 +115,30 @@ var total_chart = new Chart(ctx, {
     type: 'bar',
     data: data,
     options: {
-		animation: false,
-		aspectRatio: 3,
+        animation: false,
+        aspectRatio: 3,
         legend: {
-			display: true,
-			position: 'right',
-			labels: {
-				boxWidth: 10,
-				fontSize: 9,
-			}
-		},
+            display: true,
+            position: 'right',
+            labels: {
+                boxWidth: 10,
+                fontSize: 9,
+            }
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
-						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
         },
         tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
@@ -150,7 +150,7 @@ var total_chart = new Chart(ctx, {
 
 var data = [
 {% for data in periodData %}
-	'{{ data.gain }}',
+    '{{ data.gain }}',
 {% endfor %}
 ];
 
@@ -165,36 +165,36 @@ var gains_chart = new Chart(ctx, {
         datasets: [{
             label: 'Total Return',
             data: data,
-			borderColor: border_colours,
+            borderColor: border_colours,
             backgroundColor: bg_colours,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Total return over time"
-		},
-		animation: false,
-		aspectRatio: 2,
+        title: {
+            display: true,
+            text: "Total return over time"
+        },
+        animation: false,
+        aspectRatio: 2,
         legend: {
-			display: false,
-			position: 'right'
-		},
+            display: false,
+            position: 'right'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
-						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
         },
         tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
@@ -204,19 +204,19 @@ var gains_chart = new Chart(ctx, {
 
 var data = [
 {% for data in periodData %}
-	'{{ data.growth }}',
+    '{{ data.growth }}',
 {% endfor %}
 ];
 
 var data2 = [
 {% for data in periodData %}
-	'{{ data.growth_annualized }}',
+    '{{ data.growth_annualized }}',
 {% endfor %}
 ];
 
 var data3 = [
 {% for data in periodData %}
-	'{{ data.twr_str }}',
+    '{{ data.twr_str }}',
 {% endfor %}
 ];
 
@@ -227,55 +227,55 @@ var growth_chart = new Chart(ctx, {
         labels: labels,
         datasets: [{
             label: 'Total Return',
-			borderColor: 'rgb(255, 0, 0)',
-			backgroundColor: 'rgb(255, 0, 0)',
-			fill: false,
-			lineTension: 0.3,
-			borderWidth: 2,
+            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgb(255, 0, 0)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
             data: data,
             borderWidth: 1
         }, {
             label: 'Annualized Return',
-			borderColor: 'rgb(153, 102, 255)',
-			backgroundColor: 'rgb(153, 102, 255)',
-			fill: false,
-			lineTension: 0.3,
-			borderWidth: 2,
+            borderColor: 'rgb(153, 102, 255)',
+            backgroundColor: 'rgb(153, 102, 255)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
             data: data2,
             hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
             borderWidth: 1
         }, {
             label: 'Time-Weighted Return',
-			borderColor: 'rgb(54, 162, 235)',
-			backgroundColor: 'rgb(54, 162, 235)',
-			fill: false,
-			lineTension: 0.3,
-			borderWidth: 2,
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgb(54, 162, 235)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
             data: data3,
             hidden: false,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Total return over time"
-		},
-		animation: false,
-		aspectRatio: 2,
+        title: {
+            display: true,
+            text: "Total return over time"
+        },
+        animation: false,
+        aspectRatio: 2,
         legend: {
-			display: true,
-			position: 'right',
-			labels: {
-				boxWidth: 10,
-				fontSize: 9,
-			}
-		},
+            display: true,
+            position: 'right',
+            labels: {
+                boxWidth: 10,
+                fontSize: 9,
+            }
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
+                    callback: function(label, index, labels) {
                         return label.toFixed(2) + "%";
                     }
                 }
@@ -288,7 +288,7 @@ var growth_chart = new Chart(ctx, {
 
 var data = [
 {% for data in periodData %}
-	'{{ data.gain_delta }}',
+    '{{ data.gain_delta }}',
 {% endfor %}
 ];
 
@@ -304,36 +304,36 @@ var gains_delta_chart = new Chart(ctx, {
         datasets: [{
             label: 'Change',
             data: data,
-			borderColor: border_colours,
+            borderColor: border_colours,
             backgroundColor: bg_colours,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Monthly return change"
-		},
-		animation: false,
-		aspectRatio: 2,
+        title: {
+            display: true,
+            text: "Monthly return change"
+        },
+        animation: false,
+        aspectRatio: 2,
         legend: {
-			display: false,
-			position: 'right'
-		},
+            display: false,
+            position: 'right'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
-						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }]
         },
         tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
@@ -342,7 +342,7 @@ var gains_delta_chart = new Chart(ctx, {
 
 var data = [
 {% for data in periodData %}
-	'{{ data.value_delta }}',
+    '{{ data.value_delta }}',
 {% endfor %}
 ];
 
@@ -358,36 +358,36 @@ var value_delta_chart = new Chart(ctx, {
         datasets: [{
             label: 'Change',
             data: data,
-			borderColor: border_colours,
+            borderColor: border_colours,
             backgroundColor: bg_colours,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Monthly value change"
-		},
-		animation: false,
-		aspectRatio: 2,
+        title: {
+            display: true,
+            text: "Monthly value change"
+        },
+        animation: false,
+        aspectRatio: 2,
         legend: {
-			display: false,
-			position: 'right'
-		},
+            display: false,
+            position: 'right'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
-						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     },
                 }
             }]
         },
         tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });

@@ -12,8 +12,8 @@ function is_valid($field) {
                         return 1;
                 }
         } else {
-		return 1;
-	}
+        return 1;
+    }
         return 0;
 }
 
@@ -54,108 +54,108 @@ function is_valid($field) {
                                 <div class="col">
                                         <div class="container">
 
-		<?php
+        <?php
 $display_form = true;
 
 if ($_POST) {
-	$display_form = false;
+    $display_form = false;
 
-	$all_pass = 1;
-	foreach ($_POST as $k => $v) {
-		if (!is_valid($k)) { $all_pass = 0; break; }
-	}
+    $all_pass = 1;
+    foreach ($_POST as $k => $v) {
+        if (!is_valid($k)) { $all_pass = 0; break; }
+    }
 
-	if (!$all_pass) {
-		?>
-	        <div class="alert alert-danger" role="alert">
-	                Please complete all fields
-	        </div>
-		<?php
-		$display_form = true;
-	} else {
-		foreach ($_POST as $k => $v) {
-			$tmp = explode("_", $k);
-			$id = $tmp[0];
-			$asset[$id][$tmp[1]] = $v;
-		}
+    if (!$all_pass) {
+        ?>
+            <div class="alert alert-danger" role="alert">
+                    Please complete all fields
+            </div>
+        <?php
+        $display_form = true;
+    } else {
+        foreach ($_POST as $k => $v) {
+            $tmp = explode("_", $k);
+            $id = $tmp[0];
+            $asset[$id][$tmp[1]] = $v;
+        }
 
-		foreach ($asset as $id => $v) {
-		        $data = array(':id' => $id, ':deposit' => $v['deposit'], ':latest' => $v['latest']);
-			$q = $mysql->query("INSERT INTO `asset_log` (`id`, `asset_id`, `epoch`, `deposit_value`, `asset_value`) VALUES (NULL, :id, CURRENT_TIMESTAMP, :deposit, :latest);", $data);
+        foreach ($asset as $id => $v) {
+                $data = array(':id' => $id, ':deposit' => $v['deposit'], ':latest' => $v['latest']);
+            $q = $mysql->query("INSERT INTO `asset_log` (`id`, `asset_id`, `epoch`, `deposit_value`, `asset_value`) VALUES (NULL, :id, CURRENT_TIMESTAMP, :deposit, :latest);", $data);
 
-		}
-		?>
-	        <div class="alert alert-success" role="alert">
-	                All entries have been submitted
-	        </div>
-		<?php
+        }
+        ?>
+            <div class="alert alert-success" role="alert">
+                    All entries have been submitted
+            </div>
+        <?php
 
-	}
+    }
 
 }
 
 if ($display_form == true) {
-		?>
-	<script>
-		function removeElement(elementId) {
-			var element = document.getElementById(elementId + "_form");
-			element.parentNode.removeChild(element);
-		}
-	</script>
-	<form method="post">
-	<div class="form-group row">
-	        <div class="col-4 text-center font-weight-bold">
-	                Asset
-	        </div>
-	        <div class="col-2 text-center font-weight-bold">
-	                Deposit Value
-	        </div>
-	        <div class="col-2 text-center font-weight-bold">
-	                Current Value
-	        </div>
-	</div>
+        ?>
+    <script>
+        function removeElement(elementId) {
+            var element = document.getElementById(elementId + "_form");
+            element.parentNode.removeChild(element);
+        }
+    </script>
+    <form method="post">
+    <div class="form-group row">
+            <div class="col-4 text-center font-weight-bold">
+                    Asset
+            </div>
+            <div class="col-2 text-center font-weight-bold">
+                    Deposit Value
+            </div>
+            <div class="col-2 text-center font-weight-bold">
+                    Current Value
+            </div>
+    </div>
 
-	<?php
+    <?php
 
-	$q = $mysql->query("SELECT * from asset_classes ORDER BY description ASC");
-	while ($asset_class = $mysql->fetch($q)) {
+    $q = $mysql->query("SELECT * from asset_classes ORDER BY description ASC");
+    while ($asset_class = $mysql->fetch($q)) {
 
-	        $data = array(':class_id' => $asset_class['id']);
-		$q2 = $mysql->query("SELECT * from asset_list WHERE asset_class = :class_id ORDER BY description ASC", $data);
+            $data = array(':class_id' => $asset_class['id']);
+        $q2 = $mysql->query("SELECT * from asset_list WHERE asset_class = :class_id ORDER BY description ASC", $data);
 
-		while ($asset = $mysql->fetch($q2)) {
-		        $data = array(':asset_id' => $asset['id']);
-			$q3 = $mysql->query("SELECT deposit_value, asset_value from asset_log WHERE asset_id = :asset_id ORDER BY epoch DESC LIMIT 1", $data);
+        while ($asset = $mysql->fetch($q2)) {
+                $data = array(':asset_id' => $asset['id']);
+            $q3 = $mysql->query("SELECT deposit_value, asset_value from asset_log WHERE asset_id = :asset_id ORDER BY epoch DESC LIMIT 1", $data);
 
-			$values = $mysql->fetch($q3);
-			?>
-			<div class="form-group row" style="margin-bottom: 5px;" id="<?php echo $asset['id']; ?>_form">
-			        <div class="col-4 text-right">
-					<span><?php echo '('.$asset['id'].') '.htmlspecialchars($asset['description']); ?></span> -
-					<span class="small"><?php echo htmlspecialchars($asset_class['description']); ?></span>
-			        </div>
-			        <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">
-			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
-			        </div>
-			        <div class="col-2 <?php echo !is_valid($asset['id']."_latest") ? 'has-danger' : ''; ?>">
-			                <input class="form-control form-control-sm" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
-			        </div>
-			        <a onclick="removeElement(<?php echo $asset['id']; ?>)" href="javascript:void(0);"><small>Delete</small></a>
+            $values = $mysql->fetch($q3);
+            ?>
+            <div class="form-group row" style="margin-bottom: 5px;" id="<?php echo $asset['id']; ?>_form">
+                    <div class="col-4 text-right">
+                    <span><?php echo '('.$asset['id'].') '.htmlspecialchars($asset['description']); ?></span> -
+                    <span class="small"><?php echo htmlspecialchars($asset_class['description']); ?></span>
+                    </div>
+                    <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">
+                            <input class="form-control form-control-sm" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
+                    </div>
+                    <div class="col-2 <?php echo !is_valid($asset['id']."_latest") ? 'has-danger' : ''; ?>">
+                            <input class="form-control form-control-sm" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
+                    </div>
+                    <a onclick="removeElement(<?php echo $asset['id']; ?>)" href="javascript:void(0);"><small>Delete</small></a>
 
-			</div>
-			<?php
-		}
+            </div>
+            <?php
+        }
 
 
-	}
+    }
 
-	?>
-	<div class="col-8 text-center">
-		<button class="btn btn-primary" type="submit">Submit</button>
-	</div>
+    ?>
+    <div class="col-8 text-center">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
 
-	<?php
-	echo "</form>";
+    <?php
+    echo "</form>";
 
 }
 ?>

@@ -1,12 +1,12 @@
 {% include "nav_switcher.html" %}
 </div>
 
-	<div class="container-fluid pr-5 text-center justify-content-md-center">
-		<div class="row">
-			<div class="pt-2 col">
-				&lt;Projection Graph&gt;
-			</div>
-		</div>
+    <div class="container-fluid pr-5 text-center justify-content-md-center">
+        <div class="row">
+            <div class="pt-2 col">
+                &lt;Projection Graph&gt;
+            </div>
+        </div>
         <div class="row">
             <div class="pt-2 col">
                 Table
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
@@ -43,7 +43,7 @@ function currencyFormat(tooltipItem, data) {
 
 var labels = [
 {% for data in initial.data %}
-	'{{ data.year }}',
+    '{{ data.year }}',
 {% endfor %}
 ];
 

@@ -1,32 +1,32 @@
 {% include "nav_switcher.html" %}
 </div>
 
-	<div class="container-fluid pr-5">
-		<div class="row">
-			<div class="pt-2 col-4">
-				<canvas class="mt-4 w-100" id="yearly"></canvas>
-			</div>
-			<div class="pt-2 col-4">
-				<canvas class="mt-4 w-100" id="total"></canvas>
-			</div>
-			<div class="pt-2 col">
-				&nbsp;
-			</div>
-		</div>
-	</div>
+    <div class="container-fluid pr-5">
+        <div class="row">
+            <div class="pt-2 col-4">
+                <canvas class="mt-4 w-100" id="yearly"></canvas>
+            </div>
+            <div class="pt-2 col-4">
+                <canvas class="mt-4 w-100" id="total"></canvas>
+            </div>
+            <div class="pt-2 col">
+                &nbsp;
+            </div>
+        </div>
+    </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
 
 var labels = [
 {% for data in periodData %}
-	'{{ data.label }}',
+    '{{ data.label }}',
 {% endfor %}
 ];
 
 var data = [
 {% for data in periodData %}
-	'{{ data.twr }}',
+    '{{ data.twr }}',
 {% endfor %}
 ];
 
@@ -47,27 +47,27 @@ var yearly_chart = new Chart(ctx, {
         datasets: [{
             label: 'Performance',
             data: data,
-			borderColor: border_colours,
+            borderColor: border_colours,
             backgroundColor: bg_colours,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Time-Weighted performance"
-		},
-		animation: false,
-		aspectRatio: 1,
+        title: {
+            display: true,
+            text: "Time-Weighted performance"
+        },
+        animation: false,
+        aspectRatio: 1,
         legend: {
-			display: false,
-			position: 'right'
-		},
+            display: false,
+            position: 'right'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
+                    callback: function(label, index, labels) {
                         return label.toFixed(2) + "%";
                     }
                 }
@@ -80,7 +80,7 @@ var yearly_chart = new Chart(ctx, {
 
 var data = [
 {% for data in periodData %}
-	'{{ data.increase }}',
+    '{{ data.increase }}',
 {% endfor %}
 ];
 
@@ -101,27 +101,27 @@ var total_chart = new Chart(ctx, {
         datasets: [{
             label: 'Total Value Change',
             data: data,
-			borderColor: border_colours,
+            borderColor: border_colours,
             backgroundColor: bg_colours,
             borderWidth: 1
         }]
     },
     options: {
-		title: {
-			display: true,
-			text: "Total Value Change"
-		},
-		animation: false,
-		aspectRatio: 1,
+        title: {
+            display: true,
+            text: "Total Value Change"
+        },
+        animation: false,
+        aspectRatio: 1,
         legend: {
-			display: false,
-			position: 'right'
-		},
+            display: false,
+            position: 'right'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
+                    callback: function(label, index, labels) {
                         return label.toFixed(2) + "%";
                     }
                 }

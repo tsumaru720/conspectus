@@ -40,11 +40,11 @@ body {
 }
 
 .sidebar .add-button {
-	padding: 0;
+  padding: 0;
 }
 
 .sidebar .nav-item .disabled {
-	color: #919191;
+  color: #919191;
 }
 
 .sidebar .nav-link .feather {
@@ -88,53 +88,53 @@ body {
 }
 
 .nav-pills .nav-item {
-	margin-left: 2px;
-	margin-right: 2px;
-	color: black;
+  margin-left: 2px;
+  margin-right: 2px;
+  color: black;
 }
 
 .nav-pills .nav-link.disabled {
-	color: #919191;
+  color: #919191;
 }
 
 .nav-pills .nav-link.active  {
-	background-color: #a0caf3;
-	color: black;
+  background-color: #a0caf3;
+  color: black;
 }
 
 .nav-pills .nav-link:hover {
-	background-color: #fccb9f;
+  background-color: #fccb9f;
 }
 
 /*
  * Footer
  */
 .footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 50px;
-	clear: right;
-	color: black;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  clear: right;
+  color: black;
 }
 
 .footer hr {
-	margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .footer p {
-	text-align: right;
-	margin-bottom: 0;
+  text-align: right;
+  margin-bottom: 0;
 }
 
 .footer a {
-	color: inherit;
-	padding-left: 5px;
-	padding-right: 5px;
+  color: inherit;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .footer a:hover {
-	color: #007bff;
+  color: #007bff;
 }
 
 /*

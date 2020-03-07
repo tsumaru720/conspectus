@@ -1,12 +1,12 @@
 {% include "nav_switcher.html" %}
 </div>
 
-	<div class="container-fluid pr-5">
-		<div class="row text-center">
-			<canvas class="mt-4 w-100" id="breakdown" ></canvas>
-			<!--width="900" height="200"-->
-		</div>
-		<div class="row text-center">
+    <div class="container-fluid pr-5">
+        <div class="row text-center">
+            <canvas class="mt-4 w-100" id="breakdown" ></canvas>
+            <!--width="900" height="200"-->
+        </div>
+        <div class="row text-center">
             <div class="pt-2 col">
                 <canvas class="mt-4 w-100" id="pie"></canvas>
             </div>
@@ -14,7 +14,7 @@
                 &nbsp;
             </div>
         </div>
-		{% if left_menu == 'all' %}
+        {% if left_menu == 'all' %}
         <div class="row text-center">
             <div class="pt-2 col">
                 <canvas class="mt-4 w-100" id="pie2"></canvas>
@@ -24,9 +24,9 @@
             </div>
 
         </div>
-		{% endif %}
-		</div>
-	</div>
+        {% endif %}
+        </div>
+    </div>
 
 <!-- Graphs -->
 <!-- Cant move this yet - it needs to be loaded before our chart script
@@ -35,33 +35,33 @@ And i want to make that nicer before i move it to its own JS file -->
 <script>
 
 function currencyFormat(tooltipItem, data) {
-	var label = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
+    var label = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
 
-	if (label) {
-		label += ': ';
-	}
+    if (label) {
+        label += ': ';
+    }
 
-	if (tooltipItem.yLabel) {
-		var type = "bar";
-		var value = tooltipItem.yLabel;
-	} else {
-		var type = "pie";
-		var value = data.datasets[0].data[tooltipItem.index];
-	}
+    if (tooltipItem.yLabel) {
+        var type = "bar";
+        var value = tooltipItem.yLabel;
+    } else {
+        var type = "pie";
+        var value = data.datasets[0].data[tooltipItem.index];
+    }
 
-	label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
+    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
 
-	if (type == "pie") {
-		var total = 0.00;
-		data.datasets[0].data.forEach(function(value) {
-			total = total + parseFloat(value);
-		});
-		var percent = ((parseFloat(value) / total) * 100);
-		percent = percent.toFixed(2);
+    if (type == "pie") {
+        var total = 0.00;
+        data.datasets[0].data.forEach(function(value) {
+            total = total + parseFloat(value);
+        });
+        var percent = ((parseFloat(value) / total) * 100);
+        percent = percent.toFixed(2);
 
-		label += " (" + percent + "%)";
-	}
-	return label;
+        label += " (" + percent + "%)";
+    }
+    return label;
 }
 
 function pastel_colour(input_str) {
@@ -87,28 +87,28 @@ function pastel_colour(input_str) {
 
 var labels = [
 {% for label in labels %}
-	'{{ label }}',
+    '{{ label }}',
 {% endfor %}
 ];
 
 // TOTALS CHART
 var data = {
-	labels: labels,
-	datasets: [
-	{% for dataset in log %}
-	{
-		label: '{{ dataset.name|escape('js') }}',
-		backgroundColor: pastel_colour('{{ dataset.name|escape('js') }}'),
-		borderColor: pastel_colour('{{ dataset.name|escape('js') }}'),
-		borderWidth: 1,
-		data: [
-			{% for data in dataset.data %}
-				'{{ data }}',
-			{% endfor %}
-		]
-	},
-	{% endfor %}
-	]
+    labels: labels,
+    datasets: [
+    {% for dataset in log %}
+    {
+        label: '{{ dataset.name|escape('js') }}',
+        backgroundColor: pastel_colour('{{ dataset.name|escape('js') }}'),
+        borderColor: pastel_colour('{{ dataset.name|escape('js') }}'),
+        borderWidth: 1,
+        data: [
+            {% for data in dataset.data %}
+                '{{ data }}',
+            {% endfor %}
+        ]
+    },
+    {% endfor %}
+    ]
 };
 
 var ctx = document.getElementById('breakdown');
@@ -116,34 +116,34 @@ var total_chart = new Chart(ctx, {
     type: 'bar',
     data: data,
     options: {
-		animation: false,
-		aspectRatio: 3,
+        animation: false,
+        aspectRatio: 3,
         legend: {
-			display: true,
-			position: 'right',
-			labels: {
-				boxWidth: 10,
-				fontSize: 9,
-			}
-		},
+            display: true,
+            position: 'right',
+            labels: {
+                boxWidth: 10,
+                fontSize: 9,
+            }
+        },
         scales: {
             yAxes: [{
-				stacked: true,
+                stacked: true,
                 ticks: {
                     beginAtZero: true,
-					callback: function(label, index, labels) {
-						return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                    callback: function(label, index, labels) {
+                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
             }],
-			xAxes: [{
-				stacked: true,
-			}]
+            xAxes: [{
+                stacked: true,
+            }]
         },
         tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
@@ -151,25 +151,25 @@ var total_chart = new Chart(ctx, {
 
 var labels = [
 {% for asset in mostRecent %}
-	'{{ asset.name|escape('js') }}',
+    '{{ asset.name|escape('js') }}',
 {% endfor %}
 ];
 
 var data = {
-	labels: labels,
-	datasets: [{
-		backgroundColor: [
-		{% for asset in mostRecent %}
-			pastel_colour('{{ asset.name|escape('js') }}'),
-		{% endfor %}
-		],
-		borderWidth: 1,
-		data: [
-			{% for asset in mostRecent %}
-				'{{ asset.value }}',
-			{% endfor %}
-		]
-	}]
+    labels: labels,
+    datasets: [{
+        backgroundColor: [
+        {% for asset in mostRecent %}
+            pastel_colour('{{ asset.name|escape('js') }}'),
+        {% endfor %}
+        ],
+        borderWidth: 1,
+        data: [
+            {% for asset in mostRecent %}
+                '{{ asset.value }}',
+            {% endfor %}
+        ]
+    }]
 };
 
 
@@ -179,19 +179,19 @@ var total_chart = new Chart(ctx, {
     type: 'doughnut',
     data: data,
     options: {
-		animation: false,
+        animation: false,
         legend: {
-			display: true,
-			position: 'right',
-			labels: {
-				boxWidth: 10,
-				fontSize: 9,
-			}
-		},
-		tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            display: true,
+            position: 'right',
+            labels: {
+                boxWidth: 10,
+                fontSize: 9,
+            }
+        },
+        tooltips: {
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
@@ -200,25 +200,25 @@ var total_chart = new Chart(ctx, {
 
 var labels = [
 {% for class in class_mostRecent %}
-	'{{ class.name|raw }}',
+    '{{ class.name|raw }}',
 {% endfor %}
 ];
 
 var data = {
-	labels: labels,
-	datasets: [{
-		backgroundColor: [
-		{% for class in class_mostRecent %}
-			pastel_colour('{{ class.name|raw }}'),
-		{% endfor %}
-		],
-		borderWidth: 1,
-		data: [
-			{% for class in class_mostRecent %}
-				'{{ class.value }}',
-			{% endfor %}
-		]
-	}]
+    labels: labels,
+    datasets: [{
+        backgroundColor: [
+        {% for class in class_mostRecent %}
+            pastel_colour('{{ class.name|raw }}'),
+        {% endfor %}
+        ],
+        borderWidth: 1,
+        data: [
+            {% for class in class_mostRecent %}
+                '{{ class.value }}',
+            {% endfor %}
+        ]
+    }]
 };
 
 
@@ -228,19 +228,19 @@ var total_chart = new Chart(ctx, {
     type: 'doughnut',
     data: data,
     options: {
-		animation: false,
+        animation: false,
         legend: {
-			display: true,
-			position: 'right',
-			labels: {
-				boxWidth: 10,
-				fontSize: 9,
-			}
-		},
-		tooltips: {
-			callbacks: {
-				label: currencyFormat
-			}
+            display: true,
+            position: 'right',
+            labels: {
+                boxWidth: 10,
+                fontSize: 9,
+            }
+        },
+        tooltips: {
+            callbacks: {
+                label: currencyFormat
+            }
         }
     }
 });
