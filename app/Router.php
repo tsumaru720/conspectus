@@ -129,6 +129,24 @@ class Router {
             }
         });
 
+        $this->router->match('GET|POST', '/class/new', function() {
+            $this->page->setVar('action', 'new');
+            $this->page->display('class_manager');
+        });
+
+        $this->router->match('GET|POST', '/class/edit/(\d+)', function($itemID) {
+            if (!$this->checkExists('class', $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', 'class/'.$itemID);
+                $this->page->setVar('nav_item', 'view');
+                $this->page->setVar('item_id', $itemID);
+                $this->page->setVar('action', 'edit');
+                $this->page->display('class_manager');
+            }
+        });
+
         $this->router->set404(function() {
             $this->page->setFrame(false, false);
             $this->page->display('http_404');
