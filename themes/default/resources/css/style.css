@@ -57,7 +57,8 @@ body {
 }
 
 .sidebar .nav-link:hover {
-  color: orange;
+  background-color: #e0e0e0;
+  color: #333;
 }
 
 .sidebar .nav-link:hover .feather,
