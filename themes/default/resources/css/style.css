@@ -56,7 +56,7 @@ body {
   color: #007bff;
 }
 
-.sidebar .nav-link:hover {
+.sidebar .nav-item .nav-link:hover {
   background-color: #e0e0e0;
   color: #333;
 }
