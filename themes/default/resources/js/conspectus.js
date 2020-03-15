@@ -57,3 +57,5 @@ document.addEventListener('DOMContentLoaded', () => {
   setUpMenuItems()
   setUpSearch()
 })
+
+document.getElementById('searchbox').focus()
