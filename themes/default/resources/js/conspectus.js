@@ -3,7 +3,6 @@
 feather.replace()
 
 function setUpMenuItems () {
-  const localStorage = window.localStorage
 
   document.querySelectorAll('[data-save-state]').forEach((el) => {
     const key = `${el.id}_collapsed`
@@ -37,23 +36,41 @@ function setUpMenuItems () {
 }
 
 function setUpSearch () {
-  document.querySelectorAll('input[data-search-top]').forEach((searchBar) => {
-    searchBar.addEventListener('input', () => {
-      const query = searchBar.value.toLowerCase()
-      const target = document.querySelector(searchBar.getAttribute('data-search-top'))
-      target.querySelectorAll('[data-searchable-value]').forEach((el) => {
-        const value = el.getAttribute('data-searchable-value').toLowerCase()
-        if (value.includes(query)) {
-          $(el).show()
-        } else {
-          $(el).hide()
-        }
-      })
-    })
+  var searchBar = document.getElementById('mainSearch')
+  searchBar.addEventListener('input', searchHandler)
+
+  if (localStorage.getItem(searchBar.id)) {
+    searchBar.value = localStorage.getItem(searchBar.id)
+    searchBar.dispatchEvent(new Event('input'))
+  }
+
+}
+
+function searchHandler(e) {
+  var searchBar = e.srcElement
+  var query = searchBar.value.toLowerCase()
+
+  if (query != '') {
+    localStorage.setItem(searchBar.id, query)
+  } else {
+    localStorage.removeItem(searchBar.id)
+  }
+
+  var target = document.querySelector(searchBar.getAttribute('data-search-top'))
+  target.querySelectorAll('[data-searchable-value]').forEach((el) => {
+    const value = el.getAttribute('data-searchable-value').toLowerCase()
+    if (value.includes(query)) {
+      $(el).show()
+    } else {
+      $(el).hide()
+    }
   })
 }
 
+
+const localStorage = window.localStorage
+
 document.addEventListener('DOMContentLoaded', () => {
-  setUpMenuItems()
   setUpSearch()
+  setUpMenuItems()
 })
