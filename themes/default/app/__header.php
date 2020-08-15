@@ -13,7 +13,15 @@ class Header extends Theme {
             $vars['class_menu_items'][] = $item;
         }
 
-        $q = $this->db->query("SELECT * from asset_list ORDER BY description ASC");
+        // TODO: Integrate this with EntintyManager?
+        $q = $this->db->query("SELECT
+                                asset_list.id as id,
+                                asset_list.description as description,
+                                asset_classes.description AS class,
+                                asset_classes.id AS class_id
+                            FROM
+                                asset_list
+                            LEFT JOIN asset_classes ON asset_class = asset_classes.id ORDER BY description ASC");
         while ($item = $this->db->fetch($q)) {
             $vars['asset_menu_items'][] = $item;
         }

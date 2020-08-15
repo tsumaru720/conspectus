@@ -73,7 +73,7 @@
             <div class="collapse" id="assetList" data-save-state>
               <ul class="nav flex-column">
               {% for item in asset_menu_items %}
-                <li class="nav-item" data-searchable-value="{{ item.description }}">
+                <li class="nav-item" data-searchable-value="{{ item.description }} {{ item.class }}">
                   <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/asset/{{ item.id }}">
                     {{ item.description }}
                   </a>
