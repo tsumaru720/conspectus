@@ -13,7 +13,7 @@ class Header extends Theme {
             $vars['class_menu_items'][] = $item;
         }
 
-        // TODO: Integrate this with EntintyManager?
+        // TODO: Integrate this with EntityManager?
         $q = $this->db->query("SELECT
                                 asset_list.id as id,
                                 asset_list.description as description,
