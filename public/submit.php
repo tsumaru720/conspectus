@@ -45,7 +45,7 @@ function is_valid($field) {
 
         <body>
                 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-                        <a class="navbar-brand" href="/">Submit - <?php echo $config['SQL_DATABASE']; ?></a>
+                        <a class="navbar-brand" href="/">Submit - <?php echo $config['SQL_DATABASE']; ?></a> <span style="padding-left: 100px"><a class="navbar-brand" href="csv.php">CSV</a></span>
                         </div>
                 </nav>
 
