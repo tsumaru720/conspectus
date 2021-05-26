@@ -121,7 +121,7 @@ if ($display_form == true) {
     while ($asset_class = $mysql->fetch($q)) {
 
             $data = array(':class_id' => $asset_class['id']);
-        $q2 = $mysql->query("SELECT * from asset_list WHERE asset_class = :class_id ORDER BY description ASC", $data);
+        $q2 = $mysql->query("SELECT * from asset_list WHERE asset_class = :class_id AND closed = '0' ORDER BY description ASC", $data);
 
         while ($asset = $mysql->fetch($q2)) {
                 $data = array(':asset_id' => $asset['id']);
