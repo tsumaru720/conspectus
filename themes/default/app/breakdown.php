@@ -79,6 +79,7 @@ class Document extends Theme {
             
             $last['log'][$log['asset_id']]['name'] = $log['description'];
             $last['log'][$log['asset_id']]['value'] = $log['asset_value'];
+            $last['log'][$log['asset_id']]['yearMonth'] = $log['yearMonth'];
             $last['yearMonth'] = $log['yearMonth'];
         }
 
@@ -88,9 +89,10 @@ class Document extends Theme {
             });
             // Used for Pie Charts
             $vars['mostRecent'] = $last['log'];
-            // Remove zero values from recent data
+
+            // Remove assets that dont have a recent update (for pie charts)
             foreach ($vars['mostRecent'] as $key => $entry) {
-                if ($entry['value'] <= 0) {
+                if ($entry['yearMonth'] != $last['yearMonth']) {
                     unset($vars['mostRecent'][$key]);
                 }
             }
