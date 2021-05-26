@@ -82,6 +82,22 @@
               </ul>
             </div>
 
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <a class="text-muted" href="#closedAccounts" data-toggle="collapse"><span class="collapse_state" id="closedAccounts_state">&nbsp;</span>Closed Accounts</a>
+            </h6>
+
+            <div class="collapse" id="closedAccounts" data-save-state>
+              <ul class="nav flex-column">
+              {% for item in closed_accounts %}
+                <li class="nav-item" data-searchable-value="{{ item.description }} {{ item.class }}">
+                  <a class="nav-link {% if left_menu == 'asset/' ~ item.id %}active{% endif %}" href="/{{nav_item}}/asset/{{ item.id }}">
+                    {{ item.description }}
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+
           </div>
 
     <footer class="footer">
