@@ -68,9 +68,10 @@ if ($_FILES) {
             if ($_FILES["file"]["type"] != "text/csv") { echo "Not CSV"; die(); }
 
             // Initialize list of assets. We'll update this counter when we insert a new record
-            $q = $mysql->query("SELECT id,description from asset_list");
+            $q = $mysql->query("SELECT id,description,closed from asset_list");
             while ($item = $mysql->fetch($q)) {
                 $asset[$item['id']]['description'] = $item['description'];
+                $asset[$item['id']]['closed'] = $item['closed'];
                 $asset[$item['id']]['update'] = 0;
             }
 
@@ -102,7 +103,7 @@ if ($_FILES) {
             fclose($f);
 
             foreach ($asset as $a) {
-                if ($a['update'] == 0) {
+                if (($a['update'] == 0) && ($a['closed'] != "1")) {
                     ?>
                     <div class="alert alert-danger" role="alert">
                         <b><?php echo $a['description']; ?></b> has no update
