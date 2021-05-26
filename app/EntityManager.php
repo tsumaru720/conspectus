@@ -34,7 +34,8 @@ class EntityManager {
                                     asset_list.id as id,
                                     asset_list.description as description,
                                     asset_classes.description AS class,
-                                    asset_classes.id AS class_id
+                                    asset_classes.id AS class_id,
+                                    asset_list.closed as closed
                                 FROM
                                     asset_list
                                 LEFT JOIN asset_classes ON asset_class = asset_classes.id

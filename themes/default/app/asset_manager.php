@@ -43,6 +43,7 @@ class Document extends Theme {
 
             $this->vars['form_description'] = $asset->getDescription();
             $this->vars['form_class'] = $asset->getClassID();
+            $this->vars['form_closed'] = $asset->isClosed();
 
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "delete") {
@@ -59,13 +60,13 @@ class Document extends Theme {
     private function processPost($action) {
         if ($action == "new") {
             if ($data = $this->assetValidation()) {
-                $this->db->query("INSERT INTO `asset_list` (`id`, `asset_class`, `description`) VALUES (NULL, :class_id, :description)", $data);
+                $this->db->query("INSERT INTO `asset_list` (`id`, `asset_class`, `description`, `closed`) VALUES (NULL, :class_id, :description, :closed)", $data);
             }
             $this->document = $this->twig->load('asset_manager.html');
         } elseif ($action == "edit") {
             if ($data = $this->assetValidation()) {
                 $data['asset_id'] = $this->vars['item_id'];
-                $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description WHERE `asset_list`.`id` = :asset_id", $data);
+                $this->db->query("UPDATE `asset_list` SET `asset_class` = :class_id, `description` = :description, `closed` = :closed WHERE `asset_list`.`id` = :asset_id", $data);
                 header('Location: /view/asset/'.$data['asset_id']);
             } else {
                 $this->document = $this->twig->load('asset_manager.html');
@@ -97,12 +98,19 @@ class Document extends Theme {
     private function assetValidation() {
             $description = $this->validateInput('description');
             $class = $this->validateInput('class');
+            $closed = $this->validateInput('closed');
             $validated = true;
 
             if (($description == false) || $class == false) {
                 $validated = false;
                 $this->vars['error_code'] = "EMPTY";
                 $this->vars['error_string'] = "Input is empty";
+            }
+
+            if ($closed) {
+                $closed = '1';
+            } else {
+                $closed = '0';
             }
 
             if (strlen($description) > 40) {
@@ -142,13 +150,14 @@ class Document extends Theme {
                 $this->vars['error'] = true;
                 $this->vars['form_description'] = $description;
                 $this->vars['form_class'] = $class;
+                $this->vars['form_closed'] = $closed;
 
                 return false;
             } else {
                 $this->vars['success'] = true;
                 $this->vars['form_class'] = $class; //Pre-select last chosen class (easier when adding lots)
 
-                return array(':description' => $description, ':class_id' => $class);
+                return array(':description' => $description, ':class_id' => $class, ':closed' => $closed);
             }
     }
 }
