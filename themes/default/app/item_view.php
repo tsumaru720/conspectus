@@ -95,7 +95,7 @@ class Document extends Theme {
                     }
                     if ($period['twr'] != 0) {
                         $period['twr_str'] = ($period['twr'] - 1) * 100;
-                        $period['twr_str'] = number_format($period['twr_str'],2);
+                        $period['twr_str'] = number_format($period['twr_str'], 2, '.', '');
                     }
                 }
 
@@ -123,6 +123,7 @@ class Document extends Theme {
             $last['deposit_str'] = $this->prettify($last['deposit_total']);
             $last['asset_str'] = $this->prettify($last['asset_total']);
             $last['gain_str'] = $this->prettify($last['gain']);
+            $last['twr_str'] = number_format($last['twr_str'],2);
             $vars['mostRecent'] = $last;
 
             /////////// STANDARD DEVIATION ///////////
