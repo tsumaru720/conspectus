@@ -72,9 +72,12 @@ body {
   color: black;
 }
 
-.sidebar-heading, .sidebar-heading a:hover {
+.sidebar-heading {
   font-size: .75rem;
   text-transform: uppercase;
+}
+
+.sidebar-heading a:hover {
   text-decoration: none;
 }
 
