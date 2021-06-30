@@ -59,7 +59,8 @@ function searchHandler(e) {
   var target = document.querySelector(searchBar.getAttribute('data-search-top'))
   target.querySelectorAll('[data-searchable-value]').forEach((el) => {
     const value = el.getAttribute('data-searchable-value').toLowerCase()
-    if (value.includes(query)) {
+    var regex = new RegExp(query);
+    if (value.match(regex)) {
       $(el).show()
     } else {
       $(el).hide()
