@@ -55,19 +55,25 @@ function searchHandler(e) {
   } else {
     localStorage.removeItem(searchBar.id)
   }
-
   var target = document.querySelector(searchBar.getAttribute('data-search-top'))
   target.querySelectorAll('[data-searchable-value]').forEach((el) => {
     const value = el.getAttribute('data-searchable-value').toLowerCase()
-    var regex = new RegExp(query);
+    try {
+      var regex = new RegExp(query);
+    } catch(e) {
+      var regex = null;
+    }
+
     if (value.match(regex)) {
+      $(el).show()
+    } else if (value.includes(query)) {
       $(el).show()
     } else {
       $(el).hide()
     }
+
   })
 }
-
 
 const localStorage = window.localStorage
 
