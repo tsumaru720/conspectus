@@ -88,6 +88,16 @@ body {
   transition-duration: 0s;
 }
 
+#regexBtn.active:hover {
+  background-color: rgb(0,123,255);
+  color: white;
+}
+
+#regexBtn:hover {
+  background-color: inherit;
+  color: rgb(0,123,255);
+}
+
 .nav-pills .nav-item {
   margin-left: 2px;
   margin-right: 2px;

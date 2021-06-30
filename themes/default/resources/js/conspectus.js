@@ -37,17 +37,43 @@ function setUpMenuItems () {
 
 function setUpSearch () {
   var searchBar = document.getElementById('mainSearch')
+  var regexBtn = document.getElementById('regexBtn')
+
   searchBar.addEventListener('input', searchHandler)
+  regexBtn.addEventListener('click', regexToggle)
 
   if (localStorage.getItem(searchBar.id)) {
     searchBar.value = localStorage.getItem(searchBar.id)
     searchBar.dispatchEvent(new Event('input'))
   }
 
+  if (localStorage.getItem(regexBtn.id)) {
+    regexBtn.classList.add("active");
+  }
+
+}
+
+function regexToggle(e) {
+  var regexBtn = e.srcElement
+  var searchBar = document.getElementById('mainSearch')
+
+  if (localStorage.getItem(regexBtn.id)) {
+    regexBtn.classList.remove("active");
+    regexBtn.enabled = false;
+    localStorage.removeItem(regexBtn.id)
+    searchBar.focus()
+  } else {
+    regexBtn.classList.add("active");
+    regexBtn.enabled = true;
+    localStorage.setItem(regexBtn.id, 'active')
+    searchBar.focus()
+  }
+  searchBar.dispatchEvent(new Event('input'))
 }
 
 function searchHandler(e) {
   var searchBar = e.srcElement
+  var regexBtn = document.getElementById('regexBtn')
   var query = searchBar.value.toLowerCase()
 
   if (query != '') {
@@ -58,19 +84,29 @@ function searchHandler(e) {
   var target = document.querySelector(searchBar.getAttribute('data-search-top'))
   target.querySelectorAll('[data-searchable-value]').forEach((el) => {
     const value = el.getAttribute('data-searchable-value').toLowerCase()
-    try {
-      var regex = new RegExp(query);
-    } catch(e) {
-      var regex = null;
+
+    if (localStorage.getItem(regexBtn.id)) {
+      try {
+        var regex = new RegExp(query);
+      } catch(e) {
+        var regex = null;
+      }
+
+      if (value.match(regex)) {
+        $(el).show()
+      } else {
+        $(el).hide()
+      }
+    } else {
+      if (value.includes(query)) {
+        $(el).show()
+      } else {
+        $(el).hide()
+      }
     }
 
-    if (value.match(regex)) {
-      $(el).show()
-    } else if (value.includes(query)) {
-      $(el).show()
-    } else {
-      $(el).hide()
-    }
+
+
 
   })
 }
