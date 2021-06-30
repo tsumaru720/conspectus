@@ -7,7 +7,7 @@ class MySQL {
 
     public function __construct($host, $port, $username, $password, $database) {
         try {
-            $this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password);
+            $this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4", $username, $password);
         }
         catch(PDOException $e) {
             // Handle this ourselves

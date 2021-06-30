@@ -113,7 +113,7 @@ class Document extends Theme {
                 $closed = '0';
             }
 
-            if (strlen($description) > 40) {
+            if (mb_strlen($description) > 40) {
                 // 40 is the size set our DB schema
                 $validated = false;
                 $this->vars['error_code'] = "STRLEN";

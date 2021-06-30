@@ -96,8 +96,8 @@ class Document extends Theme {
                 $this->vars['error_string'] = "Input is empty";
             }
 
-            if (strlen($description) > 20) {
-                // 40 is the size set our DB schema
+            if (mb_strlen($description) > 20) {
+                // 20 is the size set our DB schema
                 $validated = false;
                 $this->vars['error_code'] = "STRLEN";
                 $this->vars['error_string'] = "Class name is too long - Max: 20";
