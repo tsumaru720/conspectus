@@ -62,13 +62,13 @@ function regexToggle(e) {
     regexBtn.classList.remove("active");
     localStorage.removeItem(regexBtn.id)
     searchBar.placeholder = "Search..."
-    searchBar.focus()
   } else {
     regexBtn.classList.add("active");
     localStorage.setItem(regexBtn.id, 'active')
     searchBar.placeholder = "Regex Search..."
-    searchBar.focus()
   }
+
+  searchBar.focus()
   searchBar.dispatchEvent(new Event('input'))
 }
 
