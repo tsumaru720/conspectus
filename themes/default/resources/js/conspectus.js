@@ -49,6 +49,7 @@ function setUpSearch () {
 
   if (localStorage.getItem(regexBtn.id)) {
     regexBtn.classList.add("active");
+    searchBar.placeholder = "Regex Search..."
   }
 
 }
@@ -59,13 +60,13 @@ function regexToggle(e) {
 
   if (localStorage.getItem(regexBtn.id)) {
     regexBtn.classList.remove("active");
-    regexBtn.enabled = false;
     localStorage.removeItem(regexBtn.id)
+    searchBar.placeholder = "Search..."
     searchBar.focus()
   } else {
     regexBtn.classList.add("active");
-    regexBtn.enabled = true;
     localStorage.setItem(regexBtn.id, 'active')
+    searchBar.placeholder = "Regex Search..."
     searchBar.focus()
   }
   searchBar.dispatchEvent(new Event('input'))
