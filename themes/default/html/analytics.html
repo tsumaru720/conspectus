@@ -15,119 +15,122 @@
         </div>
     </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<!-- Graphs -->
+<!-- Cant move this yet - it needs to be loaded before our chart script
+And i want to make that nicer before i move it to its own JS file -->
 <script>
+    document.addEventListener('DOMContentLoaded', function() { doCharts() })
+    function doCharts() {
+        var labels = [
+            {% for data in periodData %}
+        '{{ data.label }}',
+        {% endfor %}
+    ];
 
-var labels = [
-{% for data in periodData %}
-    '{{ data.label }}',
-{% endfor %}
-];
+        var data = [
+            {% for data in periodData %}
+        '{{ data.twr }}',
+        {% endfor %}
+    ];
 
-var data = [
-{% for data in periodData %}
-    '{{ data.twr }}',
-{% endfor %}
-];
+        var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+        var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
-var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
-
-bg_colours.pop();
-border_colours.pop();
-bg_colours.push('rgba(255, 159, 64, 0.2)');
-border_colours.push('rgba(255, 159, 64, 1)');
+        bg_colours.pop();
+        border_colours.pop();
+        bg_colours.push('rgba(255, 159, 64, 0.2)');
+        border_colours.push('rgba(255, 159, 64, 1)');
 
 
-var ctx = document.getElementById('yearly');
-var yearly_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Performance',
-            data: data,
-            borderColor: border_colours,
-            backgroundColor: bg_colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Time-Weighted performance"
-        },
-        animation: false,
-        aspectRatio: 1,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return label.toFixed(2) + "%";
-                    }
+        var ctx = document.getElementById('yearly');
+        var yearly_chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Performance',
+                    data: data,
+                    borderColor: border_colours,
+                    backgroundColor: bg_colours,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Time-Weighted performance"
+                },
+                animation: false,
+                aspectRatio: 1,
+                legend: {
+                    display: false,
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(label, index, labels) {
+                                return label.toFixed(2) + "%";
+                            }
+                        }
+                    }]
                 }
-            }]
-        }
-    }
-});
+            }
+        });
 
 ///////////////////////////////
 
-var data = [
-{% for data in periodData %}
-    '{{ data.increase }}',
-{% endfor %}
-];
+        var data = [
+            {% for data in periodData %}
+        '{{ data.increase }}',
+        {% endfor %}
+    ];
 
-var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
-var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+        var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+        var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-bg_colours.pop();
-border_colours.pop();
-bg_colours.push('rgba(255, 159, 64, 0.2)');
-border_colours.push('rgba(255, 159, 64, 1)');
+        bg_colours.pop();
+        border_colours.pop();
+        bg_colours.push('rgba(255, 159, 64, 0.2)');
+        border_colours.push('rgba(255, 159, 64, 1)');
 
 
-var ctx = document.getElementById('total');
-var total_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Total Value Change',
-            data: data,
-            borderColor: border_colours,
-            backgroundColor: bg_colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Total Value Change"
-        },
-        animation: false,
-        aspectRatio: 1,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return label.toFixed(2) + "%";
-                    }
+        var ctx = document.getElementById('total');
+        var total_chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Value Change',
+                    data: data,
+                    borderColor: border_colours,
+                    backgroundColor: bg_colours,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Total Value Change"
+                },
+                animation: false,
+                aspectRatio: 1,
+                legend: {
+                    display: false,
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(label, index, labels) {
+                                return label.toFixed(2) + "%";
+                            }
+                        }
+                    }]
                 }
-            }]
-        }
+            }
+        });
     }
-});
-
 </script>

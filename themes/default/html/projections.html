@@ -28,9 +28,11 @@
         </div>
     </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<!-- Graphs -->
+<!-- Cant move this yet - it needs to be loaded before our chart script
+And i want to make that nicer before i move it to its own JS file -->
 <script>
-
+document.addEventListener('DOMContentLoaded', function() { doCharts() })
 function currencyFormat(tooltipItem, data) {
     var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
@@ -41,89 +43,91 @@ function currencyFormat(tooltipItem, data) {
     return label;
 }
 
-var labels = [
-{% for data in initial.data %}
-    '{{ data.year }}',
-{% endfor %}
-];
+function doCharts() {
+    var labels = [
+        {% for data in initial.data %}
+        '{{ data.year }}',
+        {% endfor %}
+    ];
 
-var data = [
-{% for data in initial.data %}
-    '{{ data.value }}',
-{% endfor %}
-];
+    var data = [
+        {% for data in initial.data %}
+        '{{ data.value }}',
+        {% endfor %}
+    ];
 
-var data2 = [
-{% for data in actual.data %}
-    '{{ data.value }}',
-{% endfor %}
-];
+    var data2 = [
+        {% for data in actual.data %}
+        '{{ data.value }}',
+        {% endfor %}
+    ];
 
-var data3 = [
-{% for data in revised.data %}
-    '{{ data.value }}',
-{% endfor %}
-];
+    var data3 = [
+        {% for data in revised.data %}
+        '{{ data.value }}',
+        {% endfor %}
+    ];
 
-var ctx = document.getElementById('targets');
-var yearly_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Base target for',
-            stack: 'Stack 0',
-            data: data,
-            backgroundColor: 'rgba(105, 105, 105, 0.2)',
-            borderColor: 'rgba(105, 105, 105, 1)',
-            borderWidth: 1
-        },{
-            label: 'Actual for',
-            stack: 'Stack 1',
-            data: data2,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        },{
-            label: 'Revised target for',
-            stack: 'Stack 1',
-            data: data3,
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Target Asset Value"
-        },
-        animation: false,
-        aspectRatio: 1.25,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            xAxes: [{
-                stacked: true
-            }],
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    }
-                }, 
-                stacked: true
+    var ctx = document.getElementById('targets');
+    var yearly_chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Base target for',
+                stack: 'Stack 0',
+                data: data,
+                backgroundColor: 'rgba(105, 105, 105, 0.2)',
+                borderColor: 'rgba(105, 105, 105, 1)',
+                borderWidth: 1
+            },{
+                label: 'Actual for',
+                stack: 'Stack 1',
+                data: data2,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },{
+                label: 'Revised target for',
+                stack: 'Stack 1',
+                data: data3,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
             }]
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
+        options: {
+            title: {
+                display: true,
+                text: "Target Asset Value"
+            },
+            animation: false,
+            aspectRatio: 1.25,
+            legend: {
+                display: false,
+                position: 'right'
+            },
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(label, index, labels) {
+                            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                        }
+                    },
+                    stacked: true
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         }
-    }
-});
+    });
+}
 
 </script>

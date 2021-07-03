@@ -47,9 +47,8 @@
 <!-- Graphs -->
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script>
-
+    document.addEventListener('DOMContentLoaded', function() { doCharts() })
 // https://www.chartjs.org/samples/latest/charts/bar/stacked.html
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
 // https://www.investopedia.com/ask/answers/difference-between-yield-and-return/
@@ -75,177 +74,178 @@ function currencyFormat(tooltipItem, data) {
     return label;
 }
 
-var labels = [
-{% for data in periodData %}
+function doCharts() {
+    var labels = [
+        {% for data in periodData %}
     '{{ data.period }}',
-{% endfor %}
+    {% endfor %}
 ];
 
 // TOTALS CHART
-var data = {
-    labels: labels,
-    datasets: [{
-        label: 'Deposit Value',
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-        data: [
-            {% for data in periodData %}
-                '{{ data.deposit_total }}',
+    var data = {
+        labels: labels,
+        datasets: [{
+            label: 'Deposit Value',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            data: [
+                {% for data in periodData %}
+            '{{ data.deposit_total }}',
             {% endfor %}
-        ]
-    }, {
+]
+}, {
         type: 'line',
-        label: 'Asset Value',
-        borderColor: 'rgb(255, 159, 64)',
-        backgroundColor: 'rgb(255, 159, 64)',
-        fill: false,
-        lineTension: 0.025,
-        borderWidth: 2,
-        data: [
+            label: 'Asset Value',
+            borderColor: 'rgb(255, 159, 64)',
+            backgroundColor: 'rgb(255, 159, 64)',
+            fill: false,
+            lineTension: 0.025,
+            borderWidth: 2,
+            data: [
             {% for data in periodData %}
-            '{{ data.asset_total }}',
-            {% endfor %}
-        ]
+        '{{ data.asset_total }}',
+        {% endfor %}
+    ]
     }]
 };
 
-var ctx = document.getElementById('total_chart');
-var total_chart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
-    options: {
-        animation: false,
-        aspectRatio: 3,
-        legend: {
-            display: true,
-            position: 'right',
-            labels: {
-                boxWidth: 10,
-                fontSize: 9,
-            }
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    }
+    var ctx = document.getElementById('total_chart');
+    var total_chart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            animation: false,
+            aspectRatio: 3,
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    boxWidth: 10,
+                    fontSize: 9,
                 }
-            }]
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(label, index, labels) {
+                            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         }
-    }
-});
+    });
 
 
 
 
 // GAINS CHART
 
-var data = [
-{% for data in periodData %}
+    var data = [
+        {% for data in periodData %}
     '{{ data.gain }}',
-{% endfor %}
+    {% endfor %}
 ];
 
-var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
-var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+    var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-var ctx = document.getElementById('gain_chart');
-var gains_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Total Return',
-            data: data,
-            borderColor: border_colours,
-            backgroundColor: bg_colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Total return over time"
-        },
-        animation: false,
-        aspectRatio: 2,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    }
-                }
+    var ctx = document.getElementById('gain_chart');
+    var gains_chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Return',
+                data: data,
+                borderColor: border_colours,
+                backgroundColor: bg_colours,
+                borderWidth: 1
             }]
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
+        options: {
+            title: {
+                display: true,
+                text: "Total return over time"
+            },
+            animation: false,
+            aspectRatio: 2,
+            legend: {
+                display: false,
+                position: 'right'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(label, index, labels) {
+                            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         }
-    }
-});
+    });
 
 
 // GROWTH CHART
 
-var data = [
-{% for data in periodData %}
+    var data = [
+        {% for data in periodData %}
     '{{ data.growth }}',
-{% endfor %}
+    {% endfor %}
 ];
 
-var data2 = [
-{% for data in periodData %}
+    var data2 = [
+        {% for data in periodData %}
     '{{ data.growth_annualized }}',
-{% endfor %}
+    {% endfor %}
 ];
 
-var data3 = [
-{% for data in periodData %}
+    var data3 = [
+        {% for data in periodData %}
     '{{ data.twr_str }}',
-{% endfor %}
+    {% endfor %}
 ];
 
-var ctx = document.getElementById('growth_chart');
-var growth_chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Total Return',
-            borderColor: 'rgb(255, 0, 0)',
-            backgroundColor: 'rgb(255, 0, 0)',
-            fill: false,
-            lineTension: 0.3,
-            borderWidth: 2,
-            data: data,
-            borderWidth: 1
-        }, {
-            label: 'Annualized Return',
-            borderColor: 'rgb(153, 102, 255)',
-            backgroundColor: 'rgb(153, 102, 255)',
-            fill: false,
-            lineTension: 0.3,
-            borderWidth: 2,
-            data: data2,
-            hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
-            borderWidth: 1
-        }, {
-            label: 'Time-Weighted Return',
+    var ctx = document.getElementById('growth_chart');
+    var growth_chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Return',
+                borderColor: 'rgb(255, 0, 0)',
+                backgroundColor: 'rgb(255, 0, 0)',
+                fill: false,
+                lineTension: 0.3,
+                borderWidth: 2,
+                data: data,
+                borderWidth: 1
+            }, {
+                label: 'Annualized Return',
+                borderColor: 'rgb(153, 102, 255)',
+                backgroundColor: 'rgb(153, 102, 255)',
+                fill: false,
+                lineTension: 0.3,
+                borderWidth: 2,
+                data: data2,
+                hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
+    borderWidth: 1
+}, {
+        label: 'Time-Weighted Return',
             borderColor: 'rgb(54, 162, 235)',
             backgroundColor: 'rgb(54, 162, 235)',
             fill: false,
@@ -254,21 +254,21 @@ var growth_chart = new Chart(ctx, {
             data: data3,
             hidden: false,
             borderWidth: 1
-        }]
-    },
+    }]
+},
     options: {
         title: {
             display: true,
-            text: "Total return over time"
+                text: "Total return over time"
         },
         animation: false,
-        aspectRatio: 2,
-        legend: {
+            aspectRatio: 2,
+            legend: {
             display: true,
-            position: 'right',
-            labels: {
+                position: 'right',
+                labels: {
                 boxWidth: 10,
-                fontSize: 9,
+                    fontSize: 9,
             }
         },
         scales: {
@@ -286,111 +286,112 @@ var growth_chart = new Chart(ctx, {
 
 // GAINS DELTA CHART
 
-var data = [
-{% for data in periodData %}
+    var data = [
+        {% for data in periodData %}
     '{{ data.gain_delta }}',
-{% endfor %}
+    {% endfor %}
 ];
 
 
-var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
-var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+    var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-var ctx = document.getElementById('gain_delta_chart');
-var gains_delta_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Change',
-            data: data,
-            borderColor: border_colours,
-            backgroundColor: bg_colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Monthly return change"
-        },
-        animation: false,
-        aspectRatio: 2,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    }
-                }
+    var ctx = document.getElementById('gain_delta_chart');
+    var gains_delta_chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Change',
+                data: data,
+                borderColor: border_colours,
+                backgroundColor: bg_colours,
+                borderWidth: 1
             }]
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
+        options: {
+            title: {
+                display: true,
+                text: "Monthly return change"
+            },
+            animation: false,
+            aspectRatio: 2,
+            legend: {
+                display: false,
+                position: 'right'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(label, index, labels) {
+                            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         }
-    }
-});
+    });
 
 // Value DELTA CHART
 
-var data = [
-{% for data in periodData %}
+    var data = [
+        {% for data in periodData %}
     '{{ data.value_delta }}',
-{% endfor %}
+    {% endfor %}
 ];
 
 
-var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
-var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+    var bg_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    var border_colours = data.map((value) => value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-var ctx = document.getElementById('value_delta_chart');
-var value_delta_chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Change',
-            data: data,
-            borderColor: border_colours,
-            backgroundColor: bg_colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: "Monthly value change"
-        },
-        animation: false,
-        aspectRatio: 2,
-        legend: {
-            display: false,
-            position: 'right'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(label, index, labels) {
-                        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    },
-                }
+    var ctx = document.getElementById('value_delta_chart');
+    var value_delta_chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Change',
+                data: data,
+                borderColor: border_colours,
+                backgroundColor: bg_colours,
+                borderWidth: 1
             }]
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
+        options: {
+            title: {
+                display: true,
+                text: "Monthly value change"
+            },
+            animation: false,
+            aspectRatio: 2,
+            legend: {
+                display: false,
+                position: 'right'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(label, index, labels) {
+                            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
+                        },
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         }
-    }
-});
+    });
+}
 
 </script>
 
