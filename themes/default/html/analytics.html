@@ -53,25 +53,27 @@ var yearly_chart = new Chart(ctx, {
         }]
     },
     options: {
-        title: {
-            display: true,
-            text: "Time-Weighted performance"
+        plugins: {
+            title: {
+                display: true,
+                text: "Time-Weighted performance"
+            },
+            legend: {
+                display: false,
+                position: 'right'
+            },
         },
         animation: false,
         aspectRatio: 1,
-        legend: {
-            display: false,
-            position: 'right'
-        },
         scales: {
-            yAxes: [{
+            y: {
                 ticks: {
                     beginAtZero: true,
                     callback: function(label, index, labels) {
                         return label.toFixed(2) + "%";
                     }
                 }
-            }]
+            }
         }
     }
 });
@@ -107,25 +109,27 @@ var total_chart = new Chart(ctx, {
         }]
     },
     options: {
-        title: {
-            display: true,
-            text: "Total Value Change"
+        plugins: {
+            title: {
+                display: true,
+                text: "Total Value Change"
+            },
+            legend: {
+                display: false,
+                position: 'right'
+            },
         },
         animation: false,
         aspectRatio: 1,
-        legend: {
-            display: false,
-            position: 'right'
-        },
         scales: {
-            yAxes: [{
+            y: {
                 ticks: {
                     beginAtZero: true,
                     callback: function(label, index, labels) {
                         return label.toFixed(2) + "%";
                     }
                 }
-            }]
+            }
         }
     }
 });
