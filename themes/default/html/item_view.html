@@ -48,7 +48,7 @@
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() { doCharts() })
+    document.addEventListener('DOMContentLoaded', doCharts)
 // https://www.chartjs.org/samples/latest/charts/bar/stacked.html
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
 // https://www.investopedia.com/ask/answers/difference-between-yield-and-return/
@@ -394,4 +394,3 @@ function doCharts() {
 }
 
 </script>
-
