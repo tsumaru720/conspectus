@@ -32,7 +32,7 @@
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() { doCharts() })
+    document.addEventListener('DOMContentLoaded', doCharts)
 function currencyFormat(tooltipItem, data) {
     var label = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
 
