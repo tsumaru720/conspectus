@@ -7,7 +7,7 @@
             <!--width="900" height="200"-->
         </div>
         <div class="row text-center">
-            <div class="pt-2 col">
+            <div class="pt-2 col" style="height: 450px">
                 <canvas class="mt-4 w-100" id="pie"></canvas>
             </div>
             <div class="pt-2 col-2">
@@ -16,7 +16,7 @@
         </div>
         {% if left_menu == 'all' %}
         <div class="row text-center">
-            <div class="pt-2 col">
+            <div class="pt-2 col" style="height: 450px">
                 <canvas class="mt-4 w-100" id="pie2"></canvas>
             </div>
             <div class="pt-2 col-2">
@@ -31,7 +31,7 @@
 <!-- Graphs -->
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
 <script>
 
 function currencyFormat(tooltipItem, data) {
@@ -118,16 +118,21 @@ var total_chart = new Chart(ctx, {
     options: {
         animation: false,
         aspectRatio: 3,
-        legend: {
-            display: true,
-            position: 'right',
-            labels: {
-                boxWidth: 10,
-                fontSize: 9,
+        plugins: {
+            legend: {
+                align: 'start',
+                display: true,
+                position: 'right',
+                labels: {
+                    boxWidth: 10,
+                    font: {
+                        size: 9
+                    }
+                }
             }
         },
         scales: {
-            yAxes: [{
+            y: {
                 stacked: true,
                 ticks: {
                     beginAtZero: true,
@@ -135,10 +140,10 @@ var total_chart = new Chart(ctx, {
                         return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
-            }],
-            xAxes: [{
+            },
+            x: {
                 stacked: true,
-            }]
+            }
         },
         tooltips: {
             callbacks: {
@@ -180,12 +185,18 @@ var total_chart = new Chart(ctx, {
     data: data,
     options: {
         animation: false,
-        legend: {
-            display: true,
-            position: 'right',
-            labels: {
-                boxWidth: 10,
-                fontSize: 9,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                align: 'start',
+                display: true,
+                position: 'right',
+                labels: {
+                    boxWidth: 10,
+                    font: {
+                        size: 9
+                    }
+                },
             }
         },
         tooltips: {
@@ -229,12 +240,17 @@ var total_chart = new Chart(ctx, {
     data: data,
     options: {
         animation: false,
-        legend: {
-            display: true,
-            position: 'right',
-            labels: {
-                boxWidth: 10,
-                fontSize: 9,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    boxWidth: 10,
+                    font: {
+                        size: 9
+                    }
+                }
             }
         },
         tooltips: {

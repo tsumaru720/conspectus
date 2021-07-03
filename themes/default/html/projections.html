@@ -28,7 +28,7 @@
         </div>
     </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
 <script>
 
 function currencyFormat(tooltipItem, data) {
@@ -94,21 +94,24 @@ var yearly_chart = new Chart(ctx, {
         }]
     },
     options: {
-        title: {
-            display: true,
-            text: "Target Asset Value"
+        plugins: {
+            title: {
+                display: true,
+                text: "Target Asset Value"
+            },
+            legend: {
+                display: false,
+                position: 'right'
+            },
         },
         animation: false,
         aspectRatio: 1.25,
-        legend: {
-            display: false,
-            position: 'right'
-        },
+
         scales: {
-            xAxes: [{
+            x: {
                 stacked: true
-            }],
-            yAxes: [{
+            },
+            y: {
                 ticks: {
                     beginAtZero: true,
                     callback: function(label, index, labels) {
@@ -116,7 +119,7 @@ var yearly_chart = new Chart(ctx, {
                     }
                 }, 
                 stacked: true
-            }]
+            }
         },
         tooltips: {
             callbacks: {
