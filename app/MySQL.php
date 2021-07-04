@@ -8,6 +8,7 @@ class MySQL {
     public function __construct($host, $port, $username, $password, $database) {
         try {
             $this->handle = new PDO("mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4", $username, $password);
+            $this->handle->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         catch(PDOException $e) {
             // Handle this ourselves
