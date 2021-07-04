@@ -79,8 +79,7 @@ class PageLoader {
         $doc->render();
         $output .= $doc->getRendered();
         if ($this->main->getDb()->getError()) {
-            echo "Error loading page: " . $this->main->getDb()->getError()['message'];
-            die();
+            $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
         }
 
         if ($this->displayFooter) {
@@ -90,8 +89,7 @@ class PageLoader {
             $footer->setRegister('script', $scriptRegister);
             $output .= $footer->getRendered();
             if ($this->main->getDb()->getError()) {
-                echo "Error loading footer: " . $this->main->getDb()->getError()['message'];
-                die();
+                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
             }
         }
 
