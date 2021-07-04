@@ -45,6 +45,7 @@ class PageLoader {
     }
 
     public function display($pageName) {
+        $output = "";
         // Add default path and custom theme path for template search
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
         $loader->prependPath($this->resolveTheme('html'));
@@ -69,17 +70,32 @@ class PageLoader {
             $this->checkInterface($header);
             $header->setRegister('style', $styleRegister);
             $header->render();
+            $output .= $header->getRendered();
+            if ($this->main->getDb()->getError()) {
+                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
+            }
         }
 
         $doc->render();
+        $output .= $doc->getRendered();
+        if ($this->main->getDb()->getError()) {
+            echo "Error loading page: " . $this->main->getDb()->getError()['message'];
+            die();
+        }
 
         if ($this->displayFooter) {
             include $this->resolveTheme('app/__footer.php');
             $footer = new Footer($this->main, $this->twig, $this->vars);
             $this->checkInterface($footer);
             $footer->setRegister('script', $scriptRegister);
-            $footer->render();
+            $output .= $footer->getRendered();
+            if ($this->main->getDb()->getError()) {
+                echo "Error loading footer: " . $this->main->getDb()->getError()['message'];
+                die();
+            }
         }
+
+        echo $output;
     }
 
 }

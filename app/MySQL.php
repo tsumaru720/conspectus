@@ -19,15 +19,17 @@ class MySQL {
     }
 
     public function query($query, $data = null) {
-        $qh = $this->handle->prepare($query);
-
-        if ($data) {
-            $qh->execute($data);
-        } else {
-            $qh->execute();
+        $qh = null;
+        try {
+            $qh = $this->handle->prepare($query);
+            if ($data) {
+                $qh->execute($data);
+            } else {
+                $qh->execute();
+            }
+        } catch (Exception $e) {
+            $this->error['message'] = $qh->errorInfo()[2];
         }
-
-        if ($qh->errorInfo()[1]) { echo "ERROR: ".$qh->errorInfo()[2]."\n"; }
 
         return $qh;
     }
