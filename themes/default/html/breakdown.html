@@ -38,7 +38,8 @@ And i want to make that nicer before i move it to its own JS file -->
         if (pie && context.datasetIndex !== 0) {
             return
         }
-        let label = context.label || '';
+
+        let label = context.dataset.label || context.label;
         if (label) {
             label += ': ';
         }

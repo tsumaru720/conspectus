@@ -31,13 +31,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
 <script>
 
-function currencyFormat(tooltipItem, data) {
-    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+function currencyFormat(context) {
+    var label = context.dataset.label
 
     if (label) {
-        label += ' ' + tooltipItem.xLabel + ': ';
+        label += ': ';
     }
-    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+
+    if (context.raw !== null) {
+        label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(context.raw);
+    }
+
     return label;
 }
 
@@ -103,6 +107,12 @@ var yearly_chart = new Chart(ctx, {
                 display: false,
                 position: 'right'
             },
+            tooltip: {
+                mode: 'point',
+                callbacks: {
+                    label: currencyFormat
+                }
+            }
         },
         animation: false,
         aspectRatio: 1.25,
@@ -119,11 +129,6 @@ var yearly_chart = new Chart(ctx, {
                     }
                 }, 
                 stacked: true
-            }
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
             }
         }
     }

@@ -65,13 +65,17 @@ And i want to make that nicer before i move it to its own JS file -->
 //  grey: 'rgb(201, 203, 207)'
 // };
 
-function currencyFormat(tooltipItem, data) {
-    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+function currencyFormat(context) {
+    var label = context.dataset.label
 
     if (label) {
         label += ': ';
     }
-    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(tooltipItem.yLabel);
+
+    if (context.raw !== null) {
+        label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(context.raw);
+    }
+
     return label;
 }
 
@@ -128,6 +132,11 @@ var total_chart = new Chart(ctx, {
                         size: 9
                     }
                 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: currencyFormat
+                }
             }
         },
         scales: {
@@ -138,11 +147,6 @@ var total_chart = new Chart(ctx, {
                         return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
-            }
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
             }
         }
     }
@@ -187,6 +191,11 @@ var gains_chart = new Chart(ctx, {
                 display: true,
                 text: "Total return over time"
             },
+            tooltip: {
+                callbacks: {
+                    label: currencyFormat
+                }
+            }
         },
         scales: {
             y: {
@@ -196,11 +205,6 @@ var gains_chart = new Chart(ctx, {
                         return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
-            }
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
             }
         }
     }
@@ -281,7 +285,7 @@ var growth_chart = new Chart(ctx, {
             title: {
                 display: true,
                     text: "Total return over time"
-            },
+            }
         },
         scales: {
             y: {
@@ -333,6 +337,11 @@ var gains_delta_chart = new Chart(ctx, {
                 display: true,
                 text: "Monthly return change"
             },
+            tooltip: {
+                callbacks: {
+                    label: currencyFormat
+                }
+            }
         },
         scales: {
             y: {
@@ -342,11 +351,6 @@ var gains_delta_chart = new Chart(ctx, {
                         return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
                     }
                 }
-            }
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
             }
         }
     }
@@ -389,6 +393,11 @@ var value_delta_chart = new Chart(ctx, {
                 display: true,
                 text: "Monthly value change"
             },
+            tooltip: {
+                callbacks: {
+                    label: currencyFormat
+                }
+            }
         },
         scales: {
             y: [{
@@ -399,11 +408,6 @@ var value_delta_chart = new Chart(ctx, {
                     },
                 }
             }]
-        },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
-            }
         }
     }
 });
