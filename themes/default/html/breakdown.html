@@ -7,8 +7,8 @@
             <!--width="900" height="200"-->
         </div>
         <div class="row text-center">
-            <div class="pt-2 col" style="height: 450px">
-                <canvas class="mt-4 w-100" id="pie"></canvas>
+            <div class="pt-2 col">
+                <canvas class="mt-4 w-100" id="pie" height="400"></canvas>
             </div>
             <div class="pt-2 col-2">
                 &nbsp;
@@ -16,8 +16,8 @@
         </div>
         {% if left_menu == 'all' %}
         <div class="row text-center">
-            <div class="pt-2 col" style="height: 450px">
-                <canvas class="mt-4 w-100" id="pie2"></canvas>
+            <div class="pt-2 col">
+                <canvas class="mt-4 w-100" id="pie2" height="400"></canvas>
             </div>
             <div class="pt-2 col-2">
                 &nbsp;
@@ -34,35 +34,28 @@ And i want to make that nicer before i move it to its own JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
 <script>
 
-function currencyFormat(tooltipItem, data) {
-    var label = data.datasets[tooltipItem.datasetIndex].label || data.labels[tooltipItem.index];
-
-    if (label) {
-        label += ': ';
+    function chartLabel(context, pie) {
+        if (pie && context.datasetIndex !== 0) {
+            return
+        }
+        let label = context.label || '';
+        if (label) {
+            label += ': ';
+        }
+        if (context.raw !== null) {
+            label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(context.raw);
+        }
+        if (pie) {
+            let total = 0.00;
+            context.dataset.data.forEach(value => {
+                total = total + parseFloat(value);
+            });
+            let percent = ((parseFloat(context.raw) / total) * 100);
+            percent = percent.toFixed(2);
+            label += " (" + percent + "%)";
+        }
+        return label;
     }
-
-    if (tooltipItem.yLabel) {
-        var type = "bar";
-        var value = tooltipItem.yLabel;
-    } else {
-        var type = "pie";
-        var value = data.datasets[0].data[tooltipItem.index];
-    }
-
-    label += new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
-
-    if (type == "pie") {
-        var total = 0.00;
-        data.datasets[0].data.forEach(function(value) {
-            total = total + parseFloat(value);
-        });
-        var percent = ((parseFloat(value) / total) * 100);
-        percent = percent.toFixed(2);
-
-        label += " (" + percent + "%)";
-    }
-    return label;
-}
 
 function pastel_colour(input_str) {
   var baseRed = 100;
@@ -129,6 +122,12 @@ var total_chart = new Chart(ctx, {
                         size: 9
                     }
                 }
+            },
+            tooltip: {
+                mode: 'point',
+                callbacks: {
+                    label: function(context) {return chartLabel(context, false)}
+                }
             }
         },
         scales: {
@@ -145,11 +144,6 @@ var total_chart = new Chart(ctx, {
                 stacked: true,
             }
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
-            }
-        }
     }
 });
 
@@ -197,13 +191,13 @@ var total_chart = new Chart(ctx, {
                         size: 9
                     }
                 },
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {return chartLabel(context, true)}
+                }
             }
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
-            }
-        }
     }
 });
 
@@ -251,13 +245,13 @@ var total_chart = new Chart(ctx, {
                         size: 9
                     }
                 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {return chartLabel(context, true)}
+                }
             }
         },
-        tooltips: {
-            callbacks: {
-                label: currencyFormat
-            }
-        }
     }
 });
 
