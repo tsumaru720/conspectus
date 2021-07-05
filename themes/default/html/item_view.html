@@ -400,14 +400,14 @@ var value_delta_chart = new Chart(ctx, {
             }
         },
         scales: {
-            y: [{
+            y: {
                 ticks: {
                     beginAtZero: true,
                     callback: function(label, index, labels) {
                         return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(label);
-                    },
+                    }
                 }
-            }]
+            }
         }
     }
 });
