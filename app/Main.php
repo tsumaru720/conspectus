@@ -124,6 +124,7 @@ class Main {
                 $loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
                 $twig = new \Twig\Environment($loader);
                 echo $twig->render('loading_error.html', ['page_title' => 'Error loading page', 'error_string' => $errorStr]);
+                die();
             }
             $this->pageLoader->setFrame(false, false);
             $this->pageLoader->setVar('error_code', $errorCode);
