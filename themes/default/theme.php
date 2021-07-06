@@ -6,12 +6,17 @@ abstract class Theme implements ThemeInterface {
     protected $vars = array();
     protected $pageTitle = null;
     protected $register = array('script' => array(), 'style' => array());
+    protected $rendered = "";
 
     public function __construct(&$main, &$twig, $vars) { }
 
     public function render() {
         $this->vars['register'] = $this->register;
-        echo $this->document->render($this->vars);
+        $this->rendered = $this->document->render($this->vars);
+    }
+
+    public function getRendered() {
+        return $this->rendered;
     }
     
     public function getTitle() {
