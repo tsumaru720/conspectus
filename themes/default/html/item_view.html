@@ -244,6 +244,7 @@ var growth_chart = new Chart(ctx, {
             lineTension: 0.3,
             borderWidth: 2,
             data: data,
+            hidden: {% if hide_total_pct == true %}true{% else %}false{% endif %},
             borderWidth: 1
         }, {
             label: 'Annualized Return',

@@ -74,6 +74,8 @@ class Document extends Theme {
             }
         }
 
+        $vars['hide_total_pct'] = true;
+
         while ($period = $this->db->fetch($dataQuery)) {
             $period['gain_delta'] = 0;
             $period['value_delta'] = 0;
@@ -107,6 +109,7 @@ class Document extends Theme {
 
             if ($period['deposit_total'] != 0) {
                 $period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2, '.', '');
+                $vars['hide_total_pct'] = false;
             } else {
                 if ($period['gain'] > 0) {
                     $period['growth'] = 100;
