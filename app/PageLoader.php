@@ -96,7 +96,7 @@ class PageLoader {
             $footer->render();
             $output .= $footer->getRendered();
             if ($this->main->getDb()->getError()) {
-                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
+                $this->main->fatalErr("500", "Error loading footer: ". $this->main->getDb()->getError()['message']);
             }
         }
 
