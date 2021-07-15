@@ -85,7 +85,7 @@ class PageLoader {
         $doc->render();
         $output .= $doc->getRendered();
         if ($this->main->getDb()->getError()) {
-            $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
+            $this->main->fatalErr("500", "Error loading document: ". $this->main->getDb()->getError()['message']);
         }
 
         if ($this->displayFooter) {
