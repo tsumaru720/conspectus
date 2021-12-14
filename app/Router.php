@@ -111,6 +111,24 @@ class Router {
             }
         });
 
+        $this->router->get('/ledger', function() {
+            $this->page->setVar('nav_item', 'ledger');
+            $this->page->display('ledger');
+        });
+
+        $this->router->get('/ledger/{type}/(\d+)', function($type, $itemID) {
+            if (!$this->checkExists($type, $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', $type.'/'.$itemID);
+                $this->page->setVar('nav_item', 'ledger');
+                $this->page->setVar('type', $type);
+                $this->page->setVar('item_id', $itemID);
+                $this->page->display('ledger');
+            }
+        });
+
         $this->router->match('GET|POST', '/asset/new', function() {
             $this->page->setVar('action', 'new');
             $this->page->display('asset_manager');

@@ -1,0 +1,74 @@
+{% include "nav_switcher.html" %}
+</div>
+
+    <div class="container-fluid pr-5 justify-content-md-center">
+        <div class="row">
+            <div class="pt-2 col">
+                <h2>Asset Log</h2>
+                <table class="table table-striped table-sm table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Asset</th>
+                            <th scope="col">Deposit</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if log is defined %}
+                        {% set last_period = '' %}
+                        {% for dataset in log %}
+                        <tr>
+                            {% if last_period != dataset.period %}
+                                <td>{{ dataset.period }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>{{ dataset.description }}</td>
+                            <td>{{ dataset.deposit_value }}</td>
+                            <td>{{ dataset.asset_value }}</td>
+                        </tr>
+                        {% set last_period = dataset.period %}
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td class="text-center h4" colspan=4>No Data</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pt-2 col">
+                <h2>Payment History</h2>
+                <table class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Asset</th>
+                            <th scope="col">Payment Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if payment is defined %}
+                        {% set last_period = '' %}
+                        {% for dataset in payment %}
+                        <tr>
+                            {% if last_period != dataset.period %}
+                                <td>{{ dataset.period }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>{{ dataset.description }}</td>
+                            <td>{{ dataset.amount }}</td>
+                        </tr>
+                        {% set last_period = dataset.period %}
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td class="text-center h4" colspan=3>No Data</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
