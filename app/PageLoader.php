@@ -77,15 +77,15 @@ class PageLoader {
             $header->setRegister('style', $styleRegister);
             $header->render();
             $output .= $header->getRendered();
-            if ($this->main->getDb()->getError()) {
-                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDb()->getError()['message']);
+            if ($this->main->getDB()->getError()) {
+                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDB()->getError()['message']);
             }
         }
 
         $doc->render();
         $output .= $doc->getRendered();
-        if ($this->main->getDb()->getError()) {
-            $this->main->fatalErr("500", "Error loading document: ". $this->main->getDb()->getError()['message']);
+        if ($this->main->getDB()->getError()) {
+            $this->main->fatalErr("500", "Error loading document: ". $this->main->getDB()->getError()['message']);
         }
 
         if ($this->displayFooter) {
@@ -95,8 +95,8 @@ class PageLoader {
             $footer->setRegister('script', $scriptRegister);
             $footer->render();
             $output .= $footer->getRendered();
-            if ($this->main->getDb()->getError()) {
-                $this->main->fatalErr("500", "Error loading footer: ". $this->main->getDb()->getError()['message']);
+            if ($this->main->getDB()->getError()) {
+                $this->main->fatalErr("500", "Error loading footer: ". $this->main->getDB()->getError()['message']);
             }
         }
 
