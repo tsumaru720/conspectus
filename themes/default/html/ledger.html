@@ -39,7 +39,7 @@
                 </table>
             </div>
             <div class="pt-2 col">
-                <h2>Payment History <a href="/payments/new{% if item_id > 0 %}/{{item_id}} {% else %}/ {% endif %}" class="btn btn-sm btn-outline-primary" role="button">Add Payment</a></h2>
+                <h2>Payment History <a href="/payments/new{% if item_id > 0 and type == 'asset' %}/{{item_id}} {% else %}/ {% endif %}" class="btn btn-sm btn-outline-primary" role="button">Add Payment</a></h2>
                 <table class="table table-striped table-sm table-bordered">
                     <thead class="thead-dark">
                         <tr>
