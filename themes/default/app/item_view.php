@@ -27,9 +27,7 @@ class Document extends Theme {
                                             SUM(asset_value) AS asset_total,
                                             SUM(asset_value - deposit_value) AS gain,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
-                                            EXTRACT(YEAR_MONTH
-                                        FROM
-                                            epoch) AS yearMonth
+                                            EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             asset_log
                                         WHERE

@@ -43,6 +43,7 @@ class Document extends Theme {
                                             description,
                                             amount,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            DATE_FORMAT(epoch, '%Y') AS year,
                                             EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             payments
@@ -82,6 +83,7 @@ class Document extends Theme {
                                             asset_list.description,
                                             amount,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            DATE_FORMAT(epoch, '%Y') AS year,
                                             EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             payments
@@ -105,10 +107,20 @@ class Document extends Theme {
             $vars['log'][] = $log;
         }
 
+        $yearTotals = [];
         while ($payment = $this->db->fetch($payQuery)) {
+            if (!array_key_exists($payment['year'], $yearTotals)) {
+                $yearTotals[$payment['year']] = 0;
+            }
+            $yearTotals[$payment['year']] += $payment['amount'];
             $payment['amount'] = $this->prettify($payment['amount']);
             $vars['payment'][] = $payment;
         }
+        
+        foreach ($yearTotals as $k => $v) {
+            $yearTotals[$k] = $this->prettify($v);
+        }
+        $vars['totals'] = $yearTotals;
 
         $this->vars = $vars;
         $this->document = $twig->load('ledger.html');

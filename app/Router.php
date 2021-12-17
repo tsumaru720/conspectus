@@ -129,6 +129,25 @@ class Router {
             }
         });
 
+        $this->router->match('GET|POST', '/payments/new', function() {
+            $this->page->setVar('action', 'new');
+            $this->page->setVar('nav_item', 'ledger');
+            $this->page->display('payments');
+        });
+
+        $this->router->match('GET|POST', '/payments/new/(\d+)', function($itemID) {
+            if (!$this->checkExists('asset', $itemID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $this->page->setVar('left_menu', 'asset/'.$itemID);
+                $this->page->setVar('nav_item', 'ledger');
+                $this->page->setVar('item_id', $itemID);
+                $this->page->setVar('action', 'new');
+                $this->page->display('payments');
+            }
+        });
+
         $this->router->match('GET|POST', '/asset/new', function() {
             $this->page->setVar('action', 'new');
             $this->page->display('asset_manager');
