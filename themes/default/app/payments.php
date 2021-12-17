@@ -38,6 +38,10 @@ class Document extends Theme {
     }
 
     private function processGet($action) {
+        if ($this->vars['left_menu'] == 'all') {
+            $this->vars['item_id'] = 0;
+        }
+
         if ($action == "new") {
             if ($this->vars['item_id'] > 0) {
                 $asset = $this->entityManager->getAsset($this->vars['item_id']);
@@ -46,11 +50,6 @@ class Document extends Theme {
             $this->vars['form_date'] = date('Y-m-d');
             $this->document = $this->twig->load('payments.html');
         } elseif ($action == "edit") {
-            // $asset = $this->entityManager->getAsset($this->vars['item_id']);
-            // $this->vars['form_asset'] = $asset->getID();
-            // $this->vars['form_date'] = date('Y-m-d');
-
-            // $this->document = $this->twig->load('payments.html');
             echo "not implemented yet";
             die();
         } elseif ($action == "delete") {
