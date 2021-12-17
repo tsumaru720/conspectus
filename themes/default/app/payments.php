@@ -126,7 +126,8 @@ class Document extends Theme {
 
             // Amount input validation
             if ($validated == true) { //Only do this if previous check passes
-                if (!is_numeric($amount) || ($amount <= 0)) {
+                $amount = (float) $amount;
+                if (($amount <= 0) || $amount >= 1e12) {
                     $amount = false;
                     $validated = false;
                     $this->vars['error_code'] = "AMOUNT";
