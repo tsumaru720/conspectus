@@ -37,6 +37,20 @@ class Document extends Theme {
                                             yearMonth
                                         ORDER BY
                                             yearMonth ASC", $data);
+            $payQuery = $this->db->query("SELECT
+                                            asset_id,
+                                            description,
+                                            amount,
+                                            DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+                                        FROM
+                                            payments
+                                        LEFT JOIN asset_list ON payments.asset_id = asset_list.id
+                                        WHERE
+                                            asset_id ".$vars['modifier']." :item_id
+                                        ORDER BY
+                                            yearMonth ASC,
+                                            description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getAsset($vars['item_id']);
                 $this->pageTitle = "Asset View - ".$entity->getDescription();
@@ -65,6 +79,22 @@ class Document extends Theme {
                                             yearMonth
                                         ORDER BY
                                             yearMonth ASC", $data);
+            $payQuery = $this->db->query("SELECT
+                                            asset_id,
+                                            asset_list.description,
+                                            amount,
+                                            DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            DATE_FORMAT(epoch, '%Y') AS year,
+                                            EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+                                        FROM
+                                            payments
+                                        LEFT JOIN asset_list ON payments.asset_id = asset_list.id
+                                        LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+                                        WHERE
+                                            asset_classes.id = :item_id
+                                        ORDER BY
+                                            yearMonth ASC,
+                                            description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getClass($vars['item_id']);
                 $this->pageTitle = "Asset View - ".$entity->getDescription();
@@ -74,6 +104,16 @@ class Document extends Theme {
 
         $vars['hide_total_pct'] = true;
 
+        $vars['payments'] = [];
+        while ($payment = $this->db->fetch($payQuery)) {
+            if (array_key_exists($payment['yearMonth'],$vars['payments'])) {
+                $vars['payments'][$payment['yearMonth']] += $payment['amount'];
+            } else {
+                $vars['payments'][$payment['yearMonth']] = $payment['amount'];
+            }
+        }
+
+        $payTally = 0;
         while ($period = $this->db->fetch($dataQuery)) {
             $period['gain_delta'] = 0;
             $period['value_delta'] = 0;
@@ -81,6 +121,11 @@ class Document extends Theme {
             $period['growth_factor'] = 0;
             $period['twr'] = 0;
             $period['twr_str'] = 0;
+
+            if (array_key_exists($period['yearMonth'],$vars['payments'])) {
+                $payTally += $vars['payments'][$period['yearMonth']];
+            }
+            $period['payments'] = $payTally;
 
             if (isset($last)) {
                 $period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2, '.', '');

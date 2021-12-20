@@ -111,6 +111,20 @@ var data = {
             '{{ data.asset_total }}',
             {% endfor %}
         ]
+    }, {
+        type: 'line',
+        label: 'Payments',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgb(75, 192, 192)',
+        fill: false,
+        lineTension: 0.025,
+        borderWidth: 2,
+        hidden: true,
+        data: [
+            {% for data in periodData %}
+            '{{ data.payments }}',
+            {% endfor %}
+        ]
     }]
 };
 
