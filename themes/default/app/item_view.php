@@ -121,11 +121,15 @@ class Document extends Theme {
             $period['growth_factor'] = 0;
             $period['twr'] = 0;
             $period['twr_str'] = 0;
+            $period['growth_factor_adj'] = 0;
+            $period['twr_adj'] = 0;
+            $period['twr_str_adj'] = 0;
 
             if (array_key_exists($period['yearMonth'],$vars['payments'])) {
                 $payTally += $vars['payments'][$period['yearMonth']];
             }
             $period['payments'] = $payTally;
+            $period['asset_total_adj'] = $period['asset_total'] + $payTally;
 
             if (isset($last)) {
                 $period['gain_delta'] = number_format($period['gain'] - $last['gain'], 2, '.', '');
@@ -133,6 +137,9 @@ class Document extends Theme {
 
                 if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
                     $period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
+
+                    $period['growth_factor_adj'] = $period['asset_total_adj'] / ($last['asset_total_adj'] + $period['value_delta']);
+
                     if ($last['twr'] == 0) {
                         $period['twr'] = $period['growth_factor'];
                     } else {
@@ -142,6 +149,17 @@ class Document extends Theme {
                         $period['twr_str'] = ($period['twr'] - 1) * 100;
                         $period['twr_str'] = number_format($period['twr_str'], 2, '.', '');
                     }
+
+                    if ($last['twr_adj'] == 0) {
+                        $period['twr_adj'] = $period['growth_factor_adj'];
+                    } else {
+                        $period['twr_adj'] = $last['twr_adj'] * $period['growth_factor_adj'];
+                    }
+                    if ($period['twr_adj'] != 0) {
+                        $period['twr_str_adj'] = ($period['twr_adj'] - 1) * 100;
+                        $period['twr_str_adj'] = number_format($period['twr_str_adj'], 2, '.', '');
+                    }
+
                 }
 
                 if ($last['asset_total'] != 0) {
@@ -162,6 +180,7 @@ class Document extends Theme {
             }
             $period['growth_str'] = number_format($period['growth'],2);
             $vars['periodData'][] = $period;
+
             $last = $period;
         }
 
@@ -170,6 +189,7 @@ class Document extends Theme {
             $last['asset_str'] = $this->prettify($last['asset_total']);
             $last['gain_str'] = $this->prettify($last['gain']);
             $last['twr_str'] = number_format($last['twr_str'],2);
+            $last['twr_str_adj'] = number_format($last['twr_str_adj'],2);
             $vars['mostRecent'] = $last;
 
             /////////// STANDARD DEVIATION ///////////
@@ -195,6 +215,7 @@ class Document extends Theme {
             $last['gain_str'] = $this->prettify('0');
             $last['growth_str'] = '0.00';
             $last['twr_str'] = '0.00';
+            $last['twr_str_adj'] = '0.00';
             $vars['mostRecent'] = $last;
         }
 

@@ -12,11 +12,14 @@
             <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.gain < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
                 <h4><small>Total Return<br>{{ mostRecent.gain_str }}</small></h4>
             </div>
-            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+            <div class="pt-2 col-lg-1 ml-3 rounded" style="background-color: {% if mostRecent.growth < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
                 <h4><small>Total Return<br>{{ mostRecent.growth_str }}%</small></h4>
             </div>
-            <div class="pt-2 col-lg-2 ml-3 rounded" style="background-color: {% if mostRecent.twr_str < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+            <div class="pt-2 col-lg-1 ml-3 rounded" style="background-color: {% if mostRecent.twr_str < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
                 <h4><small>Time-Weighted<br>{{ mostRecent.twr_str }}%</small></h4>
+            </div>
+            <div class="pt-2 col-lg-1 ml-3 rounded" style="background-color: {% if mostRecent.twr_str_adj < 0 %} rgba(255, 99, 132, 0.5) {% else %} rgba(75, 192, 192, 0.5) {% endif %}">
+                <h4><small>Adjusted TWR<br>{{ mostRecent.twr_str_adj }}%</small></h4>
             </div>
         </div>
 
@@ -203,7 +206,7 @@ var gains_chart = new Chart(ctx, {
             },
             title: {
                 display: true,
-                text: "Total return over time"
+                text: "Total return over time (capital)"
             },
             tooltip: {
                 callbacks: {
@@ -245,6 +248,12 @@ var data3 = [
 {% endfor %}
 ];
 
+var data4 = [
+{% for data in periodData %}
+    '{{ data.twr_str_adj }}',
+{% endfor %}
+];
+
 var ctx = document.getElementById('growth_chart');
 var growth_chart = new Chart(ctx, {
     type: 'line',
@@ -278,6 +287,16 @@ var growth_chart = new Chart(ctx, {
             lineTension: 0.3,
             borderWidth: 2,
             data: data3,
+            hidden: false,
+            borderWidth: 1
+        }, {
+            label: 'TWR (Payment Adjusted)',
+            borderColor: 'rgb(255, 159, 64)',
+            backgroundColor: 'rgb(255, 159, 64)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
+            data: data4,
             hidden: false,
             borderWidth: 1
         }]
