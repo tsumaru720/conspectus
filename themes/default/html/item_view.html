@@ -260,26 +260,6 @@ var growth_chart = new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Total Return',
-            borderColor: 'rgb(255, 0, 0)',
-            backgroundColor: 'rgb(255, 0, 0)',
-            fill: false,
-            lineTension: 0.3,
-            borderWidth: 2,
-            data: data,
-            hidden: {% if hide_total_pct == true %}true{% else %}false{% endif %},
-            borderWidth: 1
-        }, {
-            label: 'Annualized Return',
-            borderColor: 'rgb(153, 102, 255)',
-            backgroundColor: 'rgb(153, 102, 255)',
-            fill: false,
-            lineTension: 0.3,
-            borderWidth: 2,
-            data: data2,
-            hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
-            borderWidth: 1
-        }, {
             label: 'Time-Weighted Return',
             borderColor: 'rgb(54, 162, 235)',
             backgroundColor: 'rgb(54, 162, 235)',
@@ -298,6 +278,26 @@ var growth_chart = new Chart(ctx, {
             borderWidth: 2,
             data: data4,
             hidden: false,
+            borderWidth: 1
+        },{
+            label: 'Total Return',
+            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgb(255, 0, 0)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
+            data: data,
+            hidden: {% if hide_total_pct == true %}true{% else %}false{% endif %},
+            borderWidth: 1
+        }, {
+            label: 'Annualized Return',
+            borderColor: 'rgb(153, 102, 255)',
+            backgroundColor: 'rgb(153, 102, 255)',
+            fill: false,
+            lineTension: 0.3,
+            borderWidth: 2,
+            data: data2,
+            hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
             borderWidth: 1
         }]
     },

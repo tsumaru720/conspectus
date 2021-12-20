@@ -170,7 +170,7 @@ class Document extends Theme {
 
             if ($period['deposit_total'] != 0) {
                 $period['growth'] = number_format(($period['gain'] / $period['deposit_total']) * 100, 2, '.', '');
-                $vars['hide_total_pct'] = false;
+                //$vars['hide_total_pct'] = false;
             } else {
                 if ($period['gain'] > 0) {
                     $period['growth'] = 100;
