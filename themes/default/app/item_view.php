@@ -84,7 +84,6 @@ class Document extends Theme {
                                             asset_list.description,
                                             amount,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
-                                            DATE_FORMAT(epoch, '%Y') AS year,
                                             EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             payments
@@ -163,7 +162,7 @@ class Document extends Theme {
                 }
 
                 if ($last['asset_total'] != 0) {
-                    $period['growth_annualized'] = pow($period['growth_factor'], 12) - 1;
+                    $period['growth_annualized'] = pow($period['growth_factor_adj'], 12) - 1;
                     $period['growth_annualized'] = number_format($period['growth_annualized'] * 100, 2, '.', '');
                 }
             }
