@@ -52,6 +52,7 @@ class Document extends Theme {
                                             asset_id ".$vars['modifier']." :item_id
                                         ORDER BY
                                             yearMonth DESC,
+                                            epoch DESC,
                                             description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getAsset($vars['item_id']);
@@ -93,6 +94,7 @@ class Document extends Theme {
                                             asset_classes.id = :item_id
                                         ORDER BY
                                             yearMonth DESC,
+                                            epoch DESC,
                                             description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getClass($vars['item_id']);
@@ -116,7 +118,7 @@ class Document extends Theme {
             $payment['amount'] = $this->prettify($payment['amount']);
             $vars['payment'][] = $payment;
         }
-        
+
         foreach ($yearTotals as $k => $v) {
             $yearTotals[$k] = $this->prettify($v);
         }
