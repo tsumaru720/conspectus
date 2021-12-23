@@ -136,7 +136,6 @@ class Document extends Theme {
 
                 if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
                     $period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
-
                     $period['growth_factor_adj'] = $period['asset_total_adj'] / ($last['asset_total_adj'] + $period['value_delta']);
 
                     if ($last['twr'] == 0) {
