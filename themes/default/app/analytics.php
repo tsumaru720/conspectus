@@ -38,6 +38,20 @@ class Document extends Theme {
                                             year
                                         ORDER BY
                                             yearMonth ASC", $data);
+            $payQuery = $this->db->query("SELECT
+                                            asset_id,
+                                            description,
+                                            amount,
+                                            DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+                                        FROM
+                                            payments
+                                        LEFT JOIN asset_list ON payments.asset_id = asset_list.id
+                                        WHERE
+                                            asset_id ".$vars['modifier']." :item_id
+                                        ORDER BY
+                                            yearMonth ASC,
+                                            description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getAsset($vars['item_id']);
                 $this->pageTitle = "Analytics - ".$entity->getDescription();
@@ -65,6 +79,21 @@ class Document extends Theme {
                                             year
                                         ORDER BY
                                             yearMonth ASC", $data);
+            $payQuery = $this->db->query("SELECT
+                                            asset_id,
+                                            asset_list.description,
+                                            amount,
+                                            DATE_FORMAT(epoch, '%b %Y') AS period,
+                                            EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
+                                        FROM
+                                            payments
+                                        LEFT JOIN asset_list ON payments.asset_id = asset_list.id
+                                        LEFT JOIN asset_classes ON asset_classes.id = asset_list.asset_class
+                                        WHERE
+                                            asset_classes.id = :item_id
+                                        ORDER BY
+                                            yearMonth ASC,
+                                            description ASC", $data);
             if ($vars['item_id'] > 0) {
                 $entity = $this->entityManager->getClass($vars['item_id']);
                 $this->pageTitle = "Analytics - ".$entity->getDescription();
@@ -72,10 +101,25 @@ class Document extends Theme {
             }
         }
 
-            //TODO Tidy up this whole mess of code - a lot of it can be put in generic functions
+        $vars['payments'] = [];
+        while ($payment = $this->db->fetch($payQuery)) {
+            if (array_key_exists($payment['yearMonth'],$vars['payments'])) {
+                $vars['payments'][$payment['yearMonth']] += $payment['amount'];
+            } else {
+                $vars['payments'][$payment['yearMonth']] = $payment['amount'];
+            }
+        }
+
+        $payTally = 0;
+        //TODO Tidy up this whole mess of code - a lot of it can be put in generic functions
         while ($period = $this->db->fetch($dataQuery)) {
             $period['value_delta'] = 0;
             $period['growth_factor'] = 0;
+
+            if (array_key_exists($period['yearMonth'],$vars['payments'])) {
+                $payTally += $vars['payments'][$period['yearMonth']];
+            }
+            $period['asset_total_adj'] = $period['asset_total'] + $payTally;
 
             if (!isset($vars['periodData'][$period['year']])) {
                 if ($period['year'] == date("Y")) {
@@ -85,15 +129,15 @@ class Document extends Theme {
                 }
                 $vars['periodData'][$period['year']]['twr'] = 0;
                 $vars['periodData'][$period['year']]['start'] = $period['asset_total'];
-
             }
 
             if (isset($last)) {
                 $period['value_delta'] = number_format($period['deposit_total'] - $last['deposit_total'], 2, '.', '');
 
                 if (($period['asset_total'] != 0) && ($last['asset_total'] != 0)) {
-                    $period['growth_factor'] = $period['asset_total'] / ($last['asset_total'] + $period['value_delta']);
+                    $period['growth_factor'] = $period['asset_total_adj'] / ($last['asset_total_adj'] + $period['value_delta']);
                 }
+
                 if ($vars['periodData'][$period['year']]['twr'] == 0) {
                     if ($period['year'] == $last['year']) {
                         $vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
@@ -104,7 +148,6 @@ class Document extends Theme {
                         } else {
                             $vars['periodData'][$last['year']]['twr'] = $vars['periodData'][$last['year']]['twr'] * $period['growth_factor'];
                         }
-
                         // Recalculate value percentage increase for the year
                         $vars['periodData'][$last['year']]['end'] = $period['asset_total'];
                         $start = $vars['periodData'][$last['year']]['start'];
@@ -114,6 +157,7 @@ class Document extends Theme {
                 } else {
                     $vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
                 }
+
             }
 
             $vars['periodData'][$period['year']]['end'] = $period['asset_total'];
