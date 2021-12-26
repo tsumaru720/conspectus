@@ -24,7 +24,18 @@
                             {% else %}
                                 <td></td>
                             {% endif %}
-                            <td>{{ dataset.description }}</td>
+                            <td>
+                                <div class="d-flex">
+                                      <div>
+                                         {{ dataset.description }}
+                                      </div>
+                                      {% if payDates[dataset.yearMonth] is defined %}
+                                      <div class="ml-auto">
+                                         <span title="Payment Recieved"><span class="text-success" data-feather="arrow-up-circle"></span></span>
+                                      </div>
+                                      {% endif %}
+                                 </div>
+                            </td>
                             <td>{{ dataset.deposit_value }}</td>
                             <td>{{ dataset.asset_value }}</td>
                         </tr>

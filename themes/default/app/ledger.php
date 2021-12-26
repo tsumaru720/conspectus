@@ -117,6 +117,7 @@ class Document extends Theme {
             $yearTotals[$payment['year']] += $payment['amount'];
             $payment['amount'] = $this->prettify($payment['amount']);
             $vars['payment'][] = $payment;
+            $vars['payDates'][$payment['yearMonth']] = true;
         }
 
         foreach ($yearTotals as $k => $v) {
