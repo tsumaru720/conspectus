@@ -29,7 +29,7 @@
                                       <div>
                                          {{ dataset.description }}
                                       </div>
-                                      {% if payDates[dataset.yearMonth] is defined %}
+                                      {% if payDates[dataset.yearMonth] is defined and payDates[dataset.yearMonth][dataset.asset_id] is defined %}
                                       <div class="ml-auto">
                                          <span title="Payment Recieved"><span class="text-success" data-feather="arrow-up-circle"></span></span>
                                       </div>
