@@ -157,7 +157,11 @@ class Document extends Theme {
                 } else {
                     $vars['periodData'][$period['year']]['twr'] = $vars['periodData'][$period['year']]['twr'] * $period['growth_factor'];
                 }
-
+            } else {
+                if ($period['deposit_total'] != 0) {
+                    $period['growth_factor'] = ($period['asset_total_adj'] - $period['deposit_total']) / $period['deposit_total'] + 1;
+                    $vars['periodData'][$period['year']]['twr'] = $period['growth_factor'];
+                }
             }
 
             $vars['periodData'][$period['year']]['end'] = $period['asset_total'];

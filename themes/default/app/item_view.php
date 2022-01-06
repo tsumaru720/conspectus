@@ -164,6 +164,18 @@ class Document extends Theme {
                     $period['growth_annualized'] = pow($period['growth_factor_adj'], 12) - 1;
                     $period['growth_annualized'] = number_format($period['growth_annualized'] * 100, 2, '.', '');
                 }
+            } else {
+                if ($period['deposit_total'] != 0) {
+                    $period['growth_factor'] = $period['gain'] / $period['deposit_total'] + 1;
+                    $period['twr'] = $period['growth_factor'];
+                    $period['twr_str'] = ($period['twr'] - 1) * 100;
+                    $period['twr_str'] = number_format($period['twr_str'], 2, '.', '');
+
+                    $period['growth_factor_adj'] = ($period['gain'] + $period['payments']) / $period['deposit_total'] + 1;
+                    $period['twr_adj'] = $period['growth_factor_adj'];
+                    $period['twr_str_adj'] = ($period['twr_adj'] - 1) * 100;
+                    $period['twr_str_adj'] = number_format($period['twr_str_adj'], 2, '.', '');
+                }
             }
 
             if ($period['deposit_total'] != 0) {
