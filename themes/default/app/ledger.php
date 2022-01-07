@@ -44,6 +44,7 @@ class Document extends Theme {
                                             amount,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
                                             DATE_FORMAT(epoch, '%Y') AS year,
+                                            DATE_FORMAT(epoch, '%e %M %Y') AS fullDate,
                                             EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             payments
@@ -85,6 +86,7 @@ class Document extends Theme {
                                             amount,
                                             DATE_FORMAT(epoch, '%b %Y') AS period,
                                             DATE_FORMAT(epoch, '%Y') AS year,
+                                            DATE_FORMAT(epoch, '%e %M %Y') AS fullDate,
                                             EXTRACT(YEAR_MONTH FROM epoch) AS yearMonth
                                         FROM
                                             payments

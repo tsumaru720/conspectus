@@ -73,7 +73,7 @@
                                 {% endif %}
                                 <tr>
                                     {% if last_period != dataset.period %}
-                                        <td>{{ dataset.period }}</td>
+                                        <td><span title="{{ dataset.fullDate }}">{{ dataset.period }}</span></td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}
