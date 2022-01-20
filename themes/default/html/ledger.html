@@ -73,11 +73,11 @@
                                 {% endif %}
                                 <tr>
                                     {% if last_period != dataset.period %}
-                                        <td><span title="{{ dataset.fullDate }}">{{ dataset.period }}</span></td>
+                                        <td>{{ dataset.period }}</td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}
-                                    <td>{{ dataset.description }}</td>
+                                    <td><span title="{{ dataset.fullDate }}">{{ dataset.description }}</span></td>
                                     <td>{{ dataset.amount }}</td>
                                 </tr>
                                 {% set last_period = dataset.period %}
