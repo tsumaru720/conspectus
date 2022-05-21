@@ -51,9 +51,6 @@
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
 <script>
 
 // https://www.chartjs.org/samples/latest/charts/bar/stacked.html
@@ -267,31 +264,18 @@ var dates = [
 ];
 
 bench = new Array();
-var dataURL ="http://cache1.agari.co/conspectus/global.php";
-//var dataURL ="http://cache1.agari.co/conspectus/us.php";
-$.getJSON(dataURL, function(data) {
+//var dataURL ="http://cache1.agari.co/conspectus/global.php";
+var dataURL ="http://cache1.agari.co/conspectus/us.php";
+fetch(dataURL).then(response => response.json()).then(function(data) {
     dates.forEach(function(item) {
         temp = new Array();
         temp['twr'] = (parseFloat(data4[0])) / 100 + 1;
         temp['twr_str'] = data4[0];
         temp['factor'] = 0;
 
-        x = new Date(item);
-        str = x.getFullYear() + '-'
-                + ('0' + (x.getMonth()+1)).slice(-2) + '-'
-                + ('0' + x.getDate()).slice(-2)
-        if (str in data) {
-            temp['close'] = data[str].close;
-        } else {
-            i = 0;
-            while (!(str in data)) {
-                str = x.getFullYear() + '-'
-                + ('0' + (x.getMonth()+1)).slice(-2) + '-'
-                + ('0' + x.getDate()+i).slice(-2)
-                i++;
-            }
-            temp['close'] = data[str].close;
-        }
+        let benchmarkDate = Object.keys(data).find((k) => k >= item)
+        temp['close'] = data[benchmarkDate].close;
+
         if ((typeof last) != "undefined") {
             temp['factor'] = temp['close'] / last['close'];
             if (last['twr'] == 0) {
