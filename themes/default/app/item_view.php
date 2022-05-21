@@ -124,6 +124,8 @@ class Document extends Theme {
             $period['twr_adj'] = 0;
             $period['twr_str_adj'] = 0;
 
+            $period['dateFormatted'] = substr($period['yearMonth'],0,4).'-'.substr($period['yearMonth'],4,2).'-01';
+
             if (array_key_exists($period['yearMonth'],$vars['payments'])) {
                 $payTally += $vars['payments'][$period['yearMonth']];
             }

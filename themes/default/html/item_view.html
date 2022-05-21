@@ -51,6 +51,9 @@
 <!-- Cant move this yet - it needs to be loaded before our chart script
 And i want to make that nicer before i move it to its own JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.0/chart.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <script>
 
 // https://www.chartjs.org/samples/latest/charts/bar/stacked.html
@@ -254,6 +257,64 @@ var data4 = [
 {% endfor %}
 ];
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+var data5 = new Array();
+var dates = [
+{% for data in periodData %}
+    '{{ data.dateFormatted }}',
+{% endfor %}
+];
+
+bench = new Array();
+var dataURL ="http://cache1.agari.co/conspectus/global.php";
+//var dataURL ="http://cache1.agari.co/conspectus/us.php";
+$.getJSON(dataURL, function(data) {
+    dates.forEach(function(item) {
+        temp = new Array();
+        temp['twr'] = (parseFloat(data4[0])) / 100 + 1;
+        temp['twr_str'] = data4[0];
+        temp['factor'] = 0;
+
+        x = new Date(item);
+        str = x.getFullYear() + '-'
+                + ('0' + (x.getMonth()+1)).slice(-2) + '-'
+                + ('0' + x.getDate()).slice(-2)
+        if (str in data) {
+            temp['close'] = data[str].close;
+        } else {
+            i = 0;
+            while (!(str in data)) {
+                str = x.getFullYear() + '-'
+                + ('0' + (x.getMonth()+1)).slice(-2) + '-'
+                + ('0' + x.getDate()+i).slice(-2)
+                i++;
+            }
+            temp['close'] = data[str].close;
+        }
+        if ((typeof last) != "undefined") {
+            temp['factor'] = temp['close'] / last['close'];
+            if (last['twr'] == 0) {
+                temp['twr'] = temp['factor'];
+            } else {
+                temp['twr'] = last['twr'] * temp['factor'];
+            }
+            if (temp['twr'] != 0) {
+                temp['twr_str'] = (temp['twr'] - 1) * 100;
+                temp['twr_str'] = Math.round(temp['twr_str'] * 100) / 100;
+                temp['twr_str'] = temp['twr_str'].toString();
+            }
+        } else {
+            last = new Array();
+        }
+        data5.push(temp['twr_str']);
+        last = temp;
+    });
+    growth_chart.update();
+});
+//console.log(data5);
+//////////////////////////////////////////////////////////////////////////////////////////
+
 var ctx = document.getElementById('growth_chart');
 var growth_chart = new Chart(ctx, {
     type: 'line',
@@ -298,6 +359,15 @@ var growth_chart = new Chart(ctx, {
             borderWidth: 2,
             data: data2,
             hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
+            borderWidth: 1
+        }, {
+            label: 'Benchmark',
+            borderColor: 'rgb(59, 59, 59)',
+            backgroundColor: 'rgb(59, 59, 59)',
+            fill: false,
+            lineTension: 0.3,
+            data: data5,
+            hidden: false,
             borderWidth: 1
         }]
     },
