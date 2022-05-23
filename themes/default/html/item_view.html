@@ -264,8 +264,8 @@ var dates = [
 ];
 
 bench = new Array();
-//var dataURL ="http://cache1.agari.co/conspectus/global.php";
-var dataURL ="http://cache1.agari.co/conspectus/us.php";
+var dataURL ="https://cache1.agari.co/conspectus/global.php";
+//var dataURL ="https://cache1.agari.co/conspectus/us.php";
 fetch(dataURL).then(response => response.json()).then(function(data) {
     dates.forEach(function(item) {
         temp = new Array();
