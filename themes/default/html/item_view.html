@@ -264,8 +264,9 @@ var dates = [
 ];
 
 bench = new Array();
-var dataURL ="https://cache1.agari.co/conspectus/global.php";
-//var dataURL ="https://cache1.agari.co/conspectus/us.php";
+var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/global.php";
+//var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/us.php";
+//var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/nasdaq.php";
 fetch(dataURL).then(response => response.json()).then(function(data) {
     dates.forEach(function(item) {
         temp = new Array();
@@ -274,7 +275,12 @@ fetch(dataURL).then(response => response.json()).then(function(data) {
         temp['factor'] = 0;
 
         let benchmarkDate = Object.keys(data).find((k) => k >= item)
-        temp['close'] = data[benchmarkDate].close;
+        if (benchmarkDate) {
+            temp['close'] = data[benchmarkDate].close;
+        }
+        //  else {
+        //     temp['close'] = null;
+        // }
 
         if ((typeof last) != "undefined") {
             temp['factor'] = temp['close'] / last['close'];
@@ -291,7 +297,9 @@ fetch(dataURL).then(response => response.json()).then(function(data) {
         } else {
             last = new Array();
         }
-        data5.push(temp['twr_str']);
+        if (benchmarkDate) {
+            data5.push(temp['twr_str']);
+        }
         last = temp;
     });
     growth_chart.update();
