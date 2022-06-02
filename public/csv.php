@@ -109,6 +109,12 @@ if ($_FILES) {
                         <b><?php echo $a['description']; ?></b> has no update
                     </div>
                     <?php
+                } elseif (($a['update'] == 1) && ($a['closed'] == "1")) {
+                    ?>
+                    <div class="alert alert-danger" role="alert">
+                        <b><?php echo $a['description']; ?></b> recieved update, but is closed
+                    </div>
+                    <?php
                 }
             }
 
