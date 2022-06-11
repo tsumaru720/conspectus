@@ -278,9 +278,6 @@ fetch(dataURL).then(response => response.json()).then(function(data) {
         if (benchmarkDate) {
             temp['close'] = data[benchmarkDate].close;
         }
-        //  else {
-        //     temp['close'] = null;
-        // }
 
         if ((typeof last) != "undefined") {
             temp['factor'] = temp['close'] / last['close'];
@@ -304,7 +301,7 @@ fetch(dataURL).then(response => response.json()).then(function(data) {
     });
     growth_chart.update();
 });
-//console.log(data5);
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 var ctx = document.getElementById('growth_chart');
