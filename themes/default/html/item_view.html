@@ -109,6 +109,7 @@ var data = {
         fill: false,
         lineTension: 0.025,
         borderWidth: 2,
+        pointRadius: 1,
         data: [
             {% for data in periodData %}
             '{{ data.asset_total }}',
@@ -122,6 +123,7 @@ var data = {
         fill: false,
         lineTension: 0.025,
         borderWidth: 2,
+        pointRadius: 1,
         hidden: true,
         data: [
             {% for data in periodData %}
@@ -264,9 +266,9 @@ var dates = [
 ];
 
 bench = new Array();
-var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/global.php";
-//var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/us.php";
-//var dataURL ="https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/nasdaq.php";
+var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/global.php";
+//var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/us.php";
+//var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/nasdaq.php";
 fetch(dataURL).then(response => response.json()).then(function(data) {
     dates.forEach(function(item) {
         temp = new Array();
@@ -316,6 +318,7 @@ var growth_chart = new Chart(ctx, {
             fill: false,
             lineTension: 0.3,
             borderWidth: 2,
+            pointRadius: 1,
             data: data3,
             hidden: false,
             borderWidth: 1
@@ -326,6 +329,7 @@ var growth_chart = new Chart(ctx, {
             fill: false,
             lineTension: 0.3,
             borderWidth: 2,
+            pointRadius: 1,
             data: data4,
             hidden: false,
             borderWidth: 1
@@ -336,6 +340,7 @@ var growth_chart = new Chart(ctx, {
             fill: false,
             lineTension: 0.3,
             borderWidth: 2,
+            pointRadius: 1,
             data: data,
             hidden: {% if hide_total_pct == true %}true{% else %}false{% endif %},
             borderWidth: 1
@@ -346,6 +351,7 @@ var growth_chart = new Chart(ctx, {
             fill: false,
             lineTension: 0.3,
             borderWidth: 2,
+            pointRadius: 1,
             data: data2,
             hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
             borderWidth: 1
