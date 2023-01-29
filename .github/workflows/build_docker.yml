@@ -1,0 +1,40 @@
+name: Build and publish Docker image
+on:
+  release:
+    types: [published]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build metadata
+        id: metadata
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          labels: ${{ steps.metadata.outputs.labels }}
