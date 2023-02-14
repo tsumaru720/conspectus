@@ -54,9 +54,9 @@
                 <table class="table table-striped table-sm table-bordered">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Date</th>
+                            <th style="width: 16.66%" scope="col">Date</th>
                             <th scope="col">Asset</th>
-                            <th scope="col">Payment Amount</th>
+                            <th style="width: 16.66%" scope="col">Payment Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,12 +72,21 @@
                                     {% endif %}
                                 {% endif %}
                                 <tr>
-                                    {% if last_period != dataset.period %}
-                                        <td>{{ dataset.period }}</td>
-                                    {% else %}
-                                        <td></td>
-                                    {% endif %}
-                                    <td><span title="{{ dataset.fullDate }}">{{ dataset.description }}</span></td>
+                                    <td>
+                                    <div class="d-flex">
+                                            <div>
+                                                {% if last_period != dataset.period %}
+                                                    {{ dataset.period }}
+                                                {% else %}
+                                                    &nbsp;
+                                                {% endif %}
+                                            </div>
+                                            <div class="ml-auto">
+                                                <span title="{{ dataset.fullDate }}"><small class="text-muted">{{ dataset.shortDate }}</small>&nbsp;</span>
+                                            </div>
+                                    </div>
+                                    </td>
+                                    <td>{{ dataset.description }}</td>
                                     <td>{{ dataset.amount }}</td>
                                 </tr>
                                 {% set last_period = dataset.period %}
