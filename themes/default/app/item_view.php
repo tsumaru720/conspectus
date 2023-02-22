@@ -101,6 +101,16 @@ class Document extends Theme {
             }
         }
 
+        $q = $this->db->query("SELECT value from settings WHERE setting = 'benchmark_url' LIMIT 1");
+        if ($r = $this->db->fetch($q)) {
+            if (array_key_exists('value', $r)) {
+                if (filter_var($r['value'], FILTER_VALIDATE_URL)) {
+                    $vars['enable_benchmark'] = true;
+                    $vars['benchmark_url'] = $r['value'];
+                }
+            }
+        }
+
         $vars['hide_total_pct'] = true;
 
         $vars['payments'] = [];

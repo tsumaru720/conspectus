@@ -256,6 +256,7 @@ var data4 = [
 {% endfor %}
 ];
 
+{% if enable_benchmark == true %}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 var data5 = new Array();
@@ -266,7 +267,8 @@ var dates = [
 ];
 
 bench = new Array();
-var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/global.php";
+var dataURL = "{{ benchmark_url }}";
+//var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/global.php";
 //var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/us.php";
 //var dataURL = "https://cache1.agari.co/4d0eabfdf45f0ba15f6a10797dcef522/nasdaq.php";
 fetch(dataURL).then(response => response.json()).then(function(data) {
@@ -304,7 +306,20 @@ fetch(dataURL).then(response => response.json()).then(function(data) {
     growth_chart.update();
 });
 
+benchmark_hash = {
+    label: 'Benchmark',
+    borderColor: 'rgb(180, 180, 180)',
+    backgroundColor: 'rgb(180, 180, 180)',
+    fill: false,
+    lineTension: 0.3,
+    data: data5,
+    hidden: false,
+    borderWidth: 1.5,
+    pointRadius: 1
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////
+{% endif %}
 
 var ctx = document.getElementById('growth_chart');
 var growth_chart = new Chart(ctx, {
@@ -355,17 +370,10 @@ var growth_chart = new Chart(ctx, {
             data: data2,
             hidden: {% if std_dev <= 5 %}false{% else %}true{% endif %},
             borderWidth: 1
-        }, {
-            label: 'Benchmark',
-            borderColor: 'rgb(180, 180, 180)',
-            backgroundColor: 'rgb(180, 180, 180)',
-            fill: false,
-            lineTension: 0.3,
-            data: data5,
-            hidden: false,
-            borderWidth: 1.5,
-            pointRadius: 1
-        }]
+        },
+        {% if enable_benchmark == true %}
+          benchmark_hash
+        {% endif %}]
     },
     options: {
         animation: false,
