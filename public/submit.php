@@ -32,11 +32,15 @@ function is_valid($field) {
 
                 <style>
                         body {
-                                padding-top: 75px;
+                            padding-top: 75px;
                         }
 
                         main {
-                                padding-bottom: 1rem;
+                            padding-bottom: 1rem;
+                        }
+
+                        .form-control.is-invalid {
+                            background-image: none;
                         }
 
                 </style>
@@ -68,7 +72,7 @@ if ($_POST) {
     if (!$all_pass) {
         ?>
             <div class="alert alert-danger" role="alert">
-                    Please complete all fields
+                    Please ensure all fields are filled correctly
             </div>
         <?php
         $display_form = true;
@@ -120,11 +124,11 @@ if ($display_form == true) {
     $q = $mysql->query("SELECT * from asset_classes ORDER BY description ASC");
     while ($asset_class = $mysql->fetch($q)) {
 
-            $data = array(':class_id' => $asset_class['id']);
+        $data = array(':class_id' => $asset_class['id']);
         $q2 = $mysql->query("SELECT * from asset_list WHERE asset_class = :class_id AND closed = '0' ORDER BY description ASC", $data);
 
         while ($asset = $mysql->fetch($q2)) {
-                $data = array(':asset_id' => $asset['id']);
+            $data = array(':asset_id' => $asset['id']);
             $q3 = $mysql->query("SELECT deposit_value, asset_value from asset_log WHERE asset_id = :asset_id ORDER BY epoch DESC LIMIT 1", $data);
 
             $values = $mysql->fetch($q3);
@@ -134,18 +138,17 @@ if ($display_form == true) {
                     <span><?php echo '('.$asset['id'].') '.htmlspecialchars($asset['description']); ?></span> -
                     <span class="small"><?php echo htmlspecialchars($asset_class['description']); ?></span>
                     </div>
-                    <div class="col-2 <?php echo !is_valid($asset['id']."_deposit") ? 'has-danger' : ''; ?>">
-                            <input class="form-control form-control-sm" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
+                    <div class="col-2">
+                            <input class="form-control form-control-sm <?php echo !is_valid($asset['id']."_deposit") ? 'is-invalid' : ''; ?>" name="<?php echo $asset['id']."_deposit"; ?>" placeholder="<?php echo $values['deposit_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_deposit"]) ? $_POST[$asset['id']."_deposit"] : ''; ?>"></input>
                     </div>
-                    <div class="col-2 <?php echo !is_valid($asset['id']."_latest") ? 'has-danger' : ''; ?>">
-                            <input class="form-control form-control-sm" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
+                    <div class="col-2">
+                            <input class="form-control form-control-sm <?php echo !is_valid($asset['id']."_latest") ? 'is-invalid' : ''; ?>" name="<?php echo $asset['id']."_latest"; ?>" placeholder="<?php echo $values['asset_value']; ?>" value="<?php echo isset($_POST[$asset['id']."_latest"]) ? $_POST[$asset['id']."_latest"] : ''; ?>"></input>
                     </div>
                     <a onclick="removeElement(<?php echo $asset['id']; ?>)" href="javascript:void(0);"><small>Delete</small></a>
 
             </div>
             <?php
         }
-
 
     }
 
