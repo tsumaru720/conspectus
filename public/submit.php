@@ -66,7 +66,24 @@ if ($_POST) {
 
     $all_pass = 1;
     foreach ($_POST as $k => $v) {
+        if ($k == 'date') { continue; } // Date validation is done later
         if (!is_valid($k)) { $all_pass = 0; break; }
+    }
+
+    if (!isset($_POST['date'])) {
+        $date = date('Y-m-d');
+    } else {
+        $date = $_POST['date'];
+    }
+
+    if (date('Y-m-d', strtotime($date)) != "1970-01-01") {
+        $date = date('Y-m-d', strtotime($date)); //Strip extra bits, if there are any
+        $SQLDate = $date." 00:00:00";
+    }
+
+    if ((!isset($SQLDate)) || (time() < strtotime($date))) {
+        $all_pass = 0;
+        $invalid_date = true;
     }
 
     if (!$all_pass) {
@@ -76,16 +93,27 @@ if ($_POST) {
             </div>
         <?php
         $display_form = true;
+        $date = $_POST['date'];
     } else {
         foreach ($_POST as $k => $v) {
-            $tmp = explode("_", $k);
-            $id = $tmp[0];
-            $asset[$id][$tmp[1]] = $v;
+            if ($k != 'date') {
+                $tmp = explode("_", $k);
+                $id = $tmp[0];
+                $asset[$id][$tmp[1]] = $v;
+            } else {
+                $date = $v;
+            }
         }
 
         foreach ($asset as $id => $v) {
-                $data = array(':id' => $id, ':deposit' => $v['deposit'], ':latest' => $v['latest']);
-            $q = $mysql->query("INSERT INTO `asset_log` (`id`, `asset_id`, `epoch`, `deposit_value`, `asset_value`) VALUES (NULL, :id, CURRENT_TIMESTAMP, :deposit, :latest);", $data);
+            $data = array(':id' => $id, ':deposit' => $v['deposit'], ':latest' => $v['latest']);
+            if (isset($SQLDate)) {
+                $data[':date'] = $SQLDate;
+                $q = $mysql->query("INSERT INTO `asset_log` (`id`, `asset_id`, `epoch`, `deposit_value`, `asset_value`) VALUES (NULL, :id, :date, :deposit, :latest);", $data);
+            } else {
+                $q = $mysql->query("INSERT INTO `asset_log` (`id`, `asset_id`, `epoch`, `deposit_value`, `asset_value`) VALUES (NULL, :id, CURRENT_TIMESTAMP, :deposit, :latest);", $data);
+            }
+
 
         }
         ?>
@@ -95,7 +123,8 @@ if ($_POST) {
         <?php
 
     }
-
+} else {
+    $date = date('Y-m-d');
 }
 
 if ($display_form == true) {
@@ -107,6 +136,14 @@ if ($display_form == true) {
         }
     </script>
     <form method="post">
+
+    <div class="form-group row justify-content-center mb-5">
+        <label class="col-sm-2 col-form-label text-right" for="date">Date</label>
+        <div class="col-4 text-center font-weight-bold">
+            <input type="date" class="form-control form-control-sm <?php echo isset($invalid_date) ? 'is-invalid' : ''; ?>" name="date" id="date"  value="<?php echo $date; ?>" maxlength="10" required>
+        </div>
+    </div>
+
     <div class="form-group row">
             <div class="col-4 text-center font-weight-bold">
                     Asset
@@ -162,5 +199,3 @@ if ($display_form == true) {
 
 }
 ?>
-
-
