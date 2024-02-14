@@ -95,6 +95,7 @@ var data = {
         backgroundColor: pastel_colour('{{ dataset.name|escape('js') }}'),
         borderColor: pastel_colour('{{ dataset.name|escape('js') }}'),
         borderWidth: 1,
+        barPercentage: 1.2,
         data: [
             {% for data in dataset.data %}
                 '{{ data }}',
