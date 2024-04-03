@@ -134,7 +134,7 @@ class Router {
         $this->router->match('GET|POST', '/payments/new', function() {
             $this->page->setVar('action', 'new');
             $this->page->setVar('nav_item', 'ledger');
-            $this->page->display('payments');
+            $this->page->display('payment_manager');
         });
 
         $this->router->match('GET|POST', '/payments/new/(\d+)', function($itemID) {
@@ -146,7 +146,7 @@ class Router {
                 $this->page->setVar('nav_item', 'ledger');
                 $this->page->setVar('item_id', $itemID);
                 $this->page->setVar('action', 'new');
-                $this->page->display('payments');
+                $this->page->display('payment_manager');
             }
         });
 
@@ -161,7 +161,7 @@ class Router {
                 $this->page->setVar('item_id', $assetID);
                 $this->page->setVar('payment_id', $paymentID);
                 $this->page->setVar('action', 'edit');
-                $this->page->display('payments');
+                $this->page->display('payment_manager');
             }
         });
 
@@ -176,7 +176,7 @@ class Router {
                 $this->page->setVar('item_id', $assetID);
                 $this->page->setVar('payment_id', $paymentID);
                 $this->page->setVar('action', 'delete');
-                $this->page->display('payments');
+                $this->page->display('payment_manager');
             }
         });
 
