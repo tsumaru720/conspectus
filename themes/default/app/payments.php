@@ -48,10 +48,15 @@ class Document extends Theme {
                 $this->vars['form_asset'] = $asset->getID();
             }
             $this->vars['form_date'] = date('Y-m-d');
+
             $this->document = $this->twig->load('payments.html');
         } elseif ($action == "edit") {
-            echo "not implemented yet";
-            die();
+            $payment = $this->entityManager->getPayment($this->vars['payment_id']);
+            $this->vars['form_asset'] = $payment->getAssetID();
+            $this->vars['form_date'] =  date('Y-m-d', strtotime($payment->getEpoch()));
+            $this->vars['form_amount'] = $payment->getAmount();
+
+            $this->document = $this->twig->load('payments.html');
         } elseif ($action == "delete") {
             echo "not implemented yet";
             die();
@@ -69,10 +74,24 @@ class Document extends Theme {
                 $this->db->query("INSERT INTO `payments` (`id`, `asset_id`, `epoch`, `amount`) VALUES (NULL, :asset, :date, :amount);", $data);
             }
             $this->vars['form_date'] = date('Y-m-d');
+            $this->vars['success_msg'] = "Added";
+
             $this->document = $this->twig->load('payments.html');
         } elseif ($action == "edit") {
-            echo "not implemented yet";
-            die();
+            if ($data = $this->assetValidation()) {
+                if (!$payment = $this->entityManager->getPayment($this->vars['payment_id'])) {
+                    echo "stop breaking things";
+                    die();
+                }
+                $data[':payment_id'] = $payment->getID();
+                $this->db->query("UPDATE `payments` SET `asset_id` =  :asset, `epoch` = :date, `amount` = :amount WHERE `payments`.`id` = :payment_id;", $data);
+            }
+            $this->vars['form_asset'] = $data[':asset'];
+            $this->vars['form_date'] =  date('Y-m-d', strtotime($data[':date']));
+            $this->vars['form_amount'] = $data[':amount'];
+            $this->vars['success_msg'] = "Edited";
+
+            $this->document = $this->twig->load('payments.html');
         } elseif ($action == "delete") {
             echo "not implemented yet";
             die();
@@ -143,9 +162,9 @@ class Document extends Theme {
                     $validated = false;
                     $this->vars['error_code'] = "404";
                     $this->vars['error_string'] = "Asset not found";
-                }                
+                }
             }
-            
+
             if ($validated == false) {
                 $this->vars['error'] = true;
                 $this->vars['form_date'] = $date;

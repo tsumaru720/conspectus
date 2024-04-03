@@ -15,12 +15,14 @@ class Router {
         $this->addRoutes();
         Theme::customRoutes($this->router, $this->page);
     }
-    
+
     private function checkExists($type, $itemID) {
         if ($type == "asset") {
             return $this->entityManager->getAsset($itemID);
         } elseif ($type == "class") {
             return $this->entityManager->getClass($itemID);
+        } elseif ($type == "payment") {
+            return $this->entityManager->getPayment($itemID);
         } else {
             return false;
         }
@@ -144,6 +146,36 @@ class Router {
                 $this->page->setVar('nav_item', 'ledger');
                 $this->page->setVar('item_id', $itemID);
                 $this->page->setVar('action', 'new');
+                $this->page->display('payments');
+            }
+        });
+
+        $this->router->match('GET|POST', '/payments/edit/(\d+)', function($paymentID) {
+            if (!$payment = $this->checkExists('payment', $paymentID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $assetID = $payment->getAssetID();
+                $this->page->setVar('left_menu', 'asset/'.$assetID);
+                $this->page->setVar('nav_item', 'ledger');
+                $this->page->setVar('item_id', $assetID);
+                $this->page->setVar('payment_id', $paymentID);
+                $this->page->setVar('action', 'edit');
+                $this->page->display('payments');
+            }
+        });
+
+        $this->router->match('GET|POST', '/payments/delete/(\d+)', function($paymentID) {
+            if (!$payment = $this->checkExists('payment', $paymentID)) {
+                $this->page->setFrame(false, false);
+                $this->page->display('http_404');
+            } else {
+                $assetID = $payment->getAssetID();
+                $this->page->setVar('left_menu', 'asset/'.$assetID);
+                $this->page->setVar('nav_item', 'ledger');
+                $this->page->setVar('item_id', $assetID);
+                $this->page->setVar('payment_id', $paymentID);
+                $this->page->setVar('action', 'delete');
                 $this->page->display('payments');
             }
         });

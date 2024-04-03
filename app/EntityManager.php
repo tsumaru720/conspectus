@@ -3,8 +3,9 @@
 class EntityManager {
     private $main = null;
     private $db = null;
-    private $lastAsset = null;
-    private $lastClass = null;
+    private $lastAssetObject = null;
+    private $lastClassObject = null;
+    private $lastPaymentObject = null;
 
     public function __construct(&$main) {
         $this->main = $main;
@@ -20,8 +21,8 @@ class EntityManager {
     }
 */
     public function getAsset($assetID) {
-        if ($this->lastAsset instanceof EntityObject) {
-            if ($this->lastAsset->getID() == $assetID) { return $this->lastAsset; }
+        if ($this->lastAssetObject instanceof AssetEntity) {
+            if ($this->lastAssetObject->getID() == $assetID) { return $this->lastAssetObject; }
         }
 /*
         if (!$this->checkInt($assetID)) {
@@ -43,22 +44,18 @@ class EntityManager {
                                     asset_list.id = :item_id;", $data);
 
         if ($item = $this->db->fetch($q)) {
-            $this->lastAsset = new AssetEntity($item);
-            return $this->lastAsset;
+            $this->lastAssetObject = new AssetEntity($item);
+            return $this->lastAssetObject;
         } else {
             return false;
         }
     }
 
     public function getClass($classID) {
-        if ($this->lastClass instanceof EntityObject) {
-            if ($this->lastClass->getID() == $classID) { return $this->lastClass; }
+        if ($this->lastClassObject instanceof ClassEntity) {
+            if ($this->lastClassObject->getID() == $classID) { return $this->lastClassObject; }
         }
-/*
-        if (!$this->checkInt($classID)) {
-            return false;
-        }
-*/
+
         $data = array(':item_id' => $classID);
 
         $q = $this->db->query("SELECT
@@ -70,13 +67,37 @@ class EntityManager {
                                     asset_classes.id = :item_id;", $data);
 
         if ($item = $this->db->fetch($q)) {
-            $this->lastClass = new ClassEntity($item);
-            return $this->lastClass;
+            $this->lastClassObject = new ClassEntity($item);
+            return $this->lastClassObject;
+        } else {
+            return false;
+        }
+    }
+
+    public function getPayment($paymentID) {
+        if ($this->lastPaymentObject instanceof PaymentEntity) {
+            if ($this->lastPaymentObject->getID() == $paymentID) { return $this->lastPaymentObject; }
+        }
+
+        $data = array(':payment_id' => $paymentID);
+
+        $q = $this->db->query("SELECT
+                                    payments.id,
+                                    asset_list.id as asset_id,
+                                    asset_list.description,
+                                    epoch,
+                                    amount
+                                FROM
+                                    payments
+                                LEFT JOIN asset_list ON asset_id = asset_list.id
+                                WHERE
+                                    payments.id = :payment_id;", $data);
+
+        if ($item = $this->db->fetch($q)) {
+            $this->lastPaymentObject = new PaymentEntity($item);
+            return $this->lastPaymentObject;
         } else {
             return false;
         }
     }
 }
-
-
-        
