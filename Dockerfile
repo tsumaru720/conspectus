@@ -4,7 +4,7 @@ MAINTAINER Shane Mc Cormack <dataforce@dataforce.org.uk>
 COPY . /conspectus
 
 RUN \
-  apt-get update && apt-get install netcat -y && \
+  apt-get update && apt-get install netcat-traditional -y && \
   rm -Rfv /var/www/html && \
   chown -Rfv www-data: /conspectus/ /var/www/ && \
   ln -s /conspectus/public /var/www/html && \
