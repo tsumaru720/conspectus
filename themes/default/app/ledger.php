@@ -39,6 +39,7 @@ class Document extends Theme {
                                             yearMonth DESC,
                                             description ASC", $data);
             $payQuery = $this->db->query("SELECT
+                                            payments.id as payment_id,
                                             asset_id,
                                             description,
                                             amount,
@@ -82,6 +83,7 @@ class Document extends Theme {
                                             yearMonth DESC,
                                             description ASC", $data);
             $payQuery = $this->db->query("SELECT
+                                            payments.id as payment_id,
                                             asset_id,
                                             asset_list.description,
                                             amount,
@@ -121,6 +123,7 @@ class Document extends Theme {
             $yearTotals[$payment['year']] += $payment['amount'];
             $payment['amount'] = $this->prettify($payment['amount']);
             $vars['payment'][] = $payment;
+            $this->dump($payment);
             $vars['payDates'][$payment['yearMonth']][$payment['asset_id']] = true;
         }
 

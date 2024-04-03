@@ -37,7 +37,17 @@
                                  </div>
                             </td>
                             <td>{{ dataset.deposit_value }}</td>
-                            <td>{{ dataset.asset_value }}</td>
+                            <td>
+                                <div class="d-flex">
+                                    <div>
+                                        {{ dataset.asset_value }}
+                                    </div>
+                                    <div class="ml-auto">
+                                       <!-- <a href="#"><span title="Edit"><span class="text-muted" data-feather="edit-2"></span></span></a> -->
+                                       <!-- <a href="#"><span title="Delete"><span class="text-muted" data-feather="trash-2"></span></span></a> -->
+                                    </div>
+                               </div>
+                            </td>
                         </tr>
                         {% set last_period = dataset.period %}
                         {% endfor %}
@@ -87,7 +97,17 @@
                                     </div>
                                     </td>
                                     <td>{{ dataset.description }}</td>
-                                    <td>{{ dataset.amount }}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div>
+                                                {{ dataset.amount }}
+                                            </div>
+                                            <div class="ml-auto">
+                                               <a href="/payments/edit/{{dataset.payment_id}}"><span title="Edit"><span class="text-muted" data-feather="edit-2"></span></span></a>
+                                               <!-- <a href="#"><span title="Delete"><span class="text-muted" data-feather="trash-2"></span></span></a> -->
+                                            </div>
+                                       </div>
+                                    </td>
                                 </tr>
                                 {% set last_period = dataset.period %}
                                 {% set last_year = dataset.year %}
