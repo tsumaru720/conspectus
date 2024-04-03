@@ -1,0 +1,27 @@
+{% include "nav_switcher.html" %}
+</div>
+
+    <div class="container-fluid pr-5">
+
+        <div class="ml-5 col-sm-6">
+            <p>Are you sure you want to delete this payment?</p>
+            <p>&nbsp;</p>
+        </div>
+
+        <form method="post">
+                <div class="ml-5 col-sm-6 text-left">Asset Name: <b>{{ data_asset }}</b></div>
+                <div class="ml-5 col-sm-6 text-left">Payment Date: <b>{{ data_date }}</b></div>
+                <div class="ml-5 col-sm-6 text-left">Amount: <b>{{ data_amount }}</b></div>
+
+            <div class="form-group row col-sm-4 mt-4">
+                <div class="col-sm-2">
+                    &nbsp;
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                </div>
+                <div><b>THIS CANNOT BE UNDONE</b></div>
+            </div>
+        </form>
+
+    </div>

@@ -23,6 +23,8 @@ class Document extends Theme {
             $this->pageTitle .= " - New Payment";
         } elseif ($vars['action'] == "edit") {
             $this->pageTitle .= " - Edit Payment";
+        } elseif ($vars['action'] == "delete") {
+            $this->pageTitle .= " - Delete Payment";
         }
 
         $this->vars = $vars;
@@ -45,21 +47,25 @@ class Document extends Theme {
         if ($action == "new") {
             if ($this->vars['item_id'] > 0) {
                 $asset = $this->entityManager->getAsset($this->vars['item_id']);
-                $this->vars['form_asset'] = $asset->getID();
+                $this->vars['data_asset'] = $asset->getID();
             }
-            $this->vars['form_date'] = date('Y-m-d');
+            $this->vars['data_date'] = date('Y-m-d');
 
-            $this->document = $this->twig->load('payments.html');
+            $this->document = $this->twig->load('payment_manager.html');
         } elseif ($action == "edit") {
             $payment = $this->entityManager->getPayment($this->vars['payment_id']);
-            $this->vars['form_asset'] = $payment->getAssetID();
-            $this->vars['form_date'] =  date('Y-m-d', strtotime($payment->getEpoch()));
-            $this->vars['form_amount'] = $payment->getAmount();
+            $this->vars['data_asset'] = $payment->getAssetID();
+            $this->vars['data_date'] =  date('Y-m-d', strtotime($payment->getEpoch()));
+            $this->vars['data_amount'] = $payment->getAmount();
 
-            $this->document = $this->twig->load('payments.html');
+            $this->document = $this->twig->load('payment_manager.html');
         } elseif ($action == "delete") {
-            echo "not implemented yet";
-            die();
+            $payment = $this->entityManager->getPayment($this->vars['payment_id']);
+            $this->vars['data_asset'] = $payment->getDescription();
+            $this->vars['data_date'] =  date('jS F Y', strtotime($payment->getEpoch()));
+            $this->vars['data_amount'] = $payment->getAmount();
+
+            $this->document = $this->twig->load('payment_delete.html');
         } else {
             // Should probably handle this nicer
             // Chances are someone's trying to break something
@@ -73,28 +79,37 @@ class Document extends Theme {
             if ($data = $this->assetValidation()) {
                 $this->db->query("INSERT INTO `payments` (`id`, `asset_id`, `epoch`, `amount`) VALUES (NULL, :asset, :date, :amount);", $data);
             }
-            $this->vars['form_date'] = date('Y-m-d');
+            $this->vars['data_date'] = date('Y-m-d');
             $this->vars['success_msg'] = "Added";
 
-            $this->document = $this->twig->load('payments.html');
+            $this->document = $this->twig->load('payment_manager.html');
         } elseif ($action == "edit") {
             if ($data = $this->assetValidation()) {
                 if (!$payment = $this->entityManager->getPayment($this->vars['payment_id'])) {
-                    echo "stop breaking things";
+                    // Should probably handle this nicer
+                    // Chances are someone's trying to break something
+                    // So meh.
                     die();
                 }
                 $data[':payment_id'] = $payment->getID();
                 $this->db->query("UPDATE `payments` SET `asset_id` =  :asset, `epoch` = :date, `amount` = :amount WHERE `payments`.`id` = :payment_id;", $data);
             }
-            $this->vars['form_asset'] = $data[':asset'];
-            $this->vars['form_date'] =  date('Y-m-d', strtotime($data[':date']));
-            $this->vars['form_amount'] = $data[':amount'];
+            $this->vars['data_asset'] = $data[':asset'];
+            $this->vars['data_date'] =  date('Y-m-d', strtotime($data[':date']));
+            $this->vars['data_amount'] = $data[':amount'];
             $this->vars['success_msg'] = "Edited";
 
-            $this->document = $this->twig->load('payments.html');
+            $this->document = $this->twig->load('payment_manager.html');
         } elseif ($action == "delete") {
-            echo "not implemented yet";
-            die();
+            if (!$payment = $this->entityManager->getPayment($this->vars['payment_id'])) {
+                // Should probably handle this nicer
+                // Chances are someone's trying to break something
+                // So meh.
+                die();
+            }
+            $data = array(':payment_id' => $payment->getID());
+            $this->db->query("DELETE FROM `payments` WHERE `payments`.`id` = :payment_id;", $data);
+            header('Location: /ledger/asset/'.$payment->getAssetID());
         } else {
             // Should probably handle this nicer
             // Chances are someone's trying to break something
@@ -167,14 +182,14 @@ class Document extends Theme {
 
             if ($validated == false) {
                 $this->vars['error'] = true;
-                $this->vars['form_date'] = $date;
-                $this->vars['form_asset'] = $asset;
-                $this->vars['form_amount'] = $amount;
+                $this->vars['data_date'] = $date;
+                $this->vars['data_asset'] = $asset;
+                $this->vars['data_amount'] = $amount;
 
                 return false;
             } else {
                 $this->vars['success'] = true;
-                $this->vars['form_asset'] = $asset; //Pre-select last chosen asset (easier when adding lots)
+                $this->vars['data_asset'] = $asset; //Pre-select last chosen asset (easier when adding lots)
                 return array(':date' => $SQLDate, ':asset' => $asset, ':amount' => $amount);
             }
     }

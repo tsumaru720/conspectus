@@ -123,7 +123,6 @@ class Document extends Theme {
             $yearTotals[$payment['year']] += $payment['amount'];
             $payment['amount'] = $this->prettify($payment['amount']);
             $vars['payment'][] = $payment;
-            $this->dump($payment);
             $vars['payDates'][$payment['yearMonth']][$payment['asset_id']] = true;
         }
 
