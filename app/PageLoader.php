@@ -6,6 +6,7 @@ class PageLoader {
     private $main = null;
     private $twig = null;
     private $vars = array();
+    private $startedRender = false;
     
     private $displayHeader = true;
     private $displayFooter = true;
@@ -13,6 +14,10 @@ class PageLoader {
     public function __construct(&$main) {
         $this->main = $main;
         include $this->resolveTheme('theme.php');
+    }
+
+    public function hasStartedRender() {
+        return $this->startedRender;
     }
 
     public function setTheme($theme) {
@@ -45,6 +50,8 @@ class PageLoader {
     }
 
     public function display($pageName) {
+        $this->startedRender = true;
+        $output = "";
         // Add default path and custom theme path for template search
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../themes/default/html');
         $loader->prependPath($this->resolveTheme('html'));
@@ -69,9 +76,17 @@ class PageLoader {
             $this->checkInterface($header);
             $header->setRegister('style', $styleRegister);
             $header->render();
+            $output .= $header->getRendered();
+            if ($this->main->getDB()->getError()) {
+                $this->main->fatalErr("500", "Error loading header: ". $this->main->getDB()->getError()['message']);
+            }
         }
 
         $doc->render();
+        $output .= $doc->getRendered();
+        if ($this->main->getDB()->getError()) {
+            $this->main->fatalErr("500", "Error loading document: ". $this->main->getDB()->getError()['message']);
+        }
 
         if ($this->displayFooter) {
             include $this->resolveTheme('app/__footer.php');
@@ -79,7 +94,13 @@ class PageLoader {
             $this->checkInterface($footer);
             $footer->setRegister('script', $scriptRegister);
             $footer->render();
+            $output .= $footer->getRendered();
+            if ($this->main->getDB()->getError()) {
+                $this->main->fatalErr("500", "Error loading footer: ". $this->main->getDB()->getError()['message']);
+            }
         }
+
+        echo $output;
     }
 
 }
