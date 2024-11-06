@@ -1,6 +1,6 @@
 {
     "require": {
-        "twig/twig": "^2.14.6",
+        "twig/twig": "^3.11.2",
         "bramus/router": "^1.5",
         "ext-pdo": "*"
     }
