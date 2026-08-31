@@ -22,7 +22,7 @@ class Main {
     public static $outputMethod = 'html';
 
     // The current expected database schema version.
-    public static $expectedSchema = 5;
+    public static $expectedSchema = 6;
 
     // variable initialization
     private $config = null;
