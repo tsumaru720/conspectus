@@ -1,0 +1,8 @@
+{{template "partials/header.html" .}}
+<div class="page-head">
+  <h1>{{.Asset.description}} <span class="scope-chip">asset</span>{{if or .ClassID .Asset.closed}} <span class="hdr-meta">{{if .ClassID}}<a href="/class/{{.ClassID}}">{{.ClassName}}</a>{{end}}{{if .Asset.closed}} · <span class="badge">closed</span>{{end}}</span>{{end}}</h1>
+  {{template "partials/range-picker.html" .}}
+</div>
+{{template "partials/browse-picker.html" .}}
+{{range $b := .Blocks}}{{include (printf "blocks/%s/%s.html" $.Page $b) $}}{{end}}
+{{template "partials/footer.html" .}}

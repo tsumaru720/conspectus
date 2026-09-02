@@ -1,0 +1,1 @@
+ALTER TABLE settings MODIFY value VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;

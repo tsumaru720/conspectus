@@ -1,0 +1,32 @@
+<section class="card">
+  <h2>Current allocation</h2>
+  <div class="alloc-now">
+    <div class="chart-box"><canvas id="chart-alloc"></canvas></div>
+    <script type="application/json" class="chart-data" data-chart="chart-alloc" data-type="pie" data-pastel="1">
+      {{json .Charts.AllocationNow}}
+    </script>
+    <table class="table class-table">
+      <thead><tr><th>Class</th><th class="num">Value</th><th class="num">Deposits</th><th class="num">Return</th><th class="num">R%</th><th class="num">TWRR′</th><th class="num">Share</th></tr></thead>
+      <tbody>
+        {{range .B.classes}}<tr>
+          <td><span class="chip" data-pastel="{{.description}}"></span> <a href="/class/{{.class_id}}">{{.description}}</a></td>
+          <td class="num">{{money .value}}</td>
+          <td class="num">{{money .deposits}}</td>
+          <td class="num {{if pos .return}}up{{else}}down{{end}}">{{money .return}}</td>
+          <td class="num">{{pct .return_pct}}</td>
+          <td class="num">{{pct .twrr_adj}}{{if .short_history}} <span class="badge" title="fewer than 6 monthly factors">short</span>{{end}}</td>
+          <td class="num">{{pct .share}}</td>
+        </tr>{{end}}
+      </tbody>
+    </table>
+  </div>
+  <h3>By asset</h3>
+  <p class="hint">Sorted by size. Click an entry to toggle it in or out of the pie.</p>
+  <div class="pie-legend-row">
+    <div class="chart-box"><canvas id="chart-alloc-assets"></canvas></div>
+    <script type="application/json" class="chart-data" data-chart="chart-alloc-assets" data-type="pie" data-pastel="1" data-legend-target="legend-alloc-assets">
+      {{json .Charts.AssetAllocationNow}}
+    </script>
+    <div class="html-legend" id="legend-alloc-assets"></div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+<section class="card">
+  <h2>Records &amp; risk</h2>
+  <div class="kpi-grid">
+    {{with .A.records.best_month}}<div class="kpi"><span class="kpi-label">Best month</span><span class="kpi-value up">{{pct .return}}</span><span class="kpi-delta">{{month .month}}</span></div>{{end}}
+    {{with .A.records.worst_month}}<div class="kpi"><span class="kpi-label">Worst month</span><span class="kpi-value down">{{pct .return}}</span><span class="kpi-delta">{{month .month}}</span></div>{{end}}
+    {{with .A.records.max_drawdown_growth}}<div class="kpi"><span class="kpi-label">Max drawdown</span><span class="kpi-value down">{{pct .depth}}</span><span class="kpi-delta">{{month .peak}} → {{month .trough}}</span></div>{{end}}
+    {{with .A.records.current_drawdown}}<div class="kpi"><span class="kpi-label">Current drawdown</span><span class="kpi-value">{{pct .}}</span></div>{{end}}
+    {{with .A.records.volatility_annual}}<div class="kpi"><span class="kpi-label">Volatility (annualised)</span><span class="kpi-value">{{pct .}}</span><span class="kpi-delta">monthly σ × √12</span></div>{{end}}
+    {{with .A.records.return_per_risk}}<div class="kpi"><span class="kpi-label">Return per unit of risk</span><span class="kpi-value">{{printf "%.2f" .}}</span><span class="kpi-delta">CAGR / σ</span></div>{{end}}
+    <div class="kpi"><span class="kpi-label">Positive months</span><span class="kpi-value">{{pct .A.records.positive_share}}</span><span class="kpi-delta">up streak {{.A.records.up_streak}} · down {{.A.records.down_streak}}</span></div>
+  </div>
+  {{with .A.records.max_drawdown_value}}<p class="note">Value drawdown of {{pct .depth}} ({{month .peak}} → {{month .trough}}) is distorted by deposits - trust the growth-index figure above.</p>{{end}}
+</section>

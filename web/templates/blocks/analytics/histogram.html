@@ -1,0 +1,8 @@
+<section class="card">
+  <h2>Monthly return distribution</h2>
+  <p class="card-sub">How many months landed in each return band - the bars count months, the bands are monthly returns.</p>
+  <div class="chart-box"><canvas id="chart-histogram"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-histogram" data-type="bar" data-plain="1">
+    {{json .Charts.Histogram}}
+  </script>
+</section>

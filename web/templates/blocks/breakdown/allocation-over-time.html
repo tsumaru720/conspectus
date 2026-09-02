@@ -1,0 +1,19 @@
+{{/* The class-split view only means something portfolio-wide: when the
+     page is scoped to one asset/class, this chart is noise. Stacked by
+     default; the Stacked/Lines toggle re-scales the chart in place
+     (localStorage "allocation.stack", no reload). */}}{{if not (or .Scope.AssetID .Scope.ClassID)}}
+<section class="card">
+  <div class="card-head">
+    <h2>Allocation over time</h2>
+    <div class="range-picker" data-alloc-stack>
+      <span class="rp-label">View</span>
+      <button type="button" class="rp-link active" data-stack-toggle="stacked">Stacked</button>
+      <button type="button" class="rp-link" data-stack-toggle="lines">Lines</button>
+    </div>
+  </div>
+  <div class="chart-box"><canvas id="chart-alloc-time"></canvas></div>
+    <script type="application/json" class="chart-data" data-chart="chart-alloc-time" data-type="line" data-stacked="1" data-filled="1" data-pastel="1" data-tooltip-single="1">
+    {{json .Charts.AllocationOverTime}}
+  </script>
+</section>
+{{end}}

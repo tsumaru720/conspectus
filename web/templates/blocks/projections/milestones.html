@@ -1,0 +1,16 @@
+<section class="card">
+  <h2>Milestones</h2>
+  {{if .P.milestones}}
+  <p class="card-sub">When the typical (median) path first reaches each target. “Already reached” means today's value ({{money .Track.ValueNow}}) is past the target - the projection starts from today, so there is no future date for it. Progress is today's value as a share of the target.</p>
+  <table class="table">
+    <thead><tr><th>Target</th><th class="num">Progress</th><th>ETA</th><th class="num">Months away</th></tr></thead>
+    <tbody>{{range .P.milestones}}<tr>
+      <td>{{money .target}}</td>
+      <td class="num">{{pct .progress}}</td>
+      {{if .already}}<td><span class="pill pill-open">already reached</span></td><td class="num">—</td>
+      {{else if .reached}}<td>{{month .date}}</td><td class="num">{{.months}}</td>
+      {{else}}<td class="down">not within horizon</td><td class="num">—</td>{{end}}
+    </tr>{{end}}</tbody>
+  </table>
+  {{else}}<p class="empty">No milestone targets configured (settings key <code>projection_targets</code>).</p>{{end}}
+</section>

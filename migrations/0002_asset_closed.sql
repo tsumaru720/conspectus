@@ -1,0 +1,1 @@
+ALTER TABLE asset_list ADD closed BOOLEAN NOT NULL DEFAULT FALSE AFTER description;

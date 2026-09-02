@@ -1,0 +1,32 @@
+<section class="kpi-grid">
+  <div class="kpi">
+    <span class="kpi-label">Total deposited</span>
+    <span class="kpi-value">{{money .O.deposits}}</span>
+    {{with .O.delta_1m}}<span class="kpi-delta {{if pos .deposits}}up{{else}}down{{end}}">{{money .deposits}} this month</span>{{end}}
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Net worth</span>
+    <span class="kpi-value">{{money .O.value}}</span>
+    {{with .O.delta_1m}}<span class="kpi-delta {{if pos .value}}up{{else}}down{{end}}">{{money .value}} vs last month</span>{{end}}
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Total return</span>
+    <span class="kpi-value {{if pos .O.return}}up{{else}}down{{end}}">{{money .O.return}}</span>
+    <span class="kpi-delta {{if pos .O.return}}up{{else}}down{{end}}">{{pct .O.return_pct}}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">TWRR (cumulative)</span>
+    <span class="kpi-value {{if pos .O.twrr}}up{{else}}down{{end}}">{{pct .O.twrr}}</span>
+    {{with .O.delta_1y}}<span class="kpi-delta">{{pct .twrr}} in 12m</span>{{end}}
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">TWRR (income-aware)</span>
+    <span class="kpi-value {{if pos .O.twrr_adj}}up{{else}}down{{end}}">{{pct .O.twrr_adj}}</span>
+    {{with .O.delta_1y}}<span class="kpi-delta">{{pct .twrr_adj}} in 12m</span>{{end}}
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Annualised (CAGR)</span>
+    <span class="kpi-value {{if pos .O.cagr}}up{{else}}down{{end}}">{{pct .O.cagr}}</span>
+    <span class="kpi-delta">{{.O.months}} months · {{.O.assets}} assets</span>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+<section class="card">
+  <h2>Returns</h2>
+  <div class="two-col">
+    <div><h3>Time-weighted return</h3><div class="chart-box"><canvas id="chart-asset-return"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-asset-return" data-type="line" data-percent="1">{{json .Charts.TWRR}}</script>
+    </div>
+    <div><h3>Monthly payments</h3>{{if .HasPayments}}<div class="chart-box"><canvas id="chart-asset-payments-bar"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-asset-payments-bar" data-type="bar">{{json .Charts.PaymentsBar}}</script>
+      {{else}}<p class="empty">No payments in this period.</p>{{end}}
+    </div>
+  </div>
+</section>

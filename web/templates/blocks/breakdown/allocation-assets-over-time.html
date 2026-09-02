@@ -1,0 +1,15 @@
+{{/* Unlike the class-split chart, per-asset growth stays meaningful when
+     scoped: the stats service already filters the series to the scoped
+     class, so a class page gets exactly its constituent assets. Only the
+     single-asset scope hides it (one line would just duplicate the asset's
+     own chart). */}}{{if not .Scope.AssetID}}
+<section class="card">
+  <h2>Asset growth over time</h2>
+  {{if .Scope.ClassID}}<p class="card-sub">Each asset in {{.Scope.Label}}, month by month - closed accounts included up to their final snapshot.</p>
+  {{else}}<p class="card-sub">Every asset's value, month by month - closed accounts included up to their final snapshot, so the full history of the portfolio stays visible.</p>{{end}}
+  <div class="chart-box chart-box-tall"><canvas id="chart-assets-time"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-assets-time" data-type="line" data-stacked="1" data-filled="1" data-pastel="1" data-tooltip-single="1">
+    {{json .Charts.AssetsOverTime}}
+  </script>
+</section>
+{{end}}

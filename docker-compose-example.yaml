@@ -1,0 +1,42 @@
+# Conspectus production sample: the published app image plus a MariaDB
+# database. Copy .env.example to .env, set the passwords, then
+# `docker compose up -d`. Already have a database? Drop the db service and
+# point CONSPECTUS_MYSQL_HOST at it instead.
+#
+# Development (locally built image, live-editable web/, sample data) lives
+# in dev/ - see docs/dev.md.
+
+services:
+  db:
+    image: mariadb:12.3
+    environment:
+      MARIADB_DATABASE: ${DATABASE:-asset_tracker}
+      MARIADB_USER: ${DB_USERNAME:-conspectus}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes: [db-data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    image: ghcr.io/tsumaru720/conspectus:latest
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      CONSPECTUS_MYSQL_HOST: db:3306
+      CONSPECTUS_MYSQL_USERNAME: ${DB_USERNAME:-conspectus}
+      CONSPECTUS_MYSQL_PASSWORD: ${DB_PASSWORD}
+      CONSPECTUS_MYSQL_DATABASE: ${DATABASE:-asset_tracker}
+      TZ: ${TZ:-UTC}
+    ports: ["8080:8080"]
+    restart: unless-stopped
+
+volumes:
+  db-data:

@@ -1,0 +1,19 @@
+<section class="card">
+  <h2>Yearly track record</h2>
+  {{if .Track.Rows}}
+  <p class="card-sub">Every <strong>full</strong> calendar year of history, scored against the target pace{{if .Track.HasTarget}} - what the target curve demanded at that year's end (the same required growth, extended backwards), so a green “ahead/behind” means you ended the year above/below the line. The running year is shown too: “target” is where this year must end, “actual” is where you are today.{{else}} - configure a target curve (settings key <code>projection_target_curve</code>, e.g. <code>{"value":100000,"year":2030}</code>) to score these years against a target pace.{{end}}</p>
+  <div class="chart-box"><canvas id="chart-yearly-track"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-yearly-track" data-type="bar">
+    {{json .Charts.YearlyTrack}}
+  </script>
+  <table class="table">
+    <thead><tr><th>Year</th><th class="num">Actual year-end</th>{{if .Track.HasTarget}}<th class="num">Target pace</th><th class="num">Ahead / behind</th>{{end}}</tr></thead>
+    <tbody>{{range .Track.Rows}}<tr>
+      <td>{{.Year}}{{if .Current}} <span class="badge" title="The running year: actual is today's value, target is this year's year-end requirement">in progress</span>{{end}}</td>
+      <td class="num">{{money .Actual}}</td>
+      {{if .HasTarget}}<td class="num">{{money .Required}}</td>
+      <td class="num {{if pos .Diff}}up{{else}}down{{end}}">{{if pos .Diff}}+{{end}}{{money .Diff}}</td>{{end}}
+    </tr>{{end}}</tbody>
+  </table>
+  {{else}}<p class="empty">No full calendar years of history yet.</p>{{end}}
+</section>

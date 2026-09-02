@@ -1,0 +1,10 @@
+{{define "page-title"}}Overview{{end}}
+{{template "partials/header.html" .}}
+<div class="page-head">
+  <h1>Overview{{with .Scope.Label}} <span class="scope-chip">{{.}}</span>{{end}}</h1>
+  {{template "partials/range-picker.html" .}}
+</div>
+{{template "partials/browse-picker.html" .}}
+{{if .O.notes}}{{range .O.notes}}<p class="note warn">{{.}}</p>{{end}}{{end}}
+{{range $b := .Blocks}}{{include (printf "blocks/%s/%s.html" $.Page $b) $}}{{end}}
+{{template "partials/footer.html" .}}

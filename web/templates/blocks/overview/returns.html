@@ -1,0 +1,25 @@
+<section class="card">
+  <h2>Return over time</h2>
+  <p class="card-sub">The money gap between what the holdings are worth and what you paid in (value − deposits), month by month.</p>
+  <div class="chart-box"><canvas id="chart-return"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-return" data-type="line">
+    {{json .Charts.Return}}
+  </script>
+</section>
+
+<section class="card">
+  <h2>Returns</h2>
+  <p class="card-sub">Time-weighted return: cumulative TWRR and the income-aware variant - how the held money has grown, ignoring deposit timing. Income received: the running total of payments paid out by the whole portfolio.</p>
+  <div class="two-col">
+    <div><h3>Time-weighted return</h3><div class="chart-box"><canvas id="chart-twrr"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-twrr" data-type="line" data-percent="1">
+        {{json .Charts.TWRR}}
+      </script>
+    </div>
+    <div><h3>Income received</h3><div class="chart-box"><canvas id="chart-income-cumulative"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-income-cumulative" data-type="line" data-filled="1">
+        {{json .Charts.IncomeCumulative}}
+      </script>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<section class="card">
+  <h2>Projection targets</h2>
+  <p class="hint">Milestone amounts the projections page tracks progress against. Leave empty for no targets - projections still work without them. Amounts you add are merged with the ones below, sorted, and saved as one list. Removing a target updates this list in place.</p>
+  <div id="targets-list">
+    {{if .ProjectionTargetList}}
+    <table class="table">
+      <thead><tr><th>Target</th><th class="row-actions-head">Actions</th></tr></thead>
+      <tbody>
+        {{range .ProjectionTargetList}}<tr>
+          <td>{{money .}}</td>
+          <td class="row-actions">
+            <form method="post" action="/projections/targets/delete" class="inline js-target-del">
+              <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+              <input type="hidden" name="value" value="{{.}}">
+              <button class="btn-sm danger" type="submit" title="Remove target" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-trash" .}}Remove</button>
+            </form>
+          </td>
+        </tr>{{end}}
+      </tbody>
+    </table>
+    {{else}}
+    <p class="hint js-targets-empty">No targets set.</p>
+    {{end}}
+  </div>
+  <form method="post" action="/projections/settings" class="stack">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <label>Add targets (comma-separated amounts) <input type="text" name="targets" placeholder="100000, 250000, 500000"></label>
+    <button type="submit" {{if .Settings.read_only}}disabled{{end}}>Add targets</button>
+  </form>
+</section>

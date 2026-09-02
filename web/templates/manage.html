@@ -1,0 +1,157 @@
+{{template "partials/header.html" .}}
+
+{{define "mgmt-icon-save"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>{{end}}
+{{define "mgmt-icon-close"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>{{end}}
+{{define "mgmt-icon-reopen"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9 14 2-2 2 2"/><path d="M12 12v6"/></svg>{{end}}
+{{define "mgmt-icon-trash"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>{{end}}
+
+<div class="page-head"><h1>Manage</h1></div>
+
+<section class="card">
+  <h2>Classes</h2>
+  <h3>New class</h3>
+  <form method="post" action="/manage/class/create" class="stack">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <label>Description <input type="text" name="description" required maxlength="20"></label>
+    <button type="submit" {{if .Settings.read_only}}disabled{{end}}>Create class</button>
+  </form>
+  <details class="collapse" data-store-open="manage.classes" {{if not (gt (len .ClassRows) 15)}}open{{end}}>
+    <summary>Classes ({{len .ClassRows}})</summary>
+    <table class="table">
+    <thead><tr><th>Class</th><th>Assets</th><th>Actions</th></tr></thead>
+    <tbody>
+      {{range .ClassRows}}<tr>
+        <td>
+          <form method="post" action="/manage/class/update" class="edit-row">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <input type="text" name="description" value="{{.Description}}" class="row-name" maxlength="20" aria-label="Class name">
+            <button class="btn-sm" type="submit" title="Save class name" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-save" .}}Save</button>
+          </form>
+        </td>
+        <td class="num">{{.Count}}</td>
+        <td class="row-actions">
+          <form method="post" action="/manage/class/delete" class="inline" onsubmit="return confirm('Delete this class? Assets must be moved to another class first.');">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button class="btn-sm danger" type="submit" title="Delete class" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-trash" .}}Delete</button>
+          </form>
+        </td>
+      </tr>{{end}}
+    </tbody>
+  </table>
+  </details>
+</section>
+
+<section class="card">
+  <h2>Open accounts</h2>
+  <h3>New asset</h3>
+  <form method="post" action="/manage/asset/create" class="stack">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <label>Description <input type="text" name="description" required maxlength="40"></label>
+    <label>Class
+      <select name="class_id" required>{{range .ClassRows}}<option value="{{.ID}}">{{.Description}}</option>{{end}}</select>
+    </label>
+    <button type="submit" {{if .Settings.read_only}}disabled{{end}}>Create asset</button>
+  </form>
+  <details class="collapse" data-store-open="manage.openAccounts" {{if not (gt .OpenCount 15)}}open{{end}}>
+    <summary>Open accounts ({{.OpenCount}})</summary>
+    <p><input type="search" id="asset-filter" class="asset-filter" placeholder="Filter assets…"></p>
+    <table class="table">
+    <thead><tr><th>Asset</th><th class="row-actions-head">Actions</th></tr></thead>
+    <tbody>
+      {{range .Assets}}{{if not .Closed}}<tr data-asset-row="{{.Description}}">
+        <td>
+          <form method="post" action="/manage/asset/update" class="edit-row">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <input type="text" name="description" value="{{.Description}}" class="row-name" maxlength="40" aria-label="Asset name">
+            <select name="class_id" class="row-class" aria-label="Class" {{if $.Settings.read_only}}disabled{{end}}>
+              {{$cid := .ClassID}}{{range $.ClassRows}}<option value="{{.ID}}" {{if eq .ID $cid}}selected{{end}}>{{.Description}}</option>{{end}}
+            </select>
+            <button class="btn-sm" type="submit" title="Save name and class" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-save" .}}Save</button>
+          </form>
+        </td>
+        <td class="row-actions">
+          <a class="btn-sm secondary" href="/asset/{{.ID}}" title="Open the asset page">View</a>
+          <form method="post" action="/manage/asset/close" class="inline">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button class="btn-sm secondary" type="submit" title="Close asset (keeps its history)" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-close" .}}Close</button>
+          </form>
+          <form method="post" action="/manage/asset/delete" class="inline" onsubmit="return confirm('Delete {{.Description}} and all of its history? This cannot be undone.');">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button class="btn-sm danger" type="submit" title="Delete asset permanently" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-trash" .}}Delete</button>
+          </form>
+        </td>
+      </tr>{{end}}{{end}}
+    </tbody>
+  </table>
+  </details>
+</section>
+
+<section class="card">
+  <details class="collapse" data-store-open="manage.closedOpen">
+    <summary>Closed accounts</summary>
+    <p><input type="search" class="asset-filter" placeholder="Filter assets…"></p>
+    <table class="table">
+    <thead><tr><th>Asset</th><th class="row-actions-head">Actions</th></tr></thead>
+    <tbody>
+      {{range .Assets}}{{if .Closed}}<tr data-asset-row="{{.Description}}">
+        <td>
+          <form method="post" action="/manage/asset/update" class="edit-row">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <input type="text" name="description" value="{{.Description}}" class="row-name" maxlength="40" aria-label="Asset name">
+            <select name="class_id" class="row-class" aria-label="Class" {{if $.Settings.read_only}}disabled{{end}}>
+              {{$cid := .ClassID}}{{range $.ClassRows}}<option value="{{.ID}}" {{if eq .ID $cid}}selected{{end}}>{{.Description}}</option>{{end}}
+            </select>
+            <button class="btn-sm" type="submit" title="Save name and class" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-save" .}}Save</button>
+          </form>
+        </td>
+        <td class="row-actions">
+          <a class="btn-sm secondary" href="/asset/{{.ID}}" title="Open the asset page">View</a>
+          <form method="post" action="/manage/asset/reopen" class="inline">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button class="btn-sm secondary" type="submit" title="Reopen asset" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-reopen" .}}Reopen</button>
+          </form>
+          <form method="post" action="/manage/asset/delete" class="inline" onsubmit="return confirm('Delete {{.Description}} and all of its history? This cannot be undone.');">
+            <input type="hidden" name="csrf_token" value="{{$.CSRF}}">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button class="btn-sm danger" type="submit" title="Delete asset permanently" {{if $.Settings.read_only}}disabled{{end}}>{{template "mgmt-icon-trash" .}}Delete</button>
+          </form>
+        </td>
+      </tr>{{end}}{{end}}
+    </tbody>
+  </table>
+  </details>
+</section>
+
+{{if .DisplaySettings}}
+<section class="card">
+  <h2>Settings</h2>
+  <table class="table">
+    <tbody>
+      {{range .DisplaySettings}}<tr><th>{{.description}}</th><td>{{.value}}</td></tr>{{end}}
+    </tbody>
+  </table>
+</section>
+{{end}}
+
+{{/* Page-specific settings blocks (e.g. projection targets) render here. */}}
+{{range $b := .Blocks}}{{include (printf "blocks/%s/%s.html" $.Page $b) $}}{{end}}
+
+<section class="card">
+  <h2>System</h2>
+  <table class="table">
+    <tbody>
+      <tr><th>Version</th><td>{{.System.version}} ({{.System.commit}})</td></tr>
+      <tr><th>Schema</th><td>{{.System.schema_version}} / expected {{.System.expected_schema_version}}</td></tr>
+      <tr><th>Read-only</th><td>{{.Settings.read_only}} (CONSPECTUS_READ_ONLY)</td></tr>
+      <tr><th>Routes</th><td>{{.System.routes}}</td></tr>
+    </tbody>
+  </table>
+</section>
+{{template "partials/footer.html" .}}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Title}} · Conspectus</title>
+<script>
+/* No-flash light/dark bootstrap: runs before first paint. */
+(function () {
+  var t = localStorage.getItem("theme");
+  if (!t) t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+<link rel="stylesheet" href="{{asset "css/style.css"}}">
+</head>
+<body data-currency-symbol="{{.currency_symbol}}" data-page="{{.Page}}" data-readonly="{{if .Settings.read_only}}1{{end}}">
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">Conspectus</a>
+    <nav class="site-nav">
+      {{/* An asset/class page is the overview of that one item, so it
+           lights up the Overview link. */}}
+      {{range .Nav}}<a href="{{.Path}}" class="{{if or (eq .Page $.Page) (and (eq .Page "overview") (or (eq $.Page "asset") (eq $.Page "class")))}}active{{end}}">{{.Label}}</a>{{end}}
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" title="Toggle light/dark" aria-label="Toggle colour scheme">◐</button>
+  </div>
+</header>
+{{if .Banner}}<div class="banner-banner">{{template "banner.html" .}}</div>{{end}}
+{{/* Flash messages ride the one-shot conspectus_flash cookie (set by the
+     POST-redirect); the server consumes it while rendering this page. */}}
+{{with .FlashOK}}<div class="banner-banner flash" style="background:var(--accent-soft)">{{.}}<button type="button" class="banner-close" aria-label="Dismiss">×</button></div>{{end}}
+{{with .FlashErr}}<div class="banner-banner flash down">{{.}}<button type="button" class="banner-close" aria-label="Dismiss">×</button></div>{{end}}
+<main class="wrap">

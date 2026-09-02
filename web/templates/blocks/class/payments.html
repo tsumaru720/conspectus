@@ -1,0 +1,11 @@
+<section class="card">
+  <h2>Payments ledger <span class="count">{{.PayPager.Total}}</span></h2>
+  {{if .Payments}}
+  <p class="hint">Every payment across the class's assets, newest first - edit or add them on the <a href="/ledger">ledger</a>.</p>
+  <table class="table">
+    <thead><tr><th>Date</th><th>Asset</th><th class="num">Amount</th></tr></thead>
+    <tbody id="class-payments-tbody">{{range .Payments}}<tr><td>{{.Date}}</td><td>{{.Asset}}</td><td class="num">{{money .Amount}}</td></tr>{{end}}</tbody>
+  </table>
+  {{template "partials/pagination.html" .PayPager}}
+  {{else}}<p class="empty">No payments recorded for this class yet.</p>{{end}}
+</section>

@@ -1,0 +1,12 @@
+<section class="card">
+  <h2>Income received</h2>
+  {{if .HasPayments}}
+  <div class="chart-box"><canvas id="chart-income-cumulative"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-income-cumulative" data-type="line" data-filled="1">{{json .Charts.IncomeCumulative}}</script>
+  <p class="card-sub">Payments paid <em>out</em> of this asset, per calendar year - the tax-season view. Reinvested income is already inside the asset value and is not counted here.</p>
+  <table class="table">
+    <thead><tr><th>Year</th><th class="num">Income received</th></tr></thead>
+    <tbody>{{range .IncomeYears}}<tr><td>{{.Year}}</td><td class="num">{{money .Amount}}</td></tr>{{end}}</tbody>
+  </table>
+  {{else}}<p class="empty">No payments recorded for this asset in the selected period. Record income on the <a href="/ledger">ledger</a> or in the payments ledger below.</p>{{end}}
+</section>

@@ -1,0 +1,8 @@
+{{template "partials/header.html" .}}
+<div class="page-head">
+  <h1>{{.Class.description}} <span class="scope-chip">class</span></h1>
+  {{template "partials/range-picker.html" .}}
+</div>
+{{template "partials/browse-picker.html" .}}
+{{range $b := .Blocks}}{{include (printf "blocks/%s/%s.html" $.Page $b) $}}{{end}}
+{{template "partials/footer.html" .}}
