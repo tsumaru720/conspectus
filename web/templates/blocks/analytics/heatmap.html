@@ -1,0 +1,13 @@
+<section class="card">
+  <h2>Seasonality heatmap</h2>
+  <p class="card-sub">Each cell is one month's portfolio return (the growth that month, deposits excluded): <span class="up">green</span> means the month gained and <span class="down">red</span> means it lost, with stronger colour for bigger moves (full strength at ±8%). Read along a row to see how a year unfolded; read down a column to compare the same month across years.</p>
+  <table class="heatmap">
+    <thead><tr><th></th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th></tr></thead>
+    <tbody>
+      {{range .HeatmapRows}}<tr>
+        <th>{{.Year}}</th>
+        {{range .Cells}}<td class="hm-cell {{if .Neg}}hm-down{{else}}hm-up{{end}}" style="--v: {{.V}}">{{if .Ret}}{{.Ret}}{{else}}–{{end}}</td>{{end}}
+      </tr>{{end}}
+    </tbody>
+  </table>
+</section>

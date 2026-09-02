@@ -1,0 +1,19 @@
+<section class="card">
+  <h2>Monthly changes</h2>
+  <div class="two-col">
+    <div>
+      <h3>Change in return</h3>
+      <div class="chart-box"><canvas id="chart-dreturn"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-dreturn" data-type="bar" data-sign-color="1">
+        {{json .Charts.MonthlyReturn}}
+      </script>
+    </div>
+    <div>
+      <h3>Change in deposits</h3>
+      <div class="chart-box"><canvas id="chart-deposits"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-deposits" data-type="bar" data-sign-color="1">
+        {{json .Charts.MonthlyDeposits}}
+      </script>
+    </div>
+  </div>
+</section>

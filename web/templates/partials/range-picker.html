@@ -1,0 +1,18 @@
+{{/* Range picker: the choice persists in localStorage (conspectus.ui) and
+     is mirrored into the conspectus_ui cookie so the server renders the
+     right window on the next load - the URL never carries a query string.
+     Presets recompute from the latest month. */}}
+<div class="range-picker" data-range-picker>
+  <span class="rp-label">Range</span>
+  <button type="button" class="rp-link{{if eq .RangeActive "3m"}} active{{end}}" data-set-from="{{.RangePresets.m3}}" data-set-to="">3m</button>
+  <button type="button" class="rp-link{{if eq .RangeActive "6m"}} active{{end}}" data-set-from="{{.RangePresets.m6}}" data-set-to="">6m</button>
+  <button type="button" class="rp-link{{if eq .RangeActive "ytd"}} active{{end}}" data-set-from="{{.RangePresets.ytd}}" data-set-to="">YTD</button>
+  <button type="button" class="rp-link{{if eq .RangeActive "1y"}} active{{end}}" data-set-from="{{.RangePresets.y1}}" data-set-to="">1y</button>
+  <button type="button" class="rp-link{{if eq .RangeActive "5y"}} active{{end}}" data-set-from="{{.RangePresets.y5}}" data-set-to="">5y</button>
+  <button type="button" class="rp-link{{if eq .RangeActive "all"}} active{{end}}" data-set-from="" data-set-to="">All</button>
+  <form class="rp-custom" data-range-custom>
+    <input type="month" name="from" value="{{qp .Query "from"}}" placeholder="From" pattern="\d{4}-(0[1-9]|1[0-2])" title="YYYY-MM">
+    <input type="month" name="to" value="{{qp .Query "to"}}" placeholder="To" pattern="\d{4}-(0[1-9]|1[0-2])" title="YYYY-MM">
+    <button type="submit">Go</button>
+  </form>
+</div>

@@ -1,0 +1,23 @@
+{{/* Pagination. Context is a "pager" map: PageURL builds the
+     path-based href for page n (/ledger/logs/2 - no query strings), Window
+     is the ±2 page numbers around Page. When Endpoint is set, app.js
+     fetches pages from that JSON endpoint and swaps the table body in
+     place; Prev/Next are always rendered and shown/hidden via the
+     no-prev/no-next classes. */}}
+{{$key := .Key}}{{if not $key}}{{$key = "page"}}{{end}}
+{{$pp := .PerPage}}
+{{if gt .TotalPages 1}}
+<nav class="pagination" data-totalpages="{{.TotalPages}}" data-total="{{.Total}}" data-perpage="{{$pp}}" data-url-tpl="{{.URLTpl}}"{{if .Endpoint}} data-endpoint="{{.Endpoint}}" data-target="{{.Target}}" data-kind="{{.Kind}}" data-page-key="{{$key}}" data-page="{{.Page}}"{{end}}>
+  <a class="pager-prev" data-page="{{sub .Page 1}}" href="{{call .PageURL (sub .Page 1)}}">&larr; Prev</a>
+  <span class="pager-pages-wrap">
+    {{if .ShowFirst}}<a class="pager-num" data-page="1" href="{{call .PageURL 1}}">1</a><span class="dots">…</span>{{end}}{{range .Window}}<a class="pager-num{{if eq . $.Page}} current{{end}}" data-page="{{.}}" href="{{call $.PageURL .}}">{{.}}</a>{{end}}{{if .ShowLast}}<span class="dots">…</span><a class="pager-num" data-page="{{.TotalPages}}" href="{{call .PageURL .TotalPages}}">{{.TotalPages}}</a>{{end}}
+  </span>
+  <span class="page-info">Page {{.Page}} of {{.TotalPages}}{{with .Total}} · {{.}} rows{{end}}</span>
+  <a class="pager-next" data-page="{{add .Page 1}}" href="{{call .PageURL (add .Page 1)}}">Next &rarr;</a>
+  <label class="perpage">Rows
+    <select data-perpage-select>
+      {{range .Choices}}<option value="{{.}}" {{if or (eq . $pp) (and (not $pp) (eq . "20"))}}selected{{end}}>{{if eq . "all"}}All{{else}}{{.}}{{end}}</option>{{end}}
+    </select>
+  </label>
+</nav>
+{{end}}

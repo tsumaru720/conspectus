@@ -1,0 +1,18 @@
+{{template "partials/header.html" .}}
+<div class="page-head">
+  <h1>Projections{{with .Scope.Label}} <span class="scope-chip">{{.}}</span>{{end}}</h1>
+  <div class="range-picker" data-proj-picker>
+    <span class="rp-label">Horizon</span>
+    <button type="button" class="rp-link{{if eq .P.horizon_months 24}} active{{end}}" data-set-horizon="24">2y</button>
+    <button type="button" class="rp-link{{if eq .P.horizon_months 60}} active{{end}}" data-set-horizon="60">5y</button>
+    <button type="button" class="rp-link{{if eq .P.horizon_months 120}} active{{end}}" data-set-horizon="120">10y</button>
+    <button type="button" class="rp-link{{if eq .P.horizon_months 240}} active{{end}}" data-set-horizon="240">20y</button>
+    <span class="rp-label">History window</span>
+    <button type="button" class="rp-link{{if eq .P.assumptions.window "all"}} active{{end}}" data-set-window="">All</button>
+    <button type="button" class="rp-link{{if eq .P.assumptions.window "60"}} active{{end}}" data-set-window="60">5y</button>
+    <button type="button" class="rp-link{{if eq .P.assumptions.window "36"}} active{{end}}" data-set-window="36">3y</button>
+  </div>
+</div>
+{{template "partials/browse-picker.html" .}}
+{{range $b := .Blocks}}{{include (printf "blocks/%s/%s.html" $.Page $b) $}}{{end}}
+{{template "partials/footer.html" .}}

@@ -1,0 +1,18 @@
+<section class="card">
+  <h2>By year</h2>
+  <p class="card-sub">How each calendar year moved the total: the <strong>start</strong> value, plus <strong>deposits</strong> you put in, plus <strong>growth</strong> the investments earned, minus <strong>income</strong> paid out, equals the <strong>end</strong> value - start + deposits + growth − income = end. TWRR is the time-weighted return with income excluded; TWRR (income-aware) counts payments as return.</p>
+  <table class="table">
+    <thead><tr><th>Year</th><th class="num">Start</th><th class="num">End</th><th class="num">Δ%</th><th class="num">Deposits</th><th class="num">Growth</th><th class="num">Income</th><th class="num" title="Time-weighted return, income excluded">TWRR</th><th class="num" title="Time-weighted return with payments counted as return">TWRR (income-aware)</th></tr></thead>
+    <tbody>{{range .A.yearly}}<tr>
+      <td>{{.year}}</td>
+      <td class="num">{{money .start}}</td>
+      <td class="num">{{money .end}}</td>
+      <td class="num {{if pos .change_pct}}up{{else}}down{{end}}">{{pct .change_pct}}</td>
+      <td class="num {{if pos .deposits}}up{{else}}down{{end}}">{{money .deposits}}</td>
+      <td class="num {{if pos .growth}}up{{else}}down{{end}}">{{money .growth}}</td>
+      <td class="num {{if pos .income}}up{{else}}down{{end}}">{{money .income}}</td>
+      <td class="num {{if pos .twrr}}up{{else}}down{{end}}">{{pct .twrr}}</td>
+      <td class="num {{if pos .twrr_adj}}up{{else}}down{{end}}">{{pct .twrr_adj}}</td>
+    </tr>{{end}}</tbody>
+  </table>
+</section>

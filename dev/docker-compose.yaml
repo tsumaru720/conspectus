@@ -1,0 +1,105 @@
+# Conspectus dev stack: one MariaDB, the app (built locally), Adminer, plus a
+# throwaway Go toolchain service. Everything runs from this directory:
+#
+#   cd dev
+#   docker compose up -d --build      # build + start
+#   docker compose logs -f app        # follow app logs
+#   docker compose down               # stop (data volume is kept)
+#   docker compose down -v            # stop AND wipe data
+#   docker compose run --rm go test ./...   # Go build/vet/test (docs/dev.md)
+#
+# On the very first start (empty db-data volume) the MariaDB entrypoint
+# imports conspectus.sql as sample data; the app then auto-migrates on top
+# of it (the dump carries db_version=5, so only migration 0006 applies).
+# `down -v` wipes the volume, so the next `up` re-imports the dump.
+#
+#   App:     http://127.0.0.1:8090  (host 8080 is taken by another service)
+#   Adminer: http://127.0.0.1:8091  (DB browser - server: db, user conspectus)
+#   MariaDB: 127.0.0.1:13306
+#
+# Credentials and ports can be overridden in a .env file next to this file.
+
+name: conspectus
+
+services:
+  db:
+    image: mariadb:12.3
+    container_name: conspectus-db
+    environment:
+      MARIADB_DATABASE: ${DATABASE:-asset_tracker}
+      MARIADB_USER: ${DB_USERNAME:-conspectus}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-conspectus}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-devroot}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "127.0.0.1:${DB_PORT:-13306}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../conspectus.sql:/docker-entrypoint-initdb.d/01-conspectus.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: { context: .., dockerfile: dev/Dockerfile }
+    container_name: conspectus-app
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      CONSPECTUS_MYSQL_HOST: ${DB_HOST:-db}
+      CONSPECTUS_MYSQL_USERNAME: ${DB_USERNAME:-conspectus}
+      CONSPECTUS_MYSQL_PASSWORD: ${DB_PASSWORD:-conspectus}
+      CONSPECTUS_MYSQL_DATABASE: ${DATABASE:-asset_tracker}
+      TZ: ${TZ:-UTC}
+      # debug also logs the pages' internal API calls (the loopback traffic).
+      CONSPECTUS_LOG_LEVEL: ${LOG_LEVEL:-debug}
+      CONSPECTUS_BANNER_TEXT: "Development Build - {{version}}"
+      # Set READ_ONLY=true in .env to hard-lock every mutating route (API and
+      # forms) - a viewer instance that cannot edit anything.
+      CONSPECTUS_READ_ONLY: ${READ_ONLY:-false}
+    ports:
+      - "127.0.0.1:${APP_PORT:-8090}:8080"
+    volumes:
+      # Dev conveniences only - the image works without them. web/: edit
+      # templates/assets and restart the container, no rebuild. migrations/:
+      # bind-mounted over the image-baked copies (wipe the db volume to
+      # replay the chain).
+      - ../web:/app/web
+      - ../migrations:/app/migrations
+    restart: unless-stopped
+
+  dbadmin:
+    image: adminer:6
+    container_name: conspectus-adminer
+    depends_on:
+      - db
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - "127.0.0.1:${ADMINER_PORT:-8091}:8080"
+    restart: unless-stopped
+
+  # Throwaway Go toolchain (profile "tools", never started by `up`):
+  #   docker compose run --rm go build ./...
+  go:
+    image: golang:1.27-alpine
+    profiles: ["tools"]
+    working_dir: /src
+    entrypoint: ["go"]
+    # MySQL-backed tests run by default here (they skip politely when the
+    # stack's database is down, and default to root:devroot@db:3306).
+    environment:
+      CONSPECTUS_TEST_MYSQL: 1
+    volumes:
+      - ..:/src
+      - go-mod:/go/pkg/mod
+      - go-build:/root/.cache/go-build
+
+volumes:
+  db-data:
+  go-mod:
+  go-build:

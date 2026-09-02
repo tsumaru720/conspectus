@@ -1,0 +1,86 @@
+{{template "partials/header.html" .}}
+<div class="page-head"><h1>Import</h1></div>
+
+<section class="card">
+  <h2>CSV import - monthly update</h2>
+  <p class="card-sub">The spreadsheet dump format: <code>&lt;id&gt;,&lt;name&gt;,&lt;deposit&gt;,&lt;current value&gt;</code>. Only the id, deposit and value columns are read - the name and any extra columns are discarded. Each applied row writes a snapshot for that asset in the month of the snapshot date (replacing it if one already exists); income goes on the <a href="/ledger">ledger</a> instead.</p>
+  <details class="chart-fallback">
+    <summary>CSV format guide</summary>
+    <table class="table">
+      <thead><tr><th>Column</th><th>Used</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>yes</td><td>The asset id (Manage page / <code>/asset/&lt;id&gt;</code>). Rows without an id are skipped, so header rows and blank spreadsheet padding need no cleanup - their name column still shows in the preview. An id that matches no asset is warned about and skipped.</td></tr>
+        <tr><td><code>name</code></td><td>no</td><td>Whatever the spreadsheet calls it - ignored, shown in the preview for orientation only.</td></tr>
+        <tr><td><code>deposit</code></td><td>yes</td><td><strong>Cumulative</strong> total deposited into the asset so far. Tolerates <code>£2,500.00</code>-style noise.</td></tr>
+        <tr><td><code>value</code></td><td>yes</td><td>The asset's current value.</td></tr>
+        <tr><td>anything else</td><td>no</td><td>Discarded.</td></tr>
+      </tbody>
+    </table>
+    <p class="hint">Preview first: every row is validated against the database before anything is written. Rows targeting <strong>closed assets</strong> are warned about and not applied, and the commit warns you when it ended up updating nothing for the chosen month. Validation errors (bad amounts) block the commit.</p>
+  </details>
+  <form method="post" action="/import/csv/preview" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <p><label>Snapshot date <input type="date" name="date" value="{{.CSVDate}}" required></label></p>
+    <p><input type="file" name="file" accept=".csv,text/csv" required {{if .Settings.read_only}}disabled{{end}}></p>
+    <p><button type="submit" class="secondary" {{if .Settings.read_only}}disabled{{end}}>Preview</button></p>
+  </form>
+  {{if .CSVReport}}
+  <div class="report">
+    <strong>Preview: {{.CSVReport.creates}} new, {{.CSVReport.updates}} replacing an existing entry, {{.CSVReport.skipped}} skipped{{if .CSVReport.errors}}, {{.CSVReport.errors}} errors{{end}}</strong>
+    {{range .CSVReport.warnings}}<p class="hint"><strong class="down">Warning:</strong> {{.}}</p>{{end}}
+    {{if .CSVReport.rows}}
+    <table class="table">
+      <thead><tr><th>Line</th><th class="num">ID</th><th>Name</th><th class="num">Deposit</th><th class="num">Value</th><th>Status</th></tr></thead>
+      <tbody>{{range .CSVReport.rows}}<tr>
+        <td>{{.line}}</td><td class="num">{{.id}}</td><td>{{.asset}}</td>
+        <td class="num">{{.deposit}}</td><td class="num">{{.value}}</td>
+        <td>{{if .error}}<span class="down">{{.error}}</span>{{else if .action}}<span class="up">{{.status}}</span>{{else}}<span class="hint">{{.status}}</span>{{end}}</td>
+      </tr>{{end}}</tbody>
+    </table>{{end}}
+    {{if .CSVReport.commitToken}}
+    <form method="post" action="/import/csv/commit">
+      <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+      <input type="hidden" name="token" value="{{.CSVReport.commitToken}}">
+      <p><button type="submit" {{if or .Settings.read_only (gt .CSVReport.errors 0)}}disabled{{end}}>Commit ({{.CSVReport.creates}} new, {{.CSVReport.updates}} updated)</button></p>
+    </form>
+    {{end}}
+  </div>
+  {{end}}
+</section>
+
+{{if not .CSVReport}}
+<section class="card">
+  <h2>Quick update - monthly snapshot</h2>
+  <p class="card-sub">One row per open asset, pre-filled with the latest figures. Change what changed, leave the rest; submit records this month's snapshot ({{if .Settings.read_only}}<strong class="down">read-only mode is on</strong>{{end}}). Amounts accept <code>£</code>/<code>$</code>/commas paste.</p>
+  {{if .QuickReport}}
+  <div class="report">
+    <strong>Result for {{.QuickReport.date}}:</strong>
+    written {{.QuickReport.written}}, replaced {{.QuickReport.replaced}}
+    {{if .QuickReport.skipped}}· skipped:
+    <ul>{{range .QuickReport.skipped}}<li>asset {{.asset_id}} - {{.reason}}</li>{{end}}</ul>{{end}}
+    {{if .QuickReport.duplicates}}<p class="hint">Duplicates: {{range .QuickReport.duplicates}}asset {{.asset_id}} {{.action}}; {{end}}</p>{{end}}
+  </div>
+  {{end}}
+  {{if .QuickRows}}
+  <form method="post" action="/import/quick" class="quick-grid-wrap">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <p><label>Snapshot date <input type="date" name="date" value="{{.QuickDate}}" required></label>
+       <label class="toggle"><input type="checkbox" name="on_duplicate" value="replace"> replace existing entries this month</label></p>
+    <table class="table quick-grid">
+      <thead><tr><th>Asset</th><th class="num">Deposits (cumulative)</th><th class="num">Value</th><th title="Tick to leave a row unchanged. The header box skips every row - tick it, then untick the ones you want to save.">Skip <input type="checkbox" data-skip-all title="Skip all rows"></th></tr></thead>
+      <tbody>
+        {{range .QuickRows}}<tr class="{{if .Stale}}stale{{end}}" title="{{if .Stale}}no entry for {{.MonthsSince}} months{{end}}">
+          <td>{{.Description}}{{if .Stale}} <span class="badge">stale</span>{{end}}</td>
+          <td class="num"><input type="text" inputmode="decimal" name="deposit_{{.ID}}" value="{{.Deposit}}"></td>
+          <td class="num"><input type="text" inputmode="decimal" name="value_{{.ID}}" value="{{.Value}}"></td>
+          <td><input type="checkbox" name="skip_{{.ID}}"></td>
+        </tr>{{end}}
+      </tbody>
+    </table>
+    <p><button type="submit" {{if .Settings.read_only}}disabled{{end}}>Save snapshot</button>
+    <span class="hint">Record income on the <a href="/ledger">ledger</a>, not here. Tab/Enter moves down a column.</span></p>
+  </form>
+  {{else}}<p class="empty">No open assets - create some in Manage first.</p>{{end}}
+</section>
+{{end}}
+{{template "partials/footer.html" .}}

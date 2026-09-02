@@ -1,0 +1,21 @@
+{{/* Monthly deltas for one asset - the same shape as the overview's
+     monthly-changes block but with page-unique canvas ids. */}}
+<section class="card">
+  <h2>Monthly changes</h2>
+  <div class="two-col">
+    <div>
+      <h3>Change in return</h3>
+      <div class="chart-box"><canvas id="chart-asset-dreturn"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-asset-dreturn" data-type="bar" data-sign-color="1">
+        {{json .Charts.MonthlyReturn}}
+      </script>
+    </div>
+    <div>
+      <h3>Change in deposits</h3>
+      <div class="chart-box"><canvas id="chart-asset-ddeposits"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-asset-ddeposits" data-type="bar" data-sign-color="1">
+        {{json .Charts.MonthlyChanges}}
+      </script>
+    </div>
+  </div>
+</section>

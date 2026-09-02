@@ -1,0 +1,8 @@
+<section class="card">
+  <h2>New money vs growth</h2>
+  <p class="card-sub">Where the wealth came from: deposits versus returns, monthly and cumulative.</p>
+  <div class="chart-box"><canvas id="chart-decomp"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-decomp" data-type="bar" data-stacked="1">
+    {{json .Charts.Decomposition}}
+  </script>
+</section>

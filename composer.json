@@ -1,7 +1,0 @@
-{
-    "require": {
-        "twig/twig": "^2.14.6",
-        "bramus/router": "^1.5",
-        "ext-pdo": "*"
-    }
-}

@@ -1,0 +1,28 @@
+<section class="card">
+  <h2>Assets</h2>
+  <p><input type="search" id="asset-filter" class="asset-filter" placeholder="Filter assets…"></p>
+  <table class="table" data-sortable>
+    <thead><tr>
+      <th data-sort="name">Asset</th>
+      <th data-sort="class">Class</th>
+      <th class="num" data-sort="value">Value</th>
+      <th class="num" data-sort="deposits">Deposits</th>
+      <th class="num" data-sort="ret">Return</th>
+      <th class="num" data-sort="ret_pct">R%</th>
+      <th class="num" data-sort="twrr">TWRR′</th>
+      <th class="num" data-sort="share">Share</th>
+    </tr></thead>
+    <tbody>
+      {{range .B.assets}}<tr data-asset-row="{{.description}}" data-name="{{.description}}" data-class="{{.class_name}}" data-value="{{.value}}" data-deposits="{{.deposits}}" data-ret="{{.return}}" data-ret_pct="{{.return_pct}}" data-twrr="{{.twrr_adj}}" data-share="{{.share}}">
+        <td><span class="chip" data-pastel="{{.description}}"></span> <a href="/asset/{{.asset_id}}">{{.description}}</a></td>
+        <td>{{if .class_name}}<a href="/class/{{.class_id}}">{{.class_name}}</a>{{else}}—{{end}}</td>
+        <td class="num">{{money .value}}</td>
+        <td class="num">{{money .deposits}}</td>
+        <td class="num {{if pos .return}}up{{else}}down{{end}}">{{money .return}}</td>
+        <td class="num">{{pct .return_pct}}</td>
+        <td class="num">{{pct .twrr_adj}}{{if .short_history}} <span class="badge">short</span>{{end}}</td>
+        <td class="num">{{pct .share}}</td>
+      </tr>{{end}}
+    </tbody>
+  </table>
+</section>

@@ -1,0 +1,16 @@
+{{/* Overview jumps to the chosen asset's/class's own page; breakdown,
+     analytics and projections stay and scope themselves via the path
+     routes (app.js saves the choice to localStorage and navigates). */}}
+<form class="scope-picker browse-picker">
+  <span class="rp-label">Browse</span>
+  <select name="asset_id" data-picker aria-label="Browse asset">
+    <option value="">Go to asset…</option>
+    <optgroup label="Open">{{range .Scope.AssetsOpen}}<option value="{{.id}}"{{if eq $.Scope.AssetID .id}} selected{{end}}>{{.name}}</option>{{end}}</optgroup>
+    <optgroup label="Closed">{{range .Scope.AssetsClosed}}<option value="{{.id}}" data-closed="1"{{if eq $.Scope.AssetID .id}} selected{{end}}>{{.name}} (closed)</option>{{end}}</optgroup>
+  </select>
+  <select name="class_id" data-picker aria-label="Browse class">
+    <option value="">Go to class…</option>
+    {{range .Scope.Classes}}<option value="{{.id}}"{{if eq $.Scope.ClassID .id}} selected{{end}}>{{.name}}</option>{{end}}
+  </select>
+  {{if and (or .Scope.AssetID .Scope.ClassID) .Scope.BasePath}}<a class="scope-clear" href="{{.Scope.BasePath}}" title="Clear the selection and show everything">✕ Clear</a>{{end}}
+</form>

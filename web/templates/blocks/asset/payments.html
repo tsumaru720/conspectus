@@ -1,0 +1,21 @@
+<section class="card">
+  <h2>Payments ledger <span class="count">{{.PayPager.Total}}</span></h2>
+  {{if .Payments}}
+  <p class="hint">Income this asset has paid <em>out</em>, newest first - also charted above. Everything is in the <a href="/ledger">ledger</a>.</p>
+  {{else}}<p class="empty">No payments recorded yet. Only record income paid <em>out</em> of the asset; reinvested income is already in the value.</p>{{end}}
+  <form method="post" action="/payments/quick" class="pay-form">
+    <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+    <input type="hidden" name="asset_id" value="{{.Asset.id}}">
+    <input type="hidden" name="return" value="/asset/{{.Asset.id}}">
+    <label>Date <input type="date" name="date" value="{{.Today}}" required></label>
+    <label>Amount <input type="text" name="amount" inputmode="decimal" placeholder="0.00" required></label>
+    <button type="submit" {{if .Settings.read_only}}disabled{{end}}>Add payment</button>
+  </form>
+  {{if .Payments}}
+  <table class="table">
+    <thead><tr><th>Date</th><th class="num">Amount</th></tr></thead>
+    <tbody id="asset-payments-tbody">{{range .Payments}}<tr><td>{{.Date}}</td><td class="num">{{money .Amount}}</td></tr>{{end}}</tbody>
+  </table>
+  {{template "partials/pagination.html" .PayPager}}
+  {{end}}
+</section>

@@ -1,0 +1,10 @@
+{{with .P.target_curve}}
+<section class="card">
+  <h2>Target curve</h2>
+  <p class="card-sub">To reach <strong>{{money .value}}</strong> by the end of <strong>{{.year}}</strong> with no new deposits, growth must run at <strong>{{pct .required_monthly}}</strong> per month ({{pct .required_cagr}} a year) for the {{.months_remaining}} months from {{month $.P.from_month}}. Each bar is the value required at that year's end to stay on that pace - deposits you add make the real requirement easier, so treat it as the no-new-money worst case.</p>
+  <div class="chart-box"><canvas id="chart-target"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-target" data-type="bar">
+    {{json $.Charts.TargetCurve}}
+  </script>
+</section>
+{{end}}

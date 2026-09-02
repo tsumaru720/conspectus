@@ -1,0 +1,27 @@
+{{/* The concentration measures were dropped from the page (HHI read as
+     noise, not signal); this block keeps the manifest order stable. */}}
+<section class="card">
+  <h2>Closed assets</h2>
+  {{if .B.closed.count}}
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-label">Closed</span><span class="kpi-value">{{.B.closed.count}}</span></div>
+    <div class="kpi"><span class="kpi-label">Deposited into closed</span><span class="kpi-value">{{money .B.closed.total_deposits}}</span></div>
+    <div class="kpi"><span class="kpi-label">Value extracted</span><span class="kpi-value">{{money .B.closed.total_value}}</span></div>
+    <div class="kpi"><span class="kpi-label">Realized gain</span><span class="kpi-value {{if pos .B.closed.realized_gain}}up{{else}}down{{end}}">{{money .B.closed.realized_gain}}</span></div>
+  </div>
+  <details>
+    <summary>Individual closed assets</summary>
+    <p><input type="search" class="asset-filter" placeholder="Filter assets…"></p>
+    <table class="table" data-sortable>
+      <thead><tr><th data-sort="name">Asset</th><th class="num" data-sort="deposits">Deposits</th><th class="num" data-sort="value">Value at close</th><th class="num" data-sort="gain">Gain</th><th data-sort="last">Last entry</th></tr></thead>
+      <tbody>{{range .B.closed.assets}}<tr data-asset-row="{{.description}}" data-name="{{.description}}" data-deposits="{{.deposits}}" data-value="{{.value}}" data-gain="{{.gain}}" data-last="{{.last_month}}">
+        <td><a href="/asset/{{.asset_id}}">{{.description}}</a></td>
+        <td class="num">{{money .deposits}}</td>
+        <td class="num">{{money .value}}</td>
+        <td class="num {{if pos .gain}}up{{else}}down{{end}}">{{money .gain}}</td>
+        <td>{{month .last_month}}</td>
+      </tr>{{end}}</tbody>
+    </table>
+  </details>
+  {{else}}<p class="empty">No closed assets.</p>{{end}}
+</section>

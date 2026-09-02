@@ -1,0 +1,12 @@
+<section class="card">
+  <h2>Per-year returns</h2>
+  <p class="card-sub">The by-year table, charted: income-adjusted TWRR counts payments as return; value change is the year-end move on the opening balance (no bar for the inception year, which has no opening value).</p>
+  <div class="two-col">
+    <div><h3>TWRR (income-aware)</h3><div class="chart-box"><canvas id="chart-yearly-twrr"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-yearly-twrr" data-type="bar" data-percent="1" data-sign-color="1">{{json .Charts.YearlyTWRR}}</script>
+    </div>
+    <div><h3>Value change</h3><div class="chart-box"><canvas id="chart-yearly-change"></canvas></div>
+      <script type="application/json" class="chart-data" data-chart="chart-yearly-change" data-type="bar" data-percent="1" data-sign-color="1">{{json .Charts.YearlyChange}}</script>
+    </div>
+  </div>
+</section>

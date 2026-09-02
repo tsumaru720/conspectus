@@ -1,0 +1,16 @@
+<section class="card">
+  <h2>Assets in this class</h2>
+  {{if .Assets}}
+  <table class="table">
+    <thead><tr><th>Asset</th><th class="num">Value</th><th class="num">Deposits</th><th class="num">Return</th><th class="num">R%</th><th class="num">TWRR′</th></tr></thead>
+    <tbody>{{range .Assets}}<tr>
+      <td><a href="/asset/{{.asset_id}}">{{.description}}</a></td>
+      <td class="num">{{money .value}}</td>
+      <td class="num">{{money .deposits}}</td>
+      <td class="num {{if pos .return}}up{{else}}down{{end}}">{{money .return}}</td>
+      <td class="num">{{pct .return_pct}}</td>
+      <td class="num">{{pct .twrr_adj}}{{if .short_history}} <span class="badge">short</span>{{end}}</td>
+    </tr>{{end}}</tbody>
+  </table>
+  {{else}}<p class="empty">No open assets in this class.</p>{{end}}
+</section>

@@ -1,0 +1,9 @@
+{{/* Asset detail reuses the overview block shapes scoped to one asset. */}}
+<section class="kpi-grid">
+  <div class="kpi"><span class="kpi-label">Deposited</span><span class="kpi-value">{{money .O.deposits}}</span></div>
+  <div class="kpi"><span class="kpi-label">Value</span><span class="kpi-value">{{money .O.value}}</span></div>
+  <div class="kpi"><span class="kpi-label">Return</span><span class="kpi-value {{if pos .O.return}}up{{else}}down{{end}}">{{money .O.return}}</span><span class="kpi-delta">{{pct .O.return_pct}}</span></div>
+  <div class="kpi"><span class="kpi-label">TWRR</span><span class="kpi-value">{{pct .O.twrr}}</span></div>
+  <div class="kpi"><span class="kpi-label">TWRR (income-aware)</span><span class="kpi-value">{{pct .O.twrr_adj}}</span></div>
+  <div class="kpi"><span class="kpi-label">CAGR</span><span class="kpi-value">{{pct .O.cagr}}</span><span class="kpi-delta">{{.O.months}} months</span></div>
+</section>

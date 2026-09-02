@@ -1,0 +1,8 @@
+<section class="card">
+  <h2>Wealth paths</h2>
+  <p class="card-sub">Each simulated future replays your real history: every month picks one of your past months at random, grows the balance by it, and adds your average deposit. The solid <strong>typical path</strong> is the middle outcome of 500 such simulations; the shaded band is where 80% of them landed - <span class="up">lucky</span> above, <span class="down">unlucky</span> below. The thin dashed <em>average month, every month</em> line grows at exactly your historical average rate instead - no lucky or unlucky sequences - so it is perfectly smooth, and the typical path usually ends slightly below it (volatility drag).</p>
+  <div class="chart-box"><canvas id="chart-proj"></canvas></div>
+  <script type="application/json" class="chart-data" data-chart="chart-proj" data-type="line">
+    {{json .Charts.Projections}}
+  </script>
+</section>
